@@ -1,0 +1,21 @@
+<template class="tag-editor">
+    <require from="./tag-editor.css"></require>
+    <div>
+        <span ref="existingTags">
+            <span class="applied-tag rendered-element" repeat.for="tag of tags">
+                <span class="tag-content">${tag.name}</span>
+                <span class="delete-tag" title="remove this tag" click.delegate="removeTag(tag)"></span>
+            </span>
+        </span>
+    <input ref="tagInput" type="text" placeholder.bind="inputPlaceholder" value.bind="tagQuery & debounce:500" keypress.delegate="onKeyPress($event)" />
+    </div>
+    <div role="listbox" class="dropdown-menu typeahead" show.bind="hasSuggestions" id="tag-suggestions">
+        <div role="presentation" class="dropdown-inner">
+            <ul role="presentation">
+                <li repeat.for="suggestedTag of suggestedTags" click.delegate="addTag(suggestedTag)" class="suggested-tag">
+                    <a role="option"><span><strong>${suggestedTag.name}</strong></span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</template>

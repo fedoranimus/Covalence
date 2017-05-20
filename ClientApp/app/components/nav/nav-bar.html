@@ -1,0 +1,30 @@
+<template class="nav-bar" bindable="router">
+  <require from="./nav.scss"></require>
+  <nav class="nav">
+      <a class="nav__brand" href="#"> 
+        <img class="nav__brand-logo" src="./brand.svg"/>
+        <span class="nav__brand-name">${router.title}</span>
+      </a>
+
+      <ul class="nav__list">
+        <li repeat.for="row of router.navigation | authFilter: isAuthenticated" class="nav__item ${row.isActive ? 'nav__item--active' : ''}">
+          <a class="nav__link" href.bind="row.href">${row.title}</a>
+        </li>
+      </ul>
+      
+      <ul show.bind="!isAuthenticated" class="nav__list--right">
+        <li class="nav__item"><a class="nav__link" href="/#/login">Login</a></li>
+        <li class="nav__item"><a class="nav__link" href="/#/register">Sign Up</a></li>
+      </ul>
+      <ul show.bind="isAuthenticated" class="nav__list--right">
+          <li class="nav-item"><a class="nav-link" href="/#/profile">${displayName}</a></li>
+          <li class="nav-item"><a class="nav-link" href="/#/" click.delegate="logout()">Logout</a></li>
+      </ul>
+
+      <!--<ul class="nav navbar-nav navbar-right">
+        <li class="loader" if.bind="router.isNavigating">
+          <i class="fa fa-spinner fa-spin fa-2x"></i>
+        </li>
+      </ul>-->
+  </nav>
+</template>

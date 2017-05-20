@@ -1,0 +1,124 @@
+@import '../../../colors';
+
+$delete-hover-background-color: darken($dark-text-color, 100%);
+
+input[type="text"], .tag-editor {
+    //box-shadow: 0 1px 2px rgba(12, 13, 14, 0.1) inset;
+}
+
+.tag-editor {
+    display: inline-block;
+    cursor: text;
+    background-color: #fff;
+    position: relative;
+    white-space: nowrap;
+    width: 658px;
+    height: 35px;
+    padding: 0;
+
+    &:focus {
+        border-color: $focus-border-color; 
+    }
+
+    input {
+        border: none !important;
+        outline: 0 !important;
+        //padding: 0 !important;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        background-clip: padding-box;
+        margin-left: 3px;
+        background-color: transparent !important;
+        height: 100%;
+        width: 100%;
+        box-shadow: none !important;
+        line-height: 1.25;
+        font-size: 1rem;
+        padding: 0.5rem 0.75rem;
+
+        &:focus {
+            border-color: $focus-border-color;
+        }
+    }
+
+    .rendered-element {
+        margin: 0px 3px;
+    }
+
+    .dropdown-menu {
+        display: block;
+        margin: 0;
+        border: none;
+    }
+
+    .applied-tag {
+        border-color: 1px solid $dark-text-color;
+        position: relative;
+        padding: .15em .5em;
+        white-space: nowrap;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 3px;
+        transition: all .15s ease-in-out;
+
+        .tag-content {
+            line-height: 1;
+            font-size: 1em;
+            color: $dark-text-color;
+        }
+
+        .delete-tag {
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+            margin-left: 3px;
+            text-align: center;
+            color: $dark-text-color;
+
+            &:before {
+                font-size: 1.2em;
+                content: 'x';
+            }
+
+            &:hover {
+                color: $delete-hover-background-color;
+            }
+        }
+    }
+
+    #tag-suggestions {
+        z-index: 1000;
+        position: absolute;
+        right: auto;
+        left: 0;
+        border-radius: 0 0 4px 4px;
+        width: auto;
+        
+        ul {
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+            display: block;
+            padding: 0;
+
+            li {
+                width: 100%;
+                white-space: nowrap;
+                float: left;
+                clear: left;
+                display: block;
+                text-align: center;
+
+                &:hover {
+                    background-color: $secondary-color;
+                    color: #fff;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+
+
+
+

@@ -1,0 +1,15 @@
+$primary-color: rgba(124,187,0,1);
+$secondary-color: rgba(0,161,241,1);
+$tertiary-color: rgba(246,83,20,1);
+$light-text-color: rgba(255,255,255,1);
+$dark-text-color: rgba(72,72,72,1);
+$placeholder-text-color: rgba(187,187,187,1);
+
+$light-text-color--hover: darken($light-text-color, 10%);
+
+$secondary-color--hover: darken($secondary-color, 10%);
+
+$dark-background-color: $dark-text-color;
+$translucent-dark-background-color: rgba($dark-background-color, 0.9);
+
+$focus-border-color: rgba(102, 175, 233, 1);

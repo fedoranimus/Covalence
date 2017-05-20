@@ -1,0 +1,46 @@
+<template class="register">
+    <require from="./register"></require>
+    <div class="container">
+        <div class="row">
+            <div class="center-form panel col-md-6">
+                <div class="panel-body">
+                    <h2 class="text-center">Sign Up</h2>
+                    <form method="post" name="registerForm">
+
+                    <div class="form-group has-feedback">
+                        <input class="form-control input-lg" type="text" name="firstName" value.bind="firstName" placeholder="First Name" required autofocus>
+                        <span class="ion-at form-control-feedback"></span>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <input class="form-control input-lg" type="text" name="lastName" value.bind="lastName" placeholder="Last Name" required autofocus>
+                        <span class="ion-at form-control-feedback"></span>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <input class="form-control input-lg" type="text" name="occupation" value.bind="occupation" placeholder="Occupation" required autofocus>
+                        <span class="ion-at form-control-feedback"></span>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <input class="form-control input-lg" type="text" name="employer" value.bind="employer" placeholder="Employer" required autofocus>
+                        <span class="ion-at form-control-feedback"></span>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <input class="form-control input-lg" type="text" name="email" value.bind="email" placeholder="Email" required autofocus>
+                        <span class="ion-at form-control-feedback"></span>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <input class="form-control input-lg" type="password" name="password" value.bind="password" placeholder="Password" required>
+                        <span class="ion-key form-control-feedback"></span>
+                    </div>
+
+                    <button type="submit" click.delegate="signup()" class="btn btn-lg  btn-block btn-success">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

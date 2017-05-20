@@ -1,0 +1,21 @@
+$zero-state-text-color: #4A4A4A;
+
+.result-list {
+    height: 100%;
+
+    .zero-state {
+        opacity: 0.32;
+        font-size: 27pt;
+        color: $zero-state-text-color;
+    }
+
+    .result-type--capitalize {
+        text-transform: capitalize;
+    }
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

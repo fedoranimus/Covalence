@@ -1,0 +1,23 @@
+@import '../../colors';
+
+.search {
+    height: 100%;
+    
+    .search-bar {
+        
+        h2 {
+            display: inline-block;
+        }
+
+        .zip-code {
+            display: inline-block;
+            border-radius: 0;
+            height: 40px;
+            width: 100px;
+        }
+    }
+
+    .search-input {
+        border: 1px solid black;
+    }
+}

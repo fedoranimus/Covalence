@@ -1,0 +1,24 @@
+<template class="result-list ${needsZeroState ? 'flex-center' : ''}">
+    <require from="./result-list.css"></require>
+    <!-- add zero state for no tags -->
+    <div class="zero-state" show.bind="!hasZip">
+        <span>
+            Enter a Zip Code to Find <span class="result-type--capitalize">${resultType}</span>
+        </span>
+    </div>
+    <div class="zero-state" show.bind="!hasResults && hasZip">
+        <span>
+            No <span class="result-type--capitalize">${resultType}s available</span>
+        </span>
+    </div>
+    <div show.bind="hasResults" repeat.for="match of matches" class="search-result">
+        <div class="pull-left">
+        <span class="search-result-name"><h3>${match.firstName} ${match.lastName}</h3></span>
+        <span class="search-result-employer">University of Anywhere</span>
+        <span class="search-result-position">Associate Professor</span>
+        </div>
+        <div class="pull-right">
+            <button>+ Mentor</button>
+        </div>
+    </div>
+</template>
