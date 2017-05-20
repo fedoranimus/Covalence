@@ -1,4 +1,4 @@
-import {autoinject, Aurelia} from 'aurelia-framework';
+import {autoinject, Aurelia, PLATFORM} from 'aurelia-framework';
 import {Router, RouterConfiguration} from 'aurelia-router';
 import {AuthenticateStep, AuthService} from 'aurelia-authentication';
 
@@ -14,7 +14,7 @@ export class App {
     config.title = "Covalence";
     config.addAuthorizeStep(AuthenticateStep);
     config.map([
-      { route: '', name: 'home', moduleId: 'pages/home/home', nav: false, title: 'Home' },
+      { route: '', name: 'home', moduleId: PLATFORM.moduleName('./pages/home/home'), nav: false, title: 'Home' },
       { route: 'search/mentors', name: 'mentors', moduleId: 'pages/search/search', nav: true, title: 'Mentors', auth: true },
       { route: 'search/proteges', name: 'proteges', moduleId: 'pages/search/search', nav: true, title: 'Proteges', auth: true },
       { route: 'profile', name: 'profile', moduleId: 'pages/profile/profile', nav: false, title: 'Profile', auth: true },

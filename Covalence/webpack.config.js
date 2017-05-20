@@ -21,10 +21,14 @@ module.exports = (env) => {
             rules: [
                 { test: /\.ts$/i, include: /ClientApp/, use: 'ts-loader?silent=true' },
                 { test: /\.html$/i, use: 'html-loader' },
-                //{ test: /\.css$/i, use: isDevBuild ? 'css-loader' : 'css-loader?minimize' },
-                { test: /\.scss$/i, use: [{
-                        loader: 'style-loader'
-                    },
+                { test: /\.css$/i, issuer: /\.html?$/i, use: isDevBuild ? 'css-loader' : 'css-loader?minimize' },
+                { test: /\.scss$/i,
+                    issuer: /\.html?$/i,
+                    //use: isDevBuild ? 'sass-loader' : 'sass-loader?minimize' },
+                    use: [
+                    // {
+                    //     loader: 'style-loader'
+                    // },
                     {
                         loader: isDevBuild ? "css-loader" : 'css-loader?minimize'
                     },
@@ -41,7 +45,9 @@ module.exports = (env) => {
                 context: __dirname,
                 manifest: require('./wwwroot/dist/vendor-manifest.json')
             }),
-            new AureliaPlugin({ aureliaApp: 'boot' })
+            new AureliaPlugin({ 
+                aureliaApp: 'boot'
+            })
         ].concat(isDevBuild ? [
             new webpack.SourceMapDevToolPlugin({
                 filename: '[file].map', // Remove this line if you prefer inline source maps

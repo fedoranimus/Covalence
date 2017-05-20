@@ -1,5 +1,7 @@
-import {FrameworkConfiguration} from 'aurelia-framework';
+import {FrameworkConfiguration, PLATFORM} from 'aurelia-framework';
 
 export function configure(config: FrameworkConfiguration) {
-  config.globalResources(['resources/custom-elements/tag-editor/tag-editor']);
+  config.globalResources(
+      PLATFORM.moduleName('./custom-elements/tag-editor/tag-editor')
+    );
 }
