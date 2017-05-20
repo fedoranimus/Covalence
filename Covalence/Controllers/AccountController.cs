@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Covalence.Authentication;
 using System;
 
-namespace Covalence.API.Controllers
+namespace Covalence.Controllers
 {
     [Route("api/[controller]")]
     public class AccountController : Controller

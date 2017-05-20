@@ -1,4 +1,4 @@
-using Covalence.API.Tags;
+using Covalence;
 using Covalence.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;

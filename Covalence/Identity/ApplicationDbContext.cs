@@ -1,5 +1,4 @@
-using Covalence.API;
-using Covalence.API.Tags;
+using Covalence;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

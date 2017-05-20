@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Covalence.API;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Covalence.Authentication

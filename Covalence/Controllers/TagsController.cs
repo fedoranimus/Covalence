@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Covalence.API.Tags;
 
-namespace Covalence.API.Controllers
+namespace Covalence.Controllers
 {
     [Route("api/[controller]")]
     public class TagsController : Controller

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Covalence.API.Tags
+namespace Covalence
 {
     public enum TagType
     {

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Covalence.Authentication;
 using Microsoft.Extensions.Logging;
 
-namespace Covalence.API.Tags
+namespace Covalence
 {
     public interface ITagService {
         IEnumerable<Tag> GetAllTags();

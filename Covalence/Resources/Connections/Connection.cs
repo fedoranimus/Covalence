@@ -1,6 +1,6 @@
 using Covalence.Authentication;
 
-namespace Covalence.API
+namespace Covalence
 {
 
     public enum ConnectionState

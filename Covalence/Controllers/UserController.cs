@@ -6,10 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using AspNet.Security.OAuth.Validation;
 using Microsoft.AspNetCore.Identity;
 using Covalence.Authentication;
-using Covalence.API.Tags;
-using Covalence.API.Contracts;
+using Covalence.Contracts;
 
-namespace Covalence.API.Controllers
+namespace Covalence.Controllers
 {
     [Route("api/[controller]")]
     public class UserController : Controller

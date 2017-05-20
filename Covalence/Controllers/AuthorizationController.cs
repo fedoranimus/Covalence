@@ -12,7 +12,7 @@ using AspNet.Security.OpenIdConnect.Primitives;
 using OpenIddict.Core;
 using OpenIddict.Models;
 
-namespace Covalence.API.Controllers
+namespace Covalence.Controllers
 {
     //[Route("api/[controller]")]
     public class AuthorizationController : Controller

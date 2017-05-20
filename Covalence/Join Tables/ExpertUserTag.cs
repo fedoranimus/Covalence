@@ -1,7 +1,6 @@
-using Covalence.API.Tags;
 using Covalence.Authentication;
 
-namespace Covalence.API
+namespace Covalence
 {
     public class ExpertUserTag
     {

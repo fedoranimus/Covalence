@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using Covalence.API.Tags;
 
-namespace Covalence.API.Contracts
+namespace Covalence.Contracts
 {
     public class UserContract
     {
