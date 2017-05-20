@@ -1,0 +1,21 @@
+<template>
+    <require from="./home.scss"></require>
+    <div class="home">
+        <div ref="moleculeBackground" class="molecule-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">Form Stronger Bonds</div>
+                <div class="sub-hero-text">Connect with a STEM mentor and become one yourself</div>
+            </div>
+            <div class="search-content">
+                <div class="search-box">
+                    <form submit.delegate="search()">
+                        <tag-editor tabindex="0" class="form-control" placeholder="Start typing to enter tags" available-tags.bind="suggestedTags" tags.bind="tags" add.delegate="onAddTag($event)" remove.delegate="onRemoveTag($event)"></tag-editor>
+                        <input class="form-control zip-code" type="text" maxlength="5" pattern="[0-9]{5}" title="Five digit Zip Code" placeholder="Zip Code" value.bind="zipCode" />
+                        <button class="btn btn-primary" type="submit">Find Mentors</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

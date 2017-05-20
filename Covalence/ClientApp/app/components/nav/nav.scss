@@ -1,0 +1,87 @@
+@import '../../colors';
+
+$active-primary-color: darken($primary-color, 10%);
+
+.nav-bar {
+    background-color: $primary-color;
+    display: flex;
+    justify-content: center;
+}
+
+.nav {
+    display: flex;
+    width: 960px;
+}
+
+.nav__list {
+    display: flex;
+    padding: 0;
+    list-style-type: none;
+    margin: 0;
+    overflow: hidden;
+
+    &--right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+}
+
+.nav__item {
+    padding: .25em;
+    flex: 1;
+
+    &--active {
+        background-color: $active-primary-color;
+    }
+}
+
+
+
+.nav__link {
+    color: $light-text-color;
+    text-align: center;
+    padding: 1em;
+    text-decoration: none;
+    display: flex;
+    width: 100%;
+    flex: 1;
+    
+    &:hover {
+        color: $light-text-color--hover;
+    }
+    &:focus {
+        color: $light-text-color;
+    }
+}
+
+.nav__brand {
+    flex: 1;
+    color: $light-text-color;
+    padding: 1em;
+    text-decoration: none;
+
+    &:hover {
+        color: $light-text-color--hover;
+    }
+    &:focus {
+        color: $light-text-color--hover;
+        outline: none;
+    }
+}
+
+
+.nav__brand-logo {
+    vertical-align: middle;
+    background-image: url('../../images/brand.svg')
+}
+
+.nav__brand-name {
+    color: $light-text-color;
+    vertical-align: middle;
+    font-size: 1.25em;
+
+    &:hover {
+        color: $light-text-color--hover;
+    }
+}

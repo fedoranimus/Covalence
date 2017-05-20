@@ -1,0 +1,23 @@
+<template>
+    <require from="./profile.scss"></require>
+    <div class="container">
+        <!--<label class="switch">
+            <input type="checkbox" checked.bind="isEditable">
+            <div class="slider round"></div>
+        </label>-->
+        <div class="personal_details">
+            <span class="name_input">
+                <input type="text" value.bind="displayName" />
+            </span>
+        </div>
+        <div class="connections">
+            ${profile.connections}
+        </div>
+        <ul class="study_tags">
+            <li repeat.for="tag of profile.studyTags">tag</li>
+        </ul>
+        <ul class="expert_tags">
+            <li repeat.for="tag of profile.expertTags">tag</li>
+        </ul>
+    </div>
+</template>

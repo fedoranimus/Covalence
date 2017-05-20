@@ -1,3 +1,4 @@
 {
+  "projects": ["Covalence", "Covalence.Tests"],
   "sdk": { "version": "1.0.1" }
 }

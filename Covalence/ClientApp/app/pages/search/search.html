@@ -1,0 +1,28 @@
+<template>
+    <require from="./search.scss"></require>
+    <require from="../../assets/styles/custom-elements/result-list.css"></require>
+    <require from="../../resources/custom-elements/result-list/result-list"></require>
+
+    <div class="container m-x-auto search">
+        <section class="au-animate">
+                <div class="col-xs-12 col-md-8">
+                    <div class="search-bar">
+                        <h2>Search for <span class="text-capitalize">${resultType}<span></h2> near <input tabindex="0" class="form-control zip-code" type="text" maxlength="5" pattern="[0-9]{5}" title="Five digit Zip Code" placeholder="Zip Code" value.bind="zipCode" /> or <button click.delegate="findMe">Find Me</button>
+                    </div>
+                    <tag-editor tabindex="1" class="form-control search-input" placeholder="Start typing to enter tags" available-tags.bind="suggestedTags" tags.bind="tags" add.delegate="onAddTag($event)" remove.delegate="onRemoveTag($event)"></tag-editor>
+                    <result-list matches.bind="matches" result-type="${resultType}" has-zip="${hasZip}"></result-list>
+                </div>
+                
+                <div class="col-xs-6 col-md-4">
+                    <div class="row">
+                        <div class="connections">
+                            Connected <span class="text-capitalize">${resultType}</span>
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <!--<google-map markers.bind="markers" auto-update-bounds="true"></google-map>-->
+                    </div>
+                </div>
+        </section>
+    </div>
+</template>
