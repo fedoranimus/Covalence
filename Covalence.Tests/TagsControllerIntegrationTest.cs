@@ -49,7 +49,7 @@ namespace Covalence.Tests
         [InlineData("Chem")]
         [InlineData("chem")]
         public async Task QueryTag(string query) {
-            var response = await Client.GetAsync($"/api/tags/{query}");
+            var response = await Client.GetAsync($"/api/tags/query/{query}");
 
             response.EnsureSuccessStatusCode();
             

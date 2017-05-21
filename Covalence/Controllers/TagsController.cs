@@ -30,7 +30,7 @@ namespace Covalence.Controllers
         }
 
         // GET api/tags/olo
-        [HttpGet("{query}")]
+        [HttpGet("query/{query}")]
         public IEnumerable<Tag> Get(string query)
         {
             return _service.QueryTags(query);

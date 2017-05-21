@@ -35,7 +35,7 @@ namespace Covalence
         public IEnumerable<Tag> QueryTags(string query)
         {
             _logger.LogDebug("Finding Tags which contain '{0}'", query);
-            return _context.Tags.ToList().Where(t => t.Name.Contains(query));
+            return _context.Tags.ToList().Where(t => t.Name.ToUpperInvariant().Contains(query.ToUpperInvariant()));
         }
 
         public Tag GetTagById(int id)
@@ -47,7 +47,7 @@ namespace Covalence
         public Tag GetTagByName(string name)
         {
             _logger.LogDebug("Getting with name: {0}", name);
-            return _context.Tags.FirstOrDefault(t => t.Name.ToLowerInvariant() == name.ToLowerInvariant());
+            return _context.Tags.FirstOrDefault(t => t.Name.ToUpperInvariant() == name.ToUpperInvariant());
         }
 
         public async Task<ApplicationUser> AddUserToTag(Tag tag, TagType tagType, ApplicationUser user)
