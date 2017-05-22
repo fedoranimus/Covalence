@@ -16,6 +16,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2"/>
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="1.1.1"/>
     <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="1.1.1"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="1.1.1"/>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.1" />
+    <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="1.0.0-*" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0-beta1-build3642"/>

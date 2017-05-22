@@ -8,12 +8,11 @@ using Newtonsoft.Json;
 
 namespace Covalence.Tests
 {
-    public class AccountControllerIntegrationTests : IClassFixture<TestFixture<Covalence.Startup>>
+    [Collection("Integration")]
+    public class AccountControllerIntegrationTests
     {
-
-        public HttpClient Client { get; }
-
-        public AccountControllerIntegrationTests(TestFixture<Covalence.Startup> fixture)
+        private readonly HttpClient Client;
+        public AccountControllerIntegrationTests(TestFixture<TestStartup> fixture)
         {
             Client = fixture.Client;
         }

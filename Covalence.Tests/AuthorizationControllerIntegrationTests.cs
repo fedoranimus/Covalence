@@ -10,16 +10,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Covalence.Tests
 {
-    public class AuthorizationControllerIntegrationTests : IClassFixture<TestFixture<Covalence.Startup>>
+    [Collection("Integration")]
+    public class AuthorizationControllerIntegrationTests
     {
-        public HttpClient Client { get; }
-
-        public AuthorizationControllerIntegrationTests(TestFixture<Covalence.Startup> fixture)
+        private readonly HttpClient Client;
+        public AuthorizationControllerIntegrationTests(TestFixture<TestStartup> fixture)
         {
             Client = fixture.Client;
         }
-
-        //TODO: Create a CollectionDefinition which saves the token to be available for authentication
 
         [Fact]
         public async Task Login() 

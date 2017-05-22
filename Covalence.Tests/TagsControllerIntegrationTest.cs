@@ -9,14 +9,13 @@ using System.Collections.Generic;
 
 namespace Covalence.Tests
 {
-    public class TagsControllerIntegrationTests : IClassFixture<TestFixture<Covalence.Startup>>
+    [Collection("Integration")]
+    public class TagsControllerIntegrationTests
     {
-
-        public HttpClient Client { get; }
-
-        public TagsControllerIntegrationTests(TestFixture<Covalence.Startup> fixture)
-        {
-            Client = fixture.Client;  
+        private readonly HttpClient Client;
+        public TagsControllerIntegrationTests(TestFixture<TestStartup> fixture)
+        { 
+            Client = fixture.Client;
         }
 
         [Fact]

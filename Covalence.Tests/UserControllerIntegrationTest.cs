@@ -11,15 +11,16 @@ using System.Linq;
 
 namespace Covalence.Tests
 {
-    public class UserControllerIntegrationTests : IClassFixture<TestFixture<Covalence.Startup>>
+    [Collection("Integration")]
+    public class UserControllerIntegrationTests
     {
-
-        public HttpClient Client { get; }
-
-        public UserControllerIntegrationTests(TestFixture<Covalence.Startup> fixture)
+        private readonly HttpClient Client;
+        private readonly String Token;
+        public UserControllerIntegrationTests(TestFixture<TestStartup> fixture)
         {
             Client = fixture.Client;
-            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", fixture.Token);
+            Token = fixture.Token;
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
         }
 
         [Fact]

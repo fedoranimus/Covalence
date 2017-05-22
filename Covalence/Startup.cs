@@ -39,24 +39,9 @@ namespace Covalence
             // Add framework services.
             services.AddMvc();
 
-            // Build connection string
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-            builder.DataSource = "localhost";   // update me
-            builder.UserID = "sa";              // update me
-            builder.Password = "<YourStrong!Passw0rd>";      // update me
-            builder.InitialCatalog = "master";
 
-            //var connection = @"Server=(172.17.0.2)\mssqllocaldb;Database=Covalence;User Id=sa;Password=YourStrong!Passw0rd;";
-            // services.AddDbContext<ApplicationDbContext>(options => {
-            //     options.UseSqlServer(builder.ConnectionString);
-            //     options.UseOpenIddict();
-            // });
-
-            //For Development
-            services.AddDbContext<ApplicationDbContext>( options => {
-                options.UseInMemoryDatabase();
-                options.UseOpenIddict();
-            });
+            ConfigureDatabase(services);
+            
 
             // Register the Identity services.
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -110,7 +95,7 @@ namespace Covalence
 
             //TODO: Only see when in development!!!
             //if(_env.IsDevelopment())
-                app.Seed();
+            app.Seed();
 
             app.UseCors(builder => 
                 builder.AllowAnyHeader()
@@ -148,6 +133,27 @@ namespace Covalence
                 routes.MapSpaFallbackRoute(
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
+            });
+        }
+
+        public virtual void ConfigureDatabase(IServiceCollection services) {
+            // Build connection string
+            // SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            // builder.DataSource = "localhost";   // update me
+            // builder.UserID = "sa";              // update me
+            // builder.Password = "<YourStrong!Passw0rd>";      // update me
+            // builder.InitialCatalog = "master";
+
+            //var connection = @"Server=(172.17.0.2)\mssqllocaldb;Database=Covalence;User Id=sa;Password=YourStrong!Passw0rd;";
+            // services.AddDbContext<ApplicationDbContext>(options => {
+            //     options.UseSqlServer(builder.ConnectionString);
+            //     options.UseOpenIddict();
+            // });
+
+            //For Development
+            services.AddDbContext<ApplicationDbContext>( options => {
+                options.UseInMemoryDatabase();
+                options.UseOpenIddict();
             });
         }
     }

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Covalence.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
 namespace Covalence.Tests {
@@ -14,7 +16,9 @@ namespace Covalence.Tests {
 
         public TestFixture()
         {
-            var builder = new WebHostBuilder().UseStartup<TStartup>();
+            var builder = new WebHostBuilder()
+                //.UseEnvironment("Development")
+                .UseStartup<TStartup>();
             _server = new TestServer(builder);
 
             Client = _server.CreateClient();
