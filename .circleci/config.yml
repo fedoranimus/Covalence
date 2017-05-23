@@ -5,11 +5,16 @@ jobs:
     docker:
       - image: microsoft/aspnetcore-build:1.1
     steps:
-      - checkout
+#      - checkout
       - run: ls
-      - run:
-          name: Run Tests
-          command: |
-            cd ../Covalence.Tests
-            dotnet restore
-            dotnet test
+#      - run:
+#          name: Run Tests
+#          command: |
+#            cd ../Covalence.Tests
+#            dotnet restore
+#            dotnet test
+#  deploy_production:
+#    working_directory: ~/
+#    docker:
+#      - image: microsoft/aspnetcore-build:1.1
+#    steps:
