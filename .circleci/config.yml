@@ -6,4 +6,4 @@ jobs:
       - image: microsoft/aspnetcore:latest
     steps:
       - checkout
-      - run:echo "hello world"
+      - run: echo "hello world"
