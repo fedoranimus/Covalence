@@ -12,12 +12,12 @@ jobs:
             cd ./Covalence.Tests/
             dotnet restore
             dotnet test
-      - run:
-          name: "Publish"
-          command: |
-            cd ..
-            cd ./Covalence
-            ls
-            npm i
-            dotnet publish -c Release
+ #     - run:
+#          name: "Publish"
+#          command: |
+#            cd ..
+#            cd ./Covalence/
+#            ls
+#            npm i
+#            dotnet publish -c Release
             
