@@ -1,19 +1,12 @@
 version: 2
 jobs:
   build: 
-    working_directory: ~/Covalence
+    working_directory: ~/
     docker:
       - image: microsoft/aspnetcore-build:1.1
     steps:
       - checkout
-      - run: cd Covalence
       - run: ls
-      - run: 
-          name: Restore Dotnet Dependencies
-          command: dotnet restore
-      - run:
-          name: Install NPM Packages
-          command: npm i
       - run:
           name: Run Tests
           command: |
