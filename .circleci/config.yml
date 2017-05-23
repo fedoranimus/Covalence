@@ -3,3 +3,6 @@ jobs:
   build: 
     docker:
       - image: microsoft/aspnetcore:latest
+    steps:
+      - checkout
+      - run:echo "hello world"
