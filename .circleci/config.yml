@@ -15,7 +15,8 @@ jobs:
       - run:
           name: "Publish"
           command: |
-            cd ../Covalence/
+            cd ..
+            cd ./Covalence/
             ls
             npm i
             dotnet publish -c Release
