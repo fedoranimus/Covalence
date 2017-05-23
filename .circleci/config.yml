@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build: 
-    working_directory: ~/Covalence
+    working_directory: ~/Covalence/Covalence
     docker:
       - image: microsoft/aspnetcore-build:1.1
     steps:
@@ -12,14 +12,15 @@ jobs:
             cd Covalence/
             dotnet restore
             dotnet build
-#  test:
-#    working_directory: ~/Covalence/Covalence.Tests
-#    steps:
-#      - run:
-#          name: Run Tests
-#          command: |
-#            dotnet restore
-#            dotnet test
+  test:
+    working_directory: ~/Covalence/Covalence.Tests
+    steps:
+      - run:
+          name: Run Tests
+          command: |
+            cd ../Covalence.Tests/
+            dotnet restore
+            dotnet test
 #  deploy_production:
 #    working_directory: ~/
 #    docker:
