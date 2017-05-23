@@ -6,25 +6,16 @@ jobs:
       - image: microsoft/aspnetcore-build:1.1
     steps:
       - checkout
-      - run:
-          name: "Go into app folder"
-          command: |
-            cd Covalence/
-            dotnet restore
-            dotnet build
-  test:
-    working_directory: ~/Covalence/Covalence.Tests
-    docker:
-      - image: microsoft/aspnetcore-build:1.1
-    steps:
-      - run:
+      - test:
           name: "Run Tests"
           command: |
             cd ../Covalence.Tests/
             dotnet restore
             dotnet test
-#  deploy_production:
-#    working_directory: ~/
-#    docker:
-#      - image: microsoft/aspnetcore-build:1.1
-#    steps:
+      - run:
+          name: "Publish"
+          command: |
+            cd ../Covalence/
+            npm i
+            dotnet publish -c Release
+            
