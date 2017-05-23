@@ -6,12 +6,18 @@ jobs:
       - image: microsoft/aspnetcore-build:1.1
     steps:
       - checkout
-      - run: cd ./Covalence.Tests
-      - run: ls
+      - run:
+          name: "Go into app folder"
+          command: |
+            cd Covalence/
+            dotnet restore
+            dotnet build
+#  test:
+#    working_directory: ~/Covalence/Covalence.Tests
+#    steps:
 #      - run:
 #          name: Run Tests
 #          command: |
-#            cd ../Covalence.Tests
 #            dotnet restore
 #            dotnet test
 #  deploy_production:
