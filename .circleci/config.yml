@@ -1,11 +1,12 @@
 version: 2
 jobs:
   build: 
-    working_directory: ~/Covalence/Covalence
+    working_directory: ~/Covalence
     docker:
       - image: microsoft/aspnetcore-build:1.1
     steps:
       - checkout
+      - run: cd Covalence
       - run: ls
       - run: 
           name: Restore Dotnet Dependencies
