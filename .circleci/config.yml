@@ -14,6 +14,8 @@ jobs:
             dotnet build
   test:
     working_directory: ~/Covalence/Covalence.Tests
+    docker:
+      - image: microsoft/aspnetcore-build:1.1
     steps:
       - run:
           name: Run Tests
