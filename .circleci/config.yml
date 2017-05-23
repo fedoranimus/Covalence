@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build: 
-    working_directory: ~/Covalence/Covalence
+    working_directory: ~/Covalence
     docker:
       - image: microsoft/aspnetcore-build:1.1
     steps:
@@ -16,7 +16,7 @@ jobs:
           name: "Publish"
           command: |
             cd ..
-            cd ./Covalence/
+            cd ./Covalence
             ls
             npm i
             dotnet publish -c Release
