@@ -6,7 +6,7 @@ jobs:
       - image: microsoft/aspnetcore-build:1.1
     steps:
       - checkout
-      - test:
+      - run:
           name: "Run Tests"
           command: |
             cd ../Covalence.Tests/
