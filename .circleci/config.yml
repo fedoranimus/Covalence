@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build: 
-    working_directory: ~/Covalence/Covalence
+    working_directory: ~/
     docker:
       - image: microsoft/aspnetcore-build:1.1
     steps:
