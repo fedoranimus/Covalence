@@ -37,7 +37,12 @@ namespace Covalence.Controllers
                 return BadRequest();
             }
 
-            var populatedUser = _context.Users.Where(x => x.Id == user.Id).Include(x => x.StudyTags).ThenInclude(ut => ut.Tag).Include(x => x.ExpertTags).ThenInclude(ut => ut.Tag).FirstOrDefault();
+            var populatedUser = _context.Users.Where(x => x.Id == user.Id)
+                .Include(x => x.StudyTags)
+                    .ThenInclude(ut => ut.Tag)
+                .Include(x => x.ExpertTags)
+                    .ThenInclude(ut => ut.Tag)
+                .FirstOrDefault();
 
             var userContract = new UserContract()
             {
@@ -46,8 +51,16 @@ namespace Covalence.Controllers
                 LastName = user.LastName,
                 Location = user.Location,
                 Email = user.Email,
-                StudyTags = populatedUser.StudyTags.Select(ut => ut.Tag), //only select id, name, description?
-                ExpertTags = populatedUser.ExpertTags.Select(ut => ut.Tag)
+                StudyTags = populatedUser.StudyTags
+                    .Select(ut => new TagContract(){
+                        Name = ut.Tag.Name,
+                        Description = ut.Tag.Description
+                    }),
+                ExpertTags = populatedUser.ExpertTags
+                    .Select(ut => new TagContract(){
+                        Name = ut.Tag.Name,
+                        Description = ut.Tag.Description
+                    })
             };
 
             return Ok(userContract); 

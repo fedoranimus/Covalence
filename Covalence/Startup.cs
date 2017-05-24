@@ -37,11 +37,12 @@ namespace Covalence
             services.AddCors();
 
             // Add framework services.
-            services.AddMvc().AddJsonOptions(options =>
-            {
-                options.SerializerSettings.ReferenceLoopHandling = 
-                                        Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-            });
+            // services.AddMvc().AddJsonOptions(options =>
+            // {
+            //     options.SerializerSettings.ReferenceLoopHandling = 
+            //                             Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            // });
+            services.AddMvc();
 
 
             ConfigureDatabase(services);
