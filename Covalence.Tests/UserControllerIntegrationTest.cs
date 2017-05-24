@@ -35,7 +35,7 @@ namespace Covalence.Tests
             Assert.Equal(user.Email, "fixture@test.com");
         }
 
-        [Fact(Skip="Not Complete")]
+        [Fact]
         public async Task AddTagToUser() {
             var tagType = "study";
             var tagName = "Physics";
@@ -45,7 +45,10 @@ namespace Covalence.Tests
 
             response.EnsureSuccessStatusCode();
 
-            var content = await response.Content.ReadAsStringAsync();
+            var userResponse = await Client.GetAsync("/api/user");
+            response.EnsureSuccessStatusCode();
+
+            var content = await userResponse.Content.ReadAsStringAsync();
             var user = JsonConvert.DeserializeObject<UserContract>(content);
 
             Assert.Equal(user.StudyTags.Single().Name, "Physics");         

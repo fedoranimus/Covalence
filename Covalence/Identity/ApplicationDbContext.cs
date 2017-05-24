@@ -45,6 +45,8 @@ namespace Covalence.Authentication
         public DbSet<Tag> Tags { get; set; }
         public DbSet<StudyUserTag> StudyUserTags { get; set; }
         public DbSet<ExpertUserTag> ExpertUserTags { get; set; }
+        public DbSet<ExpertUserTag> ExpertUsers { get; set; }
+        public DbSet<StudyUserTag> StudyUsers { get; set; }
         //public DbSet<Connection> Connections { get; set; }
     }
 }

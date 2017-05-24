@@ -7,6 +7,7 @@ using AspNet.Security.OAuth.Validation;
 using Microsoft.AspNetCore.Identity;
 using Covalence.Authentication;
 using Covalence.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Covalence.Controllers
 {
@@ -16,11 +17,13 @@ namespace Covalence.Controllers
         private readonly ILogger<UserController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITagService _tagService;
+        private readonly ApplicationDbContext _context;
 
-        public UserController(UserManager<ApplicationUser> userManager, ITagService tagService, ILogger<UserController> logger) {
+        public UserController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, ITagService tagService, ILogger<UserController> logger) {
             _userManager = userManager;
             _tagService = tagService;
             _logger = logger;
+            _context = context;
         }
 
         [Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
@@ -34,8 +37,7 @@ namespace Covalence.Controllers
                 return BadRequest();
             }
 
-            // var studyTags = _tagService.PopulateTags(user.StudyTags);
-            // var expertTags = _tagService.PopulateTags(user.ExpertTags);
+            var populatedUser = _context.Users.Where(x => x.Id == user.Id).Include(x => x.StudyTags).ThenInclude(ut => ut.Tag).Include(x => x.ExpertTags).ThenInclude(ut => ut.Tag).FirstOrDefault();
 
             var userContract = new UserContract()
             {
@@ -44,8 +46,8 @@ namespace Covalence.Controllers
                 LastName = user.LastName,
                 Location = user.Location,
                 Email = user.Email,
-                StudyTags = user.StudyTags.Select(ut => ut.Tag).ToList(),
-                ExpertTags = user.ExpertTags.Select(ut => ut.Tag).ToList()
+                StudyTags = populatedUser.StudyTags.Select(ut => ut.Tag), //only select id, name, description?
+                ExpertTags = populatedUser.ExpertTags.Select(ut => ut.Tag)
             };
 
             return Ok(userContract); 
@@ -108,6 +110,7 @@ namespace Covalence.Controllers
             
             if(result.Succeeded)
             {
+                await _context.SaveChangesAsync();
                 return Ok(result);
             }
             else
