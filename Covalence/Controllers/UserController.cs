@@ -123,7 +123,6 @@ namespace Covalence.Controllers
             
             if(result.Succeeded)
             {
-                await _context.SaveChangesAsync();
                 return Ok(result);
             }
             else
