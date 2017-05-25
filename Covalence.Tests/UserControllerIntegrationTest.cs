@@ -68,6 +68,29 @@ namespace Covalence.Tests
         }
 
         [Fact]
+        public async Task AddTagToUser_NonexistentTag_ShouldReturn400Error() {
+            var tagType = "study";
+            var tagName = "Eatology";
+            var uri = $"/api/user/tag/{tagType}/{tagName}";
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
+            var response = await Client.SendAsync(requestMessage);
+
+            var content = await response.Content.ReadAsStringAsync();
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal($"No tag corresponding to '{tagName}'", content);
+        }
+
+        [Fact]
+        public async Task AddTagToUser_DuplicateTag_ShouldContainSingleTag() {
+
+        }
+
+        [Fact]
+        public async Task AddTagToUser_AddSecondTag_ShouldContainTwoTags() {
+
+        }
+
+        [Fact]
         public async Task RemoveTagFromUser_CorrectData_ShouldContainZeroTags() {
             var tagType = "study";
             var tagName = "Physics";

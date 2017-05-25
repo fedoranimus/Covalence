@@ -87,8 +87,9 @@ namespace Covalence.Controllers
             var tag = _tagService.GetTagByName(tagName);
             if(tag == null)
             {
-                _logger.LogError("No tag corresponding to tagName '{0}'", tagName);
-                return BadRequest();
+                var error = $"No tag corresponding to '{tagName}'";
+                _logger.LogError(error);
+                return BadRequest(error);
             }
 
             user = await _tagService.AddTag(tag, type, user);
@@ -100,8 +101,9 @@ namespace Covalence.Controllers
             }
             else
             {
-                _logger.LogError("Updating Tag failed");
-                return BadRequest();
+                var error = "Updating tag failed";
+                _logger.LogError(error);
+                return BadRequest(error);
             } 
         }
 
@@ -124,8 +126,9 @@ namespace Covalence.Controllers
             var tag = _tagService.GetTagByName(tagName);
             if(tag == null)
             {
-                _logger.LogError("No tag corresponding to tagName '{0}'", tagName);
-                return BadRequest();
+                var error = $"No tag corresponding to '{tagName}'";
+                _logger.LogError(error);
+                return BadRequest(error);
             }
 
             user = await _tagService.RemoveTag(tag, type, user);
@@ -139,8 +142,9 @@ namespace Covalence.Controllers
             }
             else
             {
-                _logger.LogError("Updating Tag failed");
-                return BadRequest();
+                var error = "Updating tag failed";
+                _logger.LogError(error);
+                return BadRequest(error);
             }
         }
 
