@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Covalence.Authentication;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace Covalence
 {
@@ -11,8 +12,8 @@ namespace Covalence
         IEnumerable<Tag> QueryTags(string query);
         Tag GetTagById(int id);
         Tag GetTagByName(string name);
-        Task<ApplicationUser> AddUserToTag(Tag tag, TagType tagType, ApplicationUser user);
-
+        Task<ApplicationUser> AddTag(Tag tag, TagType tagType, ApplicationUser user);
+        Task<ApplicationUser> RemoveTag(Tag tag, TagType tagType, ApplicationUser user);
         HashSet<Tag> PopulateTags(ICollection<int> tagIds);
     }
 
@@ -50,10 +51,11 @@ namespace Covalence
             return _context.Tags.FirstOrDefault(t => t.Name.ToUpperInvariant() == name.ToUpperInvariant());
         }
 
-        public async Task<ApplicationUser> AddUserToTag(Tag tag, TagType tagType, ApplicationUser user)
+        public async Task<ApplicationUser> AddTag(Tag tag, TagType tagType, ApplicationUser user)
         {
             switch(tagType) {
                 case TagType.Study:
+                    user = await _context.Users.Include(x => x.StudyTags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
                     if(user.StudyTags.Select(ut => ut.Tag).Contains(tag))
                     {
                         _logger.LogInformation("{0} already assigned to {1}", tag.ToString(), user.ToString());
@@ -67,6 +69,7 @@ namespace Covalence
                     }
                     break;
                 case TagType.Expert:
+                    user = await _context.Users.Include(x => x.ExpertTags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
                     if(user.ExpertTags.Select(ut => ut.Tag).Contains(tag))
                     {
                         _logger.LogInformation("{0} already assigned to {1}", tag.ToString(), user.ToString());
@@ -83,6 +86,45 @@ namespace Covalence
 
             await _context.SaveChangesAsync();
 
+            return user;
+        }
+
+        public async Task<ApplicationUser> RemoveTag(Tag tag, TagType tagType, ApplicationUser user) 
+        {
+            switch(tagType) {
+                case TagType.Study:
+                    user = await _context.Users.Include(x => x.StudyTags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
+                    if(user.StudyTags.Select(ut => ut.Tag).Contains(tag))
+                    {
+                        var studyUserTag = user.StudyTags.Where(x => x.TagId == tag.TagId).FirstOrDefault();
+                        _logger.LogInformation($"Removing {tag.ToString()} from {user.ToString()}");
+                        //var studyUserTag = new StudyUserTag() { UserId = user.Id, User = user, TagId = tag.TagId, Tag = tag };
+                        tag.StudyUsers.Remove(studyUserTag);
+                        user.StudyTags.Remove(studyUserTag);
+                    }
+                    else 
+                    {
+                        _logger.LogInformation($"{tag.ToString()} does not exist on {user.ToString()}");
+                    }
+                    break;
+                case TagType.Expert:
+                    user = await _context.Users.Include(x => x.ExpertTags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
+                    if(user.ExpertTags.Select(ut => ut.Tag).Contains(tag))
+                    {
+                        _logger.LogInformation($"Removing {tag.ToString()} from {user.ToString()}");
+                        var expertUserTag = new ExpertUserTag() { UserId = user.Id, User = user, TagId = tag.TagId, Tag = tag };
+                        tag.ExpertUsers.Remove(expertUserTag);
+                        user.ExpertTags.Remove(expertUserTag);
+                    }
+                    else 
+                    {
+                        _logger.LogInformation($"{tag.ToString()} does not exist on {user.ToString()}");
+                    }
+                    break;
+            }
+
+            await _context.SaveChangesAsync();
+            
             return user;
         }
 

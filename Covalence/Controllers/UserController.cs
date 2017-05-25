@@ -68,10 +68,10 @@ namespace Covalence.Controllers
         }
 
         [Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
-        [HttpPost("add/tag/{tagType}/{tagName}")]
+        [HttpPost("tag/{tagType}/{tagName}")]
         public async Task<IActionResult> AddTagToUser(string tagType, string tagName) 
         {
-            var user = await _userManager.GetUserAsync(User) as ApplicationUser;
+            var user = await _userManager.GetUserAsync(User);
             if(user == null) 
             {
                 _logger.LogError("User not found");
@@ -91,7 +91,7 @@ namespace Covalence.Controllers
                 return BadRequest();
             }
 
-            user = await _tagService.AddUserToTag(tag, type, user);
+            user = await _tagService.AddTag(tag, type, user);
             var result = await _userManager.UpdateAsync(user);
 
             if(result.Succeeded)
@@ -103,12 +103,11 @@ namespace Covalence.Controllers
                 _logger.LogError("Updating Tag failed");
                 return BadRequest();
             } 
-            
         }
 
         [Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
-        [HttpPost("remove/tag/{tagType}/{tagName}")]
-        public async Task<IActionResult> RemoveTagFromUser(int tagType, string tagName) 
+        [HttpDelete("tag/{tagType}/{tagName}")]
+        public async Task<IActionResult> RemoveTagFromUser(string tagType, string tagName) 
         {
             var user = await _userManager.GetUserAsync(User);
             if(user == null)
@@ -116,10 +115,33 @@ namespace Covalence.Controllers
                 return BadRequest();
             }
 
+            if(!Enum.TryParse(tagType, true, out TagType type)) {
+                var error = "Invalid tag type";
+                _logger.LogError(error);
+                return BadRequest(error);
+            }
+
             var tag = _tagService.GetTagByName(tagName);
+            if(tag == null)
+            {
+                _logger.LogError("No tag corresponding to tagName '{0}'", tagName);
+                return BadRequest();
+            }
+
+            user = await _tagService.RemoveTag(tag, type, user);
+            var result = await _userManager.UpdateAsync(user);
 
             _logger.LogInformation("Removing Tag: {0}", tag.ToString());
-            return Ok();
+
+            if(result.Succeeded)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                _logger.LogError("Updating Tag failed");
+                return BadRequest();
+            }
         }
 
         [Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
