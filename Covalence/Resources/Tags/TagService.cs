@@ -98,7 +98,6 @@ namespace Covalence
                     {
                         var studyUserTag = user.StudyTags.Where(x => x.TagId == tag.TagId).FirstOrDefault();
                         _logger.LogInformation($"Removing {tag.ToString()} from {user.ToString()}");
-                        //var studyUserTag = new StudyUserTag() { UserId = user.Id, User = user, TagId = tag.TagId, Tag = tag };
                         tag.StudyUsers.Remove(studyUserTag);
                         user.StudyTags.Remove(studyUserTag);
                     }
@@ -111,8 +110,8 @@ namespace Covalence
                     user = await _context.Users.Include(x => x.ExpertTags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
                     if(user.ExpertTags.Select(ut => ut.Tag).Contains(tag))
                     {
+                        var expertUserTag = user.ExpertTags.Where(x => x.TagId == tag.TagId).FirstOrDefault();
                         _logger.LogInformation($"Removing {tag.ToString()} from {user.ToString()}");
-                        var expertUserTag = new ExpertUserTag() { UserId = user.Id, User = user, TagId = tag.TagId, Tag = tag };
                         tag.ExpertUsers.Remove(expertUserTag);
                         user.ExpertTags.Remove(expertUserTag);
                     }
