@@ -52,17 +52,33 @@ namespace Covalence
 
         public async Task<ApplicationUser> AddUserToTag(Tag tag, TagType tagType, ApplicationUser user)
         {
-            if(tagType == TagType.Study)
-            {
-                var studyUserTag = new StudyUserTag() { UserId = user.Id, User = user, TagId = tag.TagId, Tag = tag };
-                tag.StudyUsers.Add(studyUserTag);
-                user.StudyTags.Add(studyUserTag);
-            }
-            else if(tagType == TagType.Expert)
-            {
-                var expertUserTag = new ExpertUserTag() { UserId = user.Id, User = user, TagId = tag.TagId, Tag = tag };
-                tag.ExpertUsers.Add(expertUserTag);
-                user.ExpertTags.Add(expertUserTag);
+            switch(tagType) {
+                case TagType.Study:
+                    if(user.StudyTags.Select(ut => ut.Tag).Contains(tag))
+                    {
+                        _logger.LogInformation("{0} already assigned to {1}", tag.ToString(), user.ToString());
+                    }
+                    else
+                    {
+                        _logger.LogInformation("{0} added to {1}", tag.ToString(), user.ToString());
+                        var studyUserTag = new StudyUserTag() { UserId = user.Id, User = user, TagId = tag.TagId, Tag = tag };
+                        tag.StudyUsers.Add(studyUserTag);
+                        user.StudyTags.Add(studyUserTag);
+                    }
+                    break;
+                case TagType.Expert:
+                    if(user.ExpertTags.Select(ut => ut.Tag).Contains(tag))
+                    {
+                        _logger.LogInformation("{0} already assigned to {1}", tag.ToString(), user.ToString());
+                    }
+                    else 
+                    {
+                        _logger.LogInformation("{0} added to {1}", tag.ToString(), user.ToString());
+                        var expertUserTag = new ExpertUserTag() { UserId = user.Id, User = user, TagId = tag.TagId, Tag = tag };
+                        tag.ExpertUsers.Add(expertUserTag);
+                        user.ExpertTags.Add(expertUserTag);
+                    }
+                    break;
             }
 
             await _context.SaveChangesAsync();

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Covalence.Authentication;
 using Covalence.Contracts;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Covalence.Controllers
 {
@@ -77,6 +78,12 @@ namespace Covalence.Controllers
                 return BadRequest();
             }
 
+            if(!Enum.IsDefined(typeof(TagType), tagType))
+            {
+                _logger.LogError("No tagType corresponding to {0}", tagType);
+                return BadRequest();
+            }
+
             TagType type = (TagType)tagType;
 
             var tag = _tagService.GetTagByName(tagName);
@@ -86,41 +93,9 @@ namespace Covalence.Controllers
                 return BadRequest();
             }
 
-            if(type == TagType.Study)
-            {
-                if(user.StudyTags.Select(ut => ut.Tag).Contains(tag))
-                {
-                    _logger.LogInformation("{0} already assigned to {1}", tag.ToString(), user.ToString());
-                }
-                else
-                {
-                    _logger.LogInformation("{0} added to {1}", tag.ToString(), user.ToString());
-                    
-                    user = await _tagService.AddUserToTag(tag, type, user);
-                }
-            }
-            else if(type == TagType.Expert)
-            {
-                if(user.ExpertTags.Select(ut => ut.Tag).Contains(tag))
-                {
-                    _logger.LogInformation("{0} already assigned to {1}", tag.ToString(), user.ToString());
-                }
-                else 
-                {
-                    _logger.LogInformation("{0} added to {1}", tag.ToString(), user.ToString());
-                    
-                    user = await _tagService.AddUserToTag(tag, type, user);
-                }
-            }
-            else
-            {
-                _logger.LogError("No tagType corresponding to {0}", tagType);
-                return BadRequest();
-            }
-            
-            
+            user = await _tagService.AddUserToTag(tag, type, user);
             var result = await _userManager.UpdateAsync(user);
-            
+
             if(result.Succeeded)
             {
                 return Ok(result);
@@ -130,6 +105,7 @@ namespace Covalence.Controllers
                 _logger.LogError("Updating Tag failed");
                 return BadRequest();
             } 
+            
         }
 
         [Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
