@@ -82,7 +82,24 @@ namespace Covalence.Tests
 
         [Fact]
         public async Task AddTagToUser_DuplicateTag_ShouldContainSingleTag() {
+            var tagType = "study";
+            var tagName = "Physics";
+            var uri = $"/api/user/tag/{tagType}/{tagName}";
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
+            var response = await Client.SendAsync(requestMessage);
+            response.EnsureSuccessStatusCode();
 
+            var requestMessage2 = new HttpRequestMessage(HttpMethod.Post, uri);
+            var response2 = await Client.SendAsync(requestMessage2);
+            response.EnsureSuccessStatusCode();
+
+            var userResponse = await Client.GetAsync("/api/user");
+            response.EnsureSuccessStatusCode();
+
+            var content = await userResponse.Content.ReadAsStringAsync();
+            var user = JsonConvert.DeserializeObject<UserContract>(content);
+
+            Assert.Equal(user.StudyTags.Single().Name, "Physics");    
         }
 
         [Fact]
