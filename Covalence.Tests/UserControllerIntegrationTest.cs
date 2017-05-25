@@ -36,7 +36,7 @@ namespace Covalence.Tests
         }
 
         [Fact]
-        public async Task AddTagToUser() {
+        public async Task AddTagToUser_CorrectData_ShouldContainSingleTag() {
             var tagType = "study";
             var tagName = "Physics";
             var uri = $"/api/user/add/tag/{tagType}/{tagName}";
@@ -52,6 +52,19 @@ namespace Covalence.Tests
             var user = JsonConvert.DeserializeObject<UserContract>(content);
 
             Assert.Equal(user.StudyTags.Single().Name, "Physics");         
+        }
+
+        [Fact]
+        public async Task AddTagToUser_IncorrectTagType_ShouldReturn400Error() {
+            var tagType = "dinosaurs"; // Testing non-accepted tagtypes
+            var tagName = "Physics";
+            var uri = $"/api/user/add/tag/{tagType}/{tagName}";
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
+            var response = await Client.SendAsync(requestMessage);
+
+            var content = await response.Content.ReadAsStringAsync();
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal("Invalid tag type", content);
         }
 
         [Fact(Skip="Not Implemented")]

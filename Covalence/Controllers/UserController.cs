@@ -69,7 +69,7 @@ namespace Covalence.Controllers
 
         [Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
         [HttpPost("add/tag/{tagType}/{tagName}")]
-        public async Task<IActionResult> AddTagToUser(int tagType, string tagName) 
+        public async Task<IActionResult> AddTagToUser(string tagType, string tagName) 
         {
             var user = await _userManager.GetUserAsync(User) as ApplicationUser;
             if(user == null) 
@@ -78,13 +78,11 @@ namespace Covalence.Controllers
                 return BadRequest();
             }
 
-            if(!Enum.IsDefined(typeof(TagType), tagType))
-            {
-                _logger.LogError("No tagType corresponding to {0}", tagType);
-                return BadRequest();
+            if(!Enum.TryParse(tagType, true, out TagType type)) {
+                var error = "Invalid tag type";
+                _logger.LogError(error);
+                return BadRequest(error);
             }
-
-            TagType type = (TagType)tagType;
 
             var tag = _tagService.GetTagByName(tagName);
             if(tag == null)
