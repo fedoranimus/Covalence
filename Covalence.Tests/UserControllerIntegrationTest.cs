@@ -173,11 +173,5 @@ namespace Covalence.Tests
         public async Task BlockUser() {
 
         }
-
-        // [Fact]
-        // public void TestFoo()
-        // {
-        //     Assert.True(false, $"{nameof(TestFoo)} was run.");
-        // }
     }
 }
