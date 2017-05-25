@@ -32,7 +32,7 @@ namespace Covalence.Tests
             var content = await response.Content.ReadAsStringAsync();
             var user = JsonConvert.DeserializeObject<UserContract>(content);
 
-            Assert.Equal(user.Email, "fixture@test.com");
+            Assert.Equal("fixture@test.com", user.Email);
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace Covalence.Tests
             var content = await userResponse.Content.ReadAsStringAsync();
             var user = JsonConvert.DeserializeObject<UserContract>(content);
 
-            Assert.Equal(user.StudyTags.Single().Name, "Physics");         
+            Assert.Equal("Physics", user.StudyTags.Single().Name);         
         }
 
         [Fact]
@@ -104,7 +104,27 @@ namespace Covalence.Tests
 
         [Fact]
         public async Task AddTagToUser_AddSecondTag_ShouldContainTwoTags() {
+            var tagType = "study";
+            var tagName = "Physics";
+            var uri = $"/api/user/tag/{tagType}/{tagName}";
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
+            var response = await Client.SendAsync(requestMessage);
+            response.EnsureSuccessStatusCode();
 
+
+            var tagName2 = "Biology";
+            var uri2 = $"/api/user/tag/{tagType}/{tagName2}";
+            var requestMessage2 = new HttpRequestMessage(HttpMethod.Post, uri2);
+            var response2 = await Client.SendAsync(requestMessage2);
+            response.EnsureSuccessStatusCode();
+
+            var userResponse = await Client.GetAsync("/api/user");
+            response.EnsureSuccessStatusCode();
+
+            var content = await userResponse.Content.ReadAsStringAsync();
+            var user = JsonConvert.DeserializeObject<UserContract>(content);
+
+            Assert.Equal(2, user.StudyTags.Count());
         }
 
         [Fact]
