@@ -100,7 +100,7 @@ namespace Covalence
 
             //TODO: Only see when in development!!!
             //if(_env.IsDevelopment())
-            app.Seed();
+            Seed(app);
 
             app.UseCors(builder => 
                 builder.AllowAnyHeader()
@@ -139,6 +139,10 @@ namespace Covalence
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
+        }
+
+        public virtual void Seed(IApplicationBuilder app) {
+            // No op
         }
 
         public virtual void ConfigureDatabase(IServiceCollection services) {

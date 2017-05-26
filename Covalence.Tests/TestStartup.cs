@@ -2,6 +2,7 @@ using Covalence.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Builder;
 
 namespace Covalence.Tests {
     public class TestStartup : Startup  
@@ -15,6 +16,10 @@ namespace Covalence.Tests {
                 options.UseInMemoryDatabase();
                 options.UseOpenIddict();
             });
+        }
+
+        public override void Seed(IApplicationBuilder app) {
+            app.Seed();
         }
     }
 }
