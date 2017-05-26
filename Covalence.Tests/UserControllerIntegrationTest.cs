@@ -32,14 +32,40 @@ namespace Covalence.Tests
             var content = await response.Content.ReadAsStringAsync();
             var user = JsonConvert.DeserializeObject<UserContract>(content);
 
-            Assert.Equal(user.Email, "fixture@test.com");
+            Assert.Equal("fixture@test.com", user.Email);
+        }
+
+        [Fact]
+        public async Task RemoveTagFromUser_CorrectData_ShouldContainZeroTags() {
+            var tagType = "study";
+            var tagName = "Physics";
+
+            // Assign Physics as a Study tag to User
+            var createUri = $"/api/user/tag/{tagType}/{tagName}";
+            var createResponse = await Client.SendAsync(new HttpRequestMessage(HttpMethod.Post, createUri));
+            createResponse.EnsureSuccessStatusCode();
+
+            // Remove Physics from Study tags on User
+            var removeUri = $"/api/user/tag/{tagType}/{tagName}";
+            var requestMessage = new HttpRequestMessage(HttpMethod.Delete, removeUri);
+            var response = await Client.SendAsync(requestMessage);
+            response.EnsureSuccessStatusCode();
+
+            // Validate on User
+            var userResponse = await Client.GetAsync("/api/user");
+            response.EnsureSuccessStatusCode();
+
+            var content = await userResponse.Content.ReadAsStringAsync();
+            var user = JsonConvert.DeserializeObject<UserContract>(content);
+
+            Assert.False(user.StudyTags.Any());  
         }
 
         [Fact]
         public async Task AddTagToUser_CorrectData_ShouldContainSingleTag() {
             var tagType = "study";
             var tagName = "Physics";
-            var uri = $"/api/user/add/tag/{tagType}/{tagName}";
+            var uri = $"/api/user/tag/{tagType}/{tagName}";
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
             var response = await Client.SendAsync(requestMessage);
 
@@ -51,14 +77,14 @@ namespace Covalence.Tests
             var content = await userResponse.Content.ReadAsStringAsync();
             var user = JsonConvert.DeserializeObject<UserContract>(content);
 
-            Assert.Equal(user.StudyTags.Single().Name, "Physics");         
+            Assert.Equal("Physics", user.StudyTags.Single().Name);         
         }
 
         [Fact]
         public async Task AddTagToUser_IncorrectTagType_ShouldReturn400Error() {
             var tagType = "dinosaurs"; // Testing non-accepted tagtypes
             var tagName = "Physics";
-            var uri = $"/api/user/add/tag/{tagType}/{tagName}";
+            var uri = $"/api/user/tag/{tagType}/{tagName}";
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
             var response = await Client.SendAsync(requestMessage);
 
@@ -67,9 +93,64 @@ namespace Covalence.Tests
             Assert.Equal("Invalid tag type", content);
         }
 
-        [Fact(Skip="Not Implemented")]
-        public async Task RemoveTagFromUser() {
+        [Fact]
+        public async Task AddTagToUser_NonexistentTag_ShouldReturn400Error() {
+            var tagType = "study";
+            var tagName = "Eatology";
+            var uri = $"/api/user/tag/{tagType}/{tagName}";
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
+            var response = await Client.SendAsync(requestMessage);
 
+            var content = await response.Content.ReadAsStringAsync();
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal($"No tag corresponding to '{tagName}'", content);
+        }
+
+        [Fact]
+        public async Task AddTagToUser_DuplicateTag_ShouldContainSingleTag() {
+            var tagType = "study";
+            var tagName = "Physics";
+            var uri = $"/api/user/tag/{tagType}/{tagName}";
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
+            var response = await Client.SendAsync(requestMessage);
+            response.EnsureSuccessStatusCode();
+
+            var requestMessage2 = new HttpRequestMessage(HttpMethod.Post, uri);
+            var response2 = await Client.SendAsync(requestMessage2);
+            response.EnsureSuccessStatusCode();
+
+            var userResponse = await Client.GetAsync("/api/user");
+            response.EnsureSuccessStatusCode();
+
+            var content = await userResponse.Content.ReadAsStringAsync();
+            var user = JsonConvert.DeserializeObject<UserContract>(content);
+
+            Assert.Equal(user.StudyTags.Single().Name, "Physics");    
+        }
+
+        [Fact]
+        public async Task AddTagToUser_AddSecondTag_ShouldContainTwoTags() {
+            var tagType = "study";
+            var tagName = "Physics";
+            var uri = $"/api/user/tag/{tagType}/{tagName}";
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
+            var response = await Client.SendAsync(requestMessage);
+            response.EnsureSuccessStatusCode();
+
+
+            var tagName2 = "Biology";
+            var uri2 = $"/api/user/tag/{tagType}/{tagName2}";
+            var requestMessage2 = new HttpRequestMessage(HttpMethod.Post, uri2);
+            var response2 = await Client.SendAsync(requestMessage2);
+            response.EnsureSuccessStatusCode();
+
+            var userResponse = await Client.GetAsync("/api/user");
+            response.EnsureSuccessStatusCode();
+
+            var content = await userResponse.Content.ReadAsStringAsync();
+            var user = JsonConvert.DeserializeObject<UserContract>(content);
+
+            Assert.Equal(2, user.StudyTags.Count());
         }
 
         [Fact(Skip="Not Implemented")]
@@ -91,11 +172,5 @@ namespace Covalence.Tests
         public async Task BlockUser() {
 
         }
-
-        // [Fact]
-        // public void TestFoo()
-        // {
-        //     Assert.True(false, $"{nameof(TestFoo)} was run.");
-        // }
     }
 }
