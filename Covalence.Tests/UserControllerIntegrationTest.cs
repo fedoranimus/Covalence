@@ -36,6 +36,32 @@ namespace Covalence.Tests
         }
 
         [Fact]
+        public async Task RemoveTagFromUser_CorrectData_ShouldContainZeroTags() {
+            var tagType = "study";
+            var tagName = "Physics";
+
+            // Assign Physics as a Study tag to User
+            var createUri = $"/api/user/tag/{tagType}/{tagName}";
+            var createResponse = await Client.SendAsync(new HttpRequestMessage(HttpMethod.Post, createUri));
+            createResponse.EnsureSuccessStatusCode();
+
+            // Remove Physics from Study tags on User
+            var removeUri = $"/api/user/tag/{tagType}/{tagName}";
+            var requestMessage = new HttpRequestMessage(HttpMethod.Delete, removeUri);
+            var response = await Client.SendAsync(requestMessage);
+            response.EnsureSuccessStatusCode();
+
+            // Validate on User
+            var userResponse = await Client.GetAsync("/api/user");
+            response.EnsureSuccessStatusCode();
+
+            var content = await userResponse.Content.ReadAsStringAsync();
+            var user = JsonConvert.DeserializeObject<UserContract>(content);
+
+            Assert.False(user.StudyTags.Any());  
+        }
+
+        [Fact]
         public async Task AddTagToUser_CorrectData_ShouldContainSingleTag() {
             var tagType = "study";
             var tagName = "Physics";
@@ -125,33 +151,6 @@ namespace Covalence.Tests
             var user = JsonConvert.DeserializeObject<UserContract>(content);
 
             Assert.Equal(2, user.StudyTags.Count());
-        }
-
-        [Fact]
-        public async Task RemoveTagFromUser_CorrectData_ShouldContainZeroTags() {
-            var tagType = "study";
-            var tagName = "Physics";
-
-            // Assign Physics as a Study tag to User
-            var createUri = $"/api/user/tag/{tagType}/{tagName}";
-            var createResponse = await Client.SendAsync(new HttpRequestMessage(HttpMethod.Post, createUri));
-            createResponse.EnsureSuccessStatusCode();
-
-            // Remove Physics from Study tags on User
-            var removeUri = $"/api/user/tag/{tagType}/{tagName}";
-            var requestMessage = new HttpRequestMessage(HttpMethod.Delete, removeUri);
-            var response = await Client.SendAsync(requestMessage);
-
-            response.EnsureSuccessStatusCode();
-
-            // Validate on User
-            var userResponse = await Client.GetAsync("/api/user");
-            response.EnsureSuccessStatusCode();
-
-            var content = await userResponse.Content.ReadAsStringAsync();
-            var user = JsonConvert.DeserializeObject<UserContract>(content);
-
-            Assert.False(user.StudyTags.Any());  
         }
 
         [Fact(Skip="Not Implemented")]
