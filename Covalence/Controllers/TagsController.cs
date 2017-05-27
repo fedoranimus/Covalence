@@ -23,11 +23,11 @@ namespace Covalence.Controllers
         }
 
         // GET api/tags/5
-        [HttpGet("{id}")]
-        public Tag Get(int id)
-        {
-            return _service.GetTagById(id);
-        }
+        // [HttpGet("{id}")]
+        // public Tag Get(int id)
+        // {
+        //     return _service.GetTagById(id);
+        // }
 
         // GET api/tags/olo
         [HttpGet("query/{query}")]

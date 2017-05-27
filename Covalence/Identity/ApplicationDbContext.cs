@@ -1,5 +1,6 @@
 using Covalence;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace Covalence.Authentication
@@ -15,11 +16,14 @@ namespace Covalence.Authentication
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Tag>()
+                .HasKey(x => new { x.Name });
+
             modelBuilder.Entity<StudyUserTag>()
-                .HasKey(x => new { x.UserId, x.TagId });
+                .HasKey(x => new { x.UserId, x.Name });
 
             modelBuilder.Entity<ExpertUserTag>()
-                .HasKey(x => new { x.UserId, x.TagId });
+                .HasKey(x => new { x.UserId, x.Name });
 
             modelBuilder.Entity<StudyUserTag>()
                 .HasOne(ut => ut.User)
@@ -34,12 +38,12 @@ namespace Covalence.Authentication
             modelBuilder.Entity<StudyUserTag>()
                 .HasOne(ut => ut.Tag)
                 .WithMany(t => t.StudyUsers)
-                .HasForeignKey(ut => ut.TagId);
+                .HasForeignKey(ut => ut.Name);
 
             modelBuilder.Entity<ExpertUserTag>()
                 .HasOne(ut => ut.Tag)
                 .WithMany(t => t.ExpertUsers)
-                .HasForeignKey(ut => ut.TagId);
+                .HasForeignKey(ut => ut.Name);
         }
 
         public DbSet<Tag> Tags { get; set; }

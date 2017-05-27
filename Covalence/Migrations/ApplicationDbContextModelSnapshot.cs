@@ -75,11 +75,11 @@ namespace Covalence.Migrations
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<int>("TagId");
+                    b.Property<string>("Name");
 
-                    b.HasKey("UserId", "TagId");
+                    b.HasKey("UserId", "Name");
 
-                    b.HasIndex("TagId");
+                    b.HasIndex("Name");
 
                     b.ToTable("ExpertUserTag");
                 });
@@ -88,25 +88,23 @@ namespace Covalence.Migrations
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<int>("TagId");
+                    b.Property<string>("Name");
 
-                    b.HasKey("UserId", "TagId");
+                    b.HasKey("UserId", "Name");
 
-                    b.HasIndex("TagId");
+                    b.HasIndex("Name");
 
                     b.ToTable("StudyUserTag");
                 });
 
             modelBuilder.Entity("Covalence.Tag", b =>
                 {
-                    b.Property<int>("TagId")
+                    b.Property<string>("Name")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("Name");
-
-                    b.HasKey("TagId");
+                    b.HasKey("Name");
 
                     b.ToTable("Tags");
                 });
@@ -299,7 +297,7 @@ namespace Covalence.Migrations
                 {
                     b.HasOne("Covalence.Tag", "Tag")
                         .WithMany("ExpertUsers")
-                        .HasForeignKey("TagId")
+                        .HasForeignKey("Name")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Covalence.Authentication.ApplicationUser", "User")
@@ -312,7 +310,7 @@ namespace Covalence.Migrations
                 {
                     b.HasOne("Covalence.Tag", "Tag")
                         .WithMany("StudyUsers")
-                        .HasForeignKey("TagId")
+                        .HasForeignKey("Name")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Covalence.Authentication.ApplicationUser", "User")

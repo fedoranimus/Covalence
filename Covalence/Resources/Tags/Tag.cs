@@ -16,7 +16,6 @@ namespace Covalence
             //StudyUsers = new HashSet<ApplicationUser>();
             //ExpertUsers = new HashSet<ApplicationUser>();
         }
-        public int TagId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 
@@ -25,7 +24,7 @@ namespace Covalence
 
         public override string ToString()
         {
-            return "Tag [TagId = " + TagId + ", Name = " + Name + ", Description = " + Description + "]";
+            return $"Tag [ Name = {Name}, Description = {Description}]";
         }
     }
 }

@@ -12,6 +12,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using System.Reflection;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.Data.Sqlite;
 
 namespace Covalence
 {
@@ -139,8 +143,43 @@ namespace Covalence
         }
 
         public virtual void Seed(IApplicationBuilder app, ApplicationDbContext context) {
-            context.Database.EnsureCreated();
-            // No op
+            context.Database.Migrate();
+
+            if(!context.Tags.Any()) {
+                context.Tags.Add(new Tag() {
+                    Name = "Physics",
+                    Description = "Study of Motion"
+                });
+
+                context.Tags.Add(new Tag() {
+                    Name = "Chemistry",
+                    Description = "Study of Matter"
+                });
+
+                context.Tags.Add(new Tag() {
+                    Name = "Biology",
+                    Description = "Study of Life"
+                });
+            }
+
+            var seedUser = new ApplicationUser() {
+                Email = "fixture@test.com",
+                FirstName = "Fixture",
+                LastName = "Test",
+                Location = "03062",
+                EmailConfirmed = true
+            };
+
+            if(!context.Users.Any()) {
+                var hasher = new PasswordHasher<ApplicationUser>();
+                var hashedPassword = hasher.HashPassword(seedUser, "password");
+                seedUser.PasswordHash = hashedPassword;
+
+                var userStore = new UserStore<ApplicationUser>(context);
+                var result = userStore.CreateAsync(seedUser);
+            }
+
+            context.SaveChanges();
         }
 
         public virtual void ConfigureDatabase(IServiceCollection services) {
@@ -152,8 +191,15 @@ namespace Covalence
             // builder.InitialCatalog = "master";
 
             //var connection = @"Server=(172.17.0.2)\mssqllocaldb;Database=Covalence;User Id=sa;Password=YourStrong!Passw0rd;";
+
+            string connectionStringBuilder = new SqliteConnectionStringBuilder(){
+                DataSource = "covalence.db"
+            }.ToString();
+
+            var connection = new SqliteConnection(connectionStringBuilder);
+
             services.AddDbContext<ApplicationDbContext>(options => {
-                options.UseSqlite("DataSource=:memory:");
+                options.UseSqlite(connection);
                 options.UseOpenIddict();
             });
 

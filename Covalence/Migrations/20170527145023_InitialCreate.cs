@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Covalence.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,14 +40,12 @@ namespace Covalence.Migrations
                 name: "Tags",
                 columns: table => new
                 {
-                    TagId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Description = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tags", x => x.TagId);
+                    table.PrimaryKey("PK_Tags", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -153,16 +151,16 @@ namespace Covalence.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(nullable: false),
-                    TagId = table.Column<int>(nullable: false)
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExpertUserTag", x => new { x.UserId, x.TagId });
+                    table.PrimaryKey("PK_ExpertUserTag", x => new { x.UserId, x.Name });
                     table.ForeignKey(
-                        name: "FK_ExpertUserTag_Tags_TagId",
-                        column: x => x.TagId,
+                        name: "FK_ExpertUserTag_Tags_Name",
+                        column: x => x.Name,
                         principalTable: "Tags",
-                        principalColumn: "TagId",
+                        principalColumn: "Name",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ExpertUserTag_AspNetUsers_UserId",
@@ -177,16 +175,16 @@ namespace Covalence.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(nullable: false),
-                    TagId = table.Column<int>(nullable: false)
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudyUserTag", x => new { x.UserId, x.TagId });
+                    table.PrimaryKey("PK_StudyUserTag", x => new { x.UserId, x.Name });
                     table.ForeignKey(
-                        name: "FK_StudyUserTag_Tags_TagId",
-                        column: x => x.TagId,
+                        name: "FK_StudyUserTag_Tags_Name",
+                        column: x => x.Name,
                         principalTable: "Tags",
-                        principalColumn: "TagId",
+                        principalColumn: "Name",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_StudyUserTag_AspNetUsers_UserId",
@@ -300,14 +298,14 @@ namespace Covalence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExpertUserTag_TagId",
+                name: "IX_ExpertUserTag_Name",
                 table: "ExpertUserTag",
-                column: "TagId");
+                column: "Name");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudyUserTag_TagId",
+                name: "IX_StudyUserTag_Name",
                 table: "StudyUserTag",
-                column: "TagId");
+                column: "Name");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",

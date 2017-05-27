@@ -10,11 +10,11 @@ namespace Covalence
     public interface ITagService {
         IEnumerable<Tag> GetAllTags();
         IEnumerable<Tag> QueryTags(string query);
-        Tag GetTagById(int id);
-        Tag GetTagByName(string name);
+        //Tag GetTagById(int id);
+        Tag GetTag(string name);
         Task<ApplicationUser> AddTag(Tag tag, TagType tagType, ApplicationUser user);
         Task<ApplicationUser> RemoveTag(Tag tag, TagType tagType, ApplicationUser user);
-        HashSet<Tag> PopulateTags(ICollection<int> tagIds);
+        //HashSet<Tag> PopulateTags(ICollection<int> tagIds);
     }
 
     public class TagService : ITagService
@@ -39,13 +39,13 @@ namespace Covalence
             return _context.Tags.ToList().Where(t => t.Name.ToUpperInvariant().Contains(query.ToUpperInvariant()));
         }
 
-        public Tag GetTagById(int id)
-        {
-            _logger.LogDebug("Getting tag with id: {0}", id);
-            return _context.Tags.FirstOrDefault(t => t.TagId == id);
-        }
+        // public Tag GetTagById(int id)
+        // {
+        //     _logger.LogDebug("Getting tag with id: {0}", id);
+        //     return _context.Tags.FirstOrDefault(t => t.TagId == id);
+        // }
 
-        public Tag GetTagByName(string name)
+        public Tag GetTag(string name)
         {
             _logger.LogDebug("Getting with name: {0}", name);
             return _context.Tags.FirstOrDefault(t => t.Name.ToUpperInvariant() == name.ToUpperInvariant());
@@ -63,7 +63,7 @@ namespace Covalence
                     else
                     {
                         _logger.LogInformation("{0} added to {1}", tag.ToString(), user.ToString());
-                        var studyUserTag = new StudyUserTag() { UserId = user.Id, User = user, TagId = tag.TagId, Tag = tag };
+                        var studyUserTag = new StudyUserTag() { UserId = user.Id, User = user, Name = tag.Name, Tag = tag };
                         tag.StudyUsers.Add(studyUserTag);
                         user.StudyTags.Add(studyUserTag);
                     }
@@ -77,7 +77,7 @@ namespace Covalence
                     else 
                     {
                         _logger.LogInformation("{0} added to {1}", tag.ToString(), user.ToString());
-                        var expertUserTag = new ExpertUserTag() { UserId = user.Id, User = user, TagId = tag.TagId, Tag = tag };
+                        var expertUserTag = new ExpertUserTag() { UserId = user.Id, User = user, Name = tag.Name, Tag = tag };
                         tag.ExpertUsers.Add(expertUserTag);
                         user.ExpertTags.Add(expertUserTag);
                     }
@@ -96,7 +96,7 @@ namespace Covalence
                     user = await _context.Users.Include(x => x.StudyTags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
                     if(user.StudyTags.Select(ut => ut.Tag).Contains(tag))
                     {
-                        var studyUserTag = user.StudyTags.Where(x => x.TagId == tag.TagId).FirstOrDefault();
+                        var studyUserTag = user.StudyTags.Where(x => x.Name == tag.Name).FirstOrDefault();
                         _logger.LogInformation($"Removing {tag.ToString()} from {user.ToString()}");
                         tag.StudyUsers.Remove(studyUserTag);
                         user.StudyTags.Remove(studyUserTag);
@@ -110,7 +110,7 @@ namespace Covalence
                     user = await _context.Users.Include(x => x.ExpertTags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
                     if(user.ExpertTags.Select(ut => ut.Tag).Contains(tag))
                     {
-                        var expertUserTag = user.ExpertTags.Where(x => x.TagId == tag.TagId).FirstOrDefault();
+                        var expertUserTag = user.ExpertTags.Where(x => x.Name == tag.Name).FirstOrDefault();
                         _logger.LogInformation($"Removing {tag.ToString()} from {user.ToString()}");
                         tag.ExpertUsers.Remove(expertUserTag);
                         user.ExpertTags.Remove(expertUserTag);
@@ -127,16 +127,16 @@ namespace Covalence
             return user;
         }
 
-        public HashSet<Tag> PopulateTags(ICollection<int> tagIds)
-        {
-            HashSet<Tag> tags = new HashSet<Tag>();
+        // public HashSet<Tag> PopulateTags(ICollection<int> tagIds)
+        // {
+        //     HashSet<Tag> tags = new HashSet<Tag>();
 
-            foreach(var tagId in tagIds)
-            {
-                tags.Add(GetTagById(tagId));
-            }
+        //     foreach(var tagId in tagIds)
+        //     {
+        //         tags.Add(GetTagById(tagId));
+        //     }
 
-            return tags;
-        }
+        //     return tags;
+        // }
     }
 }

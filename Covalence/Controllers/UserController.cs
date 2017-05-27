@@ -84,7 +84,7 @@ namespace Covalence.Controllers
                 return BadRequest(error);
             }
 
-            var tag = _tagService.GetTagByName(tagName);
+            var tag = _tagService.GetTag(tagName);
             if(tag == null)
             {
                 var error = $"No tag corresponding to '{tagName}'";
@@ -123,7 +123,7 @@ namespace Covalence.Controllers
                 return BadRequest(error);
             }
 
-            var tag = _tagService.GetTagByName(tagName);
+            var tag = _tagService.GetTag(tagName);
             if(tag == null)
             {
                 var error = $"No tag corresponding to '{tagName}'";
