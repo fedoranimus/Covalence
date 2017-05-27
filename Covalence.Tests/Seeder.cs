@@ -1,33 +1,35 @@
 using Covalence;
 using Covalence.Authentication;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Covalence.Tests {
     public static class Seeder
     {
-        public static void Seed(this IApplicationBuilder app)
+        public static void Seed(this IApplicationBuilder app, ApplicationDbContext context)
         {
-            var db = app.ApplicationServices.GetService<ApplicationDbContext>();
+            if(!context.Database.EnsureCreated())
+                context.Database.Migrate();
 
-            SeedTags(db);
+            SeedTags(context);
 
-            db.SaveChanges();
+            context.SaveChanges();
         }
 
-        private static void SeedTags(ApplicationDbContext db)
+        private static void SeedTags(ApplicationDbContext context)
         {
-            db.Tags.Add(new Tag() {
+            context.Tags.Add(new Tag() {
                     Name = "Physics",
                     Description = "Study of Motion"
             });
 
-            db.Tags.Add(new Tag() {
+            context.Tags.Add(new Tag() {
                 Name = "Chemistry",
                 Description = "Study of Matter"
             });
 
-            db.Tags.Add(new Tag() {
+            context.Tags.Add(new Tag() {
                 Name = "Biology",
                 Description = "Study of Life"
             });

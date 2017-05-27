@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Covalence.Tests
 {
-    [Collection("Integration")]
-    public class AuthorizationControllerIntegrationTests
+    // [Collection("Integration")]
+    public class AuthorizationControllerIntegrationTests : IClassFixture<TestFixture<TestStartup>>
     {
         private readonly HttpClient Client;
         public AuthorizationControllerIntegrationTests(TestFixture<TestStartup> fixture)

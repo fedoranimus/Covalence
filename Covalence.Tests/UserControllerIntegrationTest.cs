@@ -11,8 +11,8 @@ using System.Linq;
 
 namespace Covalence.Tests
 {
-    [Collection("Integration")]
-    public class UserControllerIntegrationTests
+    // [Collection("Integration")]
+    public class UserControllerIntegrationTests : IClassFixture<TestFixture<TestStartup>>
     {
         private readonly HttpClient Client;
         private readonly String Token;
@@ -33,32 +33,6 @@ namespace Covalence.Tests
             var user = JsonConvert.DeserializeObject<UserContract>(content);
 
             Assert.Equal("fixture@test.com", user.Email);
-        }
-
-        [Fact]
-        public async Task RemoveTagFromUser_CorrectData_ShouldContainZeroTags() {
-            var tagType = "study";
-            var tagName = "Physics";
-
-            // Assign Physics as a Study tag to User
-            var createUri = $"/api/user/tag/{tagType}/{tagName}";
-            var createResponse = await Client.SendAsync(new HttpRequestMessage(HttpMethod.Post, createUri));
-            createResponse.EnsureSuccessStatusCode();
-
-            // Remove Physics from Study tags on User
-            var removeUri = $"/api/user/tag/{tagType}/{tagName}";
-            var requestMessage = new HttpRequestMessage(HttpMethod.Delete, removeUri);
-            var response = await Client.SendAsync(requestMessage);
-            response.EnsureSuccessStatusCode();
-
-            // Validate on User
-            var userResponse = await Client.GetAsync("/api/user");
-            response.EnsureSuccessStatusCode();
-
-            var content = await userResponse.Content.ReadAsStringAsync();
-            var user = JsonConvert.DeserializeObject<UserContract>(content);
-
-            Assert.False(user.StudyTags.Any());  
         }
 
         [Fact]
@@ -106,71 +80,24 @@ namespace Covalence.Tests
             Assert.Equal($"No tag corresponding to '{tagName}'", content);
         }
 
-        [Fact]
-        public async Task AddTagToUser_DuplicateTag_ShouldContainSingleTag() {
-            var tagType = "study";
-            var tagName = "Physics";
-            var uri = $"/api/user/tag/{tagType}/{tagName}";
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
-            var response = await Client.SendAsync(requestMessage);
-            response.EnsureSuccessStatusCode();
+        // [Fact(Skip="Not Implemented")]
+        // public async Task RequestConnectionToUser() {
 
-            var requestMessage2 = new HttpRequestMessage(HttpMethod.Post, uri);
-            var response2 = await Client.SendAsync(requestMessage2);
-            response.EnsureSuccessStatusCode();
+        // }
 
-            var userResponse = await Client.GetAsync("/api/user");
-            response.EnsureSuccessStatusCode();
+        // [Fact(Skip="Not Implemented")]
+        // public async Task AcceptConnectionFromUser() {
 
-            var content = await userResponse.Content.ReadAsStringAsync();
-            var user = JsonConvert.DeserializeObject<UserContract>(content);
+        // }
 
-            Assert.Equal(user.StudyTags.Single().Name, "Physics");    
-        }
+        // [Fact(Skip="Not Implemented")]
+        // public async Task RejectConnectionFromUser() {
 
-        [Fact]
-        public async Task AddTagToUser_AddSecondTag_ShouldContainTwoTags() {
-            var tagType = "study";
-            var tagName = "Physics";
-            var uri = $"/api/user/tag/{tagType}/{tagName}";
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
-            var response = await Client.SendAsync(requestMessage);
-            response.EnsureSuccessStatusCode();
+        // }
 
+        // [Fact(Skip="Not Implemented")]
+        // public async Task BlockUser() {
 
-            var tagName2 = "Biology";
-            var uri2 = $"/api/user/tag/{tagType}/{tagName2}";
-            var requestMessage2 = new HttpRequestMessage(HttpMethod.Post, uri2);
-            var response2 = await Client.SendAsync(requestMessage2);
-            response.EnsureSuccessStatusCode();
-
-            var userResponse = await Client.GetAsync("/api/user");
-            response.EnsureSuccessStatusCode();
-
-            var content = await userResponse.Content.ReadAsStringAsync();
-            var user = JsonConvert.DeserializeObject<UserContract>(content);
-
-            Assert.Equal(2, user.StudyTags.Count());
-        }
-
-        [Fact(Skip="Not Implemented")]
-        public async Task RequestConnectionToUser() {
-
-        }
-
-        [Fact(Skip="Not Implemented")]
-        public async Task AcceptConnectionFromUser() {
-
-        }
-
-        [Fact(Skip="Not Implemented")]
-        public async Task RejectConnectionFromUser() {
-
-        }
-
-        [Fact(Skip="Not Implemented")]
-        public async Task BlockUser() {
-
-        }
+        //}
     }
 }

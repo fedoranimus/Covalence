@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Primitives;
@@ -44,9 +43,7 @@ namespace Covalence
             // });
             services.AddMvc();
 
-
-            ConfigureDatabase(services);
-            
+            ConfigureDatabase(services);            
 
             // Register the Identity services.
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -93,14 +90,14 @@ namespace Covalence
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext context)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             //TODO: Only see when in development!!!
             //if(_env.IsDevelopment())
-            Seed(app);
+            Seed(app, context);
 
             app.UseCors(builder => 
                 builder.AllowAnyHeader()
@@ -141,7 +138,8 @@ namespace Covalence
             });
         }
 
-        public virtual void Seed(IApplicationBuilder app) {
+        public virtual void Seed(IApplicationBuilder app, ApplicationDbContext context) {
+            context.Database.EnsureCreated();
             // No op
         }
 
@@ -154,16 +152,16 @@ namespace Covalence
             // builder.InitialCatalog = "master";
 
             //var connection = @"Server=(172.17.0.2)\mssqllocaldb;Database=Covalence;User Id=sa;Password=YourStrong!Passw0rd;";
-            // services.AddDbContext<ApplicationDbContext>(options => {
-            //     options.UseSqlServer(builder.ConnectionString);
-            //     options.UseOpenIddict();
-            // });
-
-            //For Development
-            services.AddDbContext<ApplicationDbContext>( options => {
-                options.UseInMemoryDatabase();
+            services.AddDbContext<ApplicationDbContext>(options => {
+                options.UseSqlite("DataSource=:memory:");
                 options.UseOpenIddict();
             });
+
+            //For Development
+            // services.AddDbContext<ApplicationDbContext>( options => {
+            //     options.UseInMemoryDatabase();
+            //     options.UseOpenIddict();
+            // });
         }
     }
 }

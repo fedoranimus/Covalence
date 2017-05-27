@@ -13,6 +13,7 @@ namespace Covalence.Tests {
     public class TestFixture<TStartup> : IDisposable where TStartup : class  
     {
         private readonly TestServer _server;
+        private readonly ApplicationDbContext _context;
 
         public TestFixture()
         {
@@ -20,6 +21,8 @@ namespace Covalence.Tests {
                 //.UseEnvironment("Development")
                 .UseStartup<TStartup>();
             _server = new TestServer(builder);
+
+            _context = _server.Host.Services.GetRequiredService<ApplicationDbContext>();
 
             Client = _server.CreateClient();
             Client.BaseAddress = new Uri("http://localhost:5000");
@@ -59,8 +62,9 @@ namespace Covalence.Tests {
 
         public void Dispose()
         {
+            _context.Database.EnsureDeleted();
             Client.Dispose();
-            _server.Dispose();
+            _server.Dispose();  
         }
     }
 }

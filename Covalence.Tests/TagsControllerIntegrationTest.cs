@@ -9,8 +9,8 @@ using System.Collections.Generic;
 
 namespace Covalence.Tests
 {
-    [Collection("Integration")]
-    public class TagsControllerIntegrationTests
+    // [Collection("Integration")]
+    public class TagsControllerIntegrationTests : IClassFixture<TestFixture<TestStartup>>
     {
         private readonly HttpClient Client;
         public TagsControllerIntegrationTests(TestFixture<TestStartup> fixture)
