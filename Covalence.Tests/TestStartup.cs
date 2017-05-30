@@ -4,6 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.Sqlite;
+using Microsoft.IdentityModel.Tokens;
+using AspNet.Security.OpenIdConnect.Primitives;
+using System.Net.Http;
 
 namespace Covalence.Tests {
     public class TestStartup : Startup  

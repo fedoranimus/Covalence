@@ -19,7 +19,8 @@ export class Login {
     }
 
     login() {
-        return this.authService.login(this.email, this.password)
+        let credentials = { username: this.email, password: this.password, grant_type: "password", scope: "offline_access", resource: "http://localhost:5000" };
+        return this.authService.login(credentials)
             .then(me => {
                 console.log(me);
             });

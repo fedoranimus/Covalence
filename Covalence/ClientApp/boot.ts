@@ -9,10 +9,10 @@ export function configure(aurelia: Aurelia) {
     .feature(PLATFORM.moduleName('app/resources/index'))
     .plugin(PLATFORM.moduleName('aurelia-api'), config => {
       //config.setDefaultBaseUrl(environment.host);
-      config.registerEndpoint('auth');
+      config.registerEndpoint('auth', 'http://localhost:5000/connect/');
       config.registerEndpoint('api', 'http://localhost:5000/api/');
-      config.registerEndpoint('me', 'http://localhost:5000//api/users/me');
-      config.registerEndpoint('user', 'http://localhost:5000//api/users');
+      //config.registerEndpoint('me', 'http://localhost:5000/api/users/me');
+      //config.registerEndpoint('user', 'http://localhost:5000/api/users');
       config.setDefaultEndpoint('api');
     })
     .plugin(PLATFORM.moduleName('aurelia-authentication/authenticatedFilterValueConverter'))

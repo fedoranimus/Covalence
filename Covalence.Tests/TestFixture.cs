@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using AspNet.Security.OpenIdConnect.Primitives;
 using Covalence.Authentication;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
 namespace Covalence.Tests {
@@ -23,6 +26,24 @@ namespace Covalence.Tests {
             _server = new TestServer(builder);
 
             _context = _server.Host.Services.GetRequiredService<ApplicationDbContext>();
+
+            var jwtOptions = new JwtBearerOptions
+            {
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                RequireHttpsMetadata = false,
+                Audience = "http://localhost:5000",
+                Authority = "http://localhost:5000",
+                TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = OpenIdConnectConstants.Claims.Subject,
+                    RoleClaimType = OpenIdConnectConstants.Claims.Role
+                },
+                BackchannelHttpHandler = _server.CreateHandler(),
+                
+            };
+
+            builder.ConfigureServices(c => c.AddSingleton(jwtOptions));
 
             Client = _server.CreateClient();
             Client.BaseAddress = new Uri("http://localhost:5000");
@@ -46,6 +67,7 @@ namespace Covalence.Tests {
             keyValues.Add(new KeyValuePair<string, string>("password", "123Abc!"));
             keyValues.Add(new KeyValuePair<string, string>("grant_type", "password"));
             keyValues.Add(new KeyValuePair<string, string>("scope", "offline_access"));
+            keyValues.Add(new KeyValuePair<string, string>("resource", "http://localhost:5000"));
 
             var loginBody = new FormUrlEncodedContent(keyValues);
             

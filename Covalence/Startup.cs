@@ -16,6 +16,13 @@ using Microsoft.AspNetCore.Identity;
 using System.Reflection;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Data.Sqlite;
+using System.Threading;
+using OpenIddict.Core;
+using OpenIddict.Models;
+using AspNet.Security.OAuth.Extensions;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Covalence
 {
@@ -40,11 +47,6 @@ namespace Covalence
             services.AddCors();
 
             // Add framework services.
-            // services.AddMvc().AddJsonOptions(options =>
-            // {
-            //     options.SerializerSettings.ReferenceLoopHandling = 
-            //                             Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-            // });
             services.AddMvc();
 
             ConfigureDatabase(services);            
@@ -74,12 +76,19 @@ namespace Covalence
                 // Enable the token endpoint (required to use the password flow).
                 options.EnableTokenEndpoint("/connect/token");
 
+                // Enable the authorization, logout, userinfo, and introspection endpoints.
+                // options.EnableAuthorizationEndpoint("/connect/authorize")
+                //        .EnableLogoutEndpoint("/connect/logout")
+                //        .EnableIntrospectionEndpoint("/connect/introspect")
+                //        .EnableUserinfoEndpoint("/api/userinfo");
+
                 // Allow client applications to use the grant_type=password flow.
                 options.AllowPasswordFlow();
+                //options.AllowImplicitFlow();
                 options.AllowRefreshTokenFlow();
 
                 // Return a JWT rather than a traditional token
-                //.UseJsonWebTokens()
+                options.UseJsonWebTokens();
 
                 // During development, you can disable the HTTPS requirement.
                 options.DisableHttpsRequirement();
@@ -88,6 +97,20 @@ namespace Covalence
                 // shuts down. Tokens signed using this key are automatically invalidated.
                 // This method should only be used during development.
                 options.AddEphemeralSigningKey();
+            });
+
+            services.TryAddSingleton(new JwtBearerOptions
+            {
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                RequireHttpsMetadata = false,
+                Audience = "http://localhost:5000",
+                Authority = "http://localhost:5000",
+                TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = OpenIdConnectConstants.Claims.Subject,
+                    RoleClaimType = OpenIdConnectConstants.Claims.Role
+                }
             });
 
             services.AddScoped<ITagService, TagService>();
@@ -103,6 +126,15 @@ namespace Covalence
             //if(_env.IsDevelopment())
             Seed(app, context);
 
+            // If you prefer using JWT, don't forget to disable the automatic
+            // JWT -> WS-Federation claims mapping used by the JWT middleware:
+            //
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+
+            var jwtOptions = app.ApplicationServices.GetService<JwtBearerOptions>();
+            app.UseJwtBearerAuthentication(jwtOptions);
+
             app.UseCors(builder => 
                 builder.AllowAnyHeader()
                        .AllowAnyMethod()
@@ -110,8 +142,6 @@ namespace Covalence
             );
 
             app.UseIdentity();
-
-            app.UseOAuthValidation();
 
             app.UseOpenIddict();
 
@@ -141,8 +171,9 @@ namespace Covalence
                     defaults: new { controller = "Home", action = "Index" });
             });
         }
-
-        public virtual void Seed(IApplicationBuilder app, ApplicationDbContext context) {
+        public virtual async void Seed(IApplicationBuilder app, ApplicationDbContext context) {
+            var userManager = app.ApplicationServices.GetService<UserManager<ApplicationUser>>();
+            
             context.Database.Migrate();
 
             if(!context.Tags.Any()) {
@@ -164,6 +195,7 @@ namespace Covalence
 
             var seedUser = new ApplicationUser() {
                 Email = "fixture@test.com",
+                UserName = "fixture@test.com",
                 FirstName = "Fixture",
                 LastName = "Test",
                 Location = "03062",
@@ -171,12 +203,15 @@ namespace Covalence
             };
 
             if(!context.Users.Any()) {
-                var hasher = new PasswordHasher<ApplicationUser>();
-                var hashedPassword = hasher.HashPassword(seedUser, "password");
-                seedUser.PasswordHash = hashedPassword;
+                //var hasher = new PasswordHasher<ApplicationUser>();
+                //var hashedPassword = hasher.HashPassword(seedUser, "password");
+                //seedUser.PasswordHash = hashedPassword;
 
-                var userStore = new UserStore<ApplicationUser>(context);
-                var result = userStore.CreateAsync(seedUser);
+                //var userStore = new UserStore<ApplicationUser>(context);
+                var result = await userManager.CreateAsync(seedUser, "123Abc!");
+                if(result.Succeeded) {
+                    Console.WriteLine("Added User");
+                }
             }
 
             context.SaveChanges();
@@ -208,6 +243,41 @@ namespace Covalence
             //     options.UseInMemoryDatabase();
             //     options.UseOpenIddict();
             // });
+        }
+
+        private async Task InitializeAsync(IServiceProvider services, CancellationToken cancellationToken)
+        {
+            // Create a new service scope to ensure the database context is correctly disposed when this methods returns.
+            using (var scope = services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                await context.Database.EnsureCreatedAsync();
+
+                var manager = scope.ServiceProvider.GetRequiredService<OpenIddictApplicationManager<OpenIddictApplication>>();
+
+                if (await manager.FindByClientIdAsync("aurelia", cancellationToken) == null)
+                {
+                    var application = new OpenIddictApplication
+                    {
+                        ClientId = "aurelia",
+                        DisplayName = "Aurelia client application",
+                        LogoutRedirectUri = "http://localhost:5000/signout-oidc",
+                        RedirectUri = "http://localhost:5000/signin-oidc"
+                    };
+
+                    await manager.CreateAsync(application, cancellationToken);
+                }
+
+                if (await manager.FindByClientIdAsync("resource-server-1", cancellationToken) == null)
+                {
+                    var application = new OpenIddictApplication
+                    {
+                        ClientId = "resource-server-1"
+                    };
+
+                    await manager.CreateAsync(application, "846B62D0-DEF9-4215-A99D-86E6B8DAB342", cancellationToken);
+                }
+            }
         }
     }
 }
