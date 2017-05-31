@@ -32,8 +32,8 @@ namespace Covalence.Tests {
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
                 RequireHttpsMetadata = false,
-                Audience = "http://localhost:5000",
-                Authority = "http://localhost:5000",
+                Audience = "Anything",
+                //Authority = "http://localhost:5000",
                 TokenValidationParameters = new TokenValidationParameters
                 {
                     NameClaimType = OpenIdConnectConstants.Claims.Subject,
