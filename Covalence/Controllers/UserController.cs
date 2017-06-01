@@ -9,11 +9,12 @@ using Covalence.Authentication;
 using Covalence.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using AspNet.Security.OpenIdConnect.Primitives;
 
 namespace Covalence.Controllers
 {
     [Authorize]
-    //[Authorize(ActiveAuthenticationSchemes = "Bearer")]
     [Route("api/[controller]")]
     public class UserController : Controller
     {
@@ -33,6 +34,8 @@ namespace Covalence.Controllers
         public async Task<IActionResult> Get()
         {
             var user = await _userManager.GetUserAsync(User);
+
+            var claim = User.HasClaim(e => e.Type == OpenIdConnectConstants.Claims.Name);
             if(user == null)
             {
                 _logger.LogError("User not found");

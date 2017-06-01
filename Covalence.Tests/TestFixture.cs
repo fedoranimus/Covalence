@@ -70,7 +70,7 @@ namespace Covalence.Tests {
             keyValues.Add(new KeyValuePair<string, string>("username", "fixture@test.com"));
             keyValues.Add(new KeyValuePair<string, string>("password", "123Abc!"));
             keyValues.Add(new KeyValuePair<string, string>("grant_type", "password"));
-            keyValues.Add(new KeyValuePair<string, string>("scope", "offline_access"));
+            keyValues.Add(new KeyValuePair<string, string>("scope", "offline_access, profile, email, roles"));
             keyValues.Add(new KeyValuePair<string, string>("resource", "http://localhost:5000"));
 
             var loginBody = new FormUrlEncodedContent(keyValues);

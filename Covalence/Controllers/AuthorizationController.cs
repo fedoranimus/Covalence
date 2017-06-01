@@ -14,6 +14,7 @@ using OpenIddict.Models;
 using System.Collections.Generic;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Builder;
+using System.Diagnostics;
 
 namespace Covalence.Controllers
 {
@@ -43,6 +44,10 @@ namespace Covalence.Controllers
         [HttpPostAttribute("connect/token"), ProducesAttribute("application/json")]
         public async Task<IActionResult> Exchange(OpenIdConnectRequest request)
         {
+            Debug.Assert(request.IsTokenRequest(),
+                "The OpenIddict binder for ASP.NET Core MVC is not registered. " +
+                "Make sure services.AddOpenIddict().AddMvcBinders() is correctly called.");
+                
             if(request.IsPasswordGrantType())
             {
                 var user = await _userManager.FindByNameAsync(request.Username); //should this be email instead?
@@ -102,7 +107,7 @@ namespace Covalence.Controllers
             });
         }
 
-private async Task<AuthenticationTicket> CreateTicketAsync(OpenIdConnectRequest request, ApplicationUser user)
+        private async Task<AuthenticationTicket> CreateTicketAsync(OpenIdConnectRequest request, ApplicationUser user)
         {
             // Create a new ClaimsPrincipal containing the claims that
             // will be used to create an id_token, a token or a code.
@@ -122,7 +127,7 @@ private async Task<AuthenticationTicket> CreateTicketAsync(OpenIdConnectRequest 
                 OpenIddictConstants.Scopes.Roles
             }.Intersect(request.GetScopes()));
 
-            //ticket.SetResources("resource-server");
+            //ticket.SetResources("http://localhost:5000"); //TODO
 
             // Note: by default, claims are NOT automatically included in the access and identity tokens.
             // To allow OpenIddict to serialize them, you must attach them a destination, that specifies
