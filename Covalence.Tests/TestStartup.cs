@@ -7,6 +7,8 @@ using Microsoft.Data.Sqlite;
 using Microsoft.IdentityModel.Tokens;
 using AspNet.Security.OpenIdConnect.Primitives;
 using System.Net.Http;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Extensions.Logging;
 
 namespace Covalence.Tests {
     public class TestStartup : Startup  
@@ -14,6 +16,7 @@ namespace Covalence.Tests {
         public TestStartup(IHostingEnvironment env): base(env) {
 
         }
+
         public override void ConfigureDatabase(IServiceCollection services)
         {
             var db = new SqliteConnection("DataSource=:memory:");

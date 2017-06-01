@@ -13,6 +13,7 @@ using System;
 namespace Covalence.Controllers
 {
     [Authorize]
+    //[Authorize(ActiveAuthenticationSchemes = "Bearer")]
     [Route("api/[controller]")]
     public class UserController : Controller
     {
@@ -28,7 +29,6 @@ namespace Covalence.Controllers
             _context = context;
         }
 
-        //[Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -68,7 +68,6 @@ namespace Covalence.Controllers
             return Ok(userContract); 
         }
 
-        //[Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
         [HttpPost("tag/{tagType}/{tagName}")]
         public async Task<IActionResult> AddTagToUser(string tagType, string tagName) 
         {
@@ -108,7 +107,6 @@ namespace Covalence.Controllers
             } 
         }
 
-        //[Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
         [HttpDelete("tag/{tagType}/{tagName}")]
         public async Task<IActionResult> RemoveTagFromUser(string tagType, string tagName) 
         {
@@ -149,7 +147,6 @@ namespace Covalence.Controllers
             }
         }
 
-        //[Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
         [HttpPost("request/connection/{requestedUserId}")]
         public async Task<IActionResult> RequestConnection(string requestedUserId)
         {
@@ -162,7 +159,6 @@ namespace Covalence.Controllers
             return Ok();
         }
 
-        //[Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
         [HttpPost("approve/connection/{requestedUserId}")]
         public async Task<IActionResult> ApproveConnection(string requestedUserId)
         {
@@ -175,7 +171,6 @@ namespace Covalence.Controllers
             return Ok();
         }
 
-        //[Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
         [HttpPost("reject/connection/{requestedUserId}")]
         public async Task<IActionResult> RejectConnection(string requestedUserId)
         {
@@ -188,7 +183,6 @@ namespace Covalence.Controllers
             return Ok();
         }
 
-        //[Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
         [HttpPost("block/connection/{requestedUserId}")]
         public async Task<IActionResult> BlockConnection(string requestedUserId)
         {

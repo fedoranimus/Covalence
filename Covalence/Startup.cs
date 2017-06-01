@@ -141,7 +141,7 @@ namespace Covalence
                        .AllowAnyOrigin()
             );
 
-            app.UseIdentity();
+            //app.UseIdentity();
 
             app.UseOpenIddict();
 
