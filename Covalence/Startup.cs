@@ -99,6 +99,9 @@ namespace Covalence
                 options.AddEphemeralSigningKey();
             });
 
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+
             services.TryAddSingleton(new JwtBearerOptions
             {
                 AutomaticAuthenticate = true,
@@ -109,7 +112,7 @@ namespace Covalence
                 TokenValidationParameters = new TokenValidationParameters
                 {
                     NameClaimType = OpenIdConnectConstants.Claims.Subject,
-                    RoleClaimType = OpenIdConnectConstants.Claims.Role
+                    RoleClaimType = OpenIdConnectConstants.Claims.Role,
                 }
             });
 
@@ -129,8 +132,7 @@ namespace Covalence
             // If you prefer using JWT, don't forget to disable the automatic
             // JWT -> WS-Federation claims mapping used by the JWT middleware:
             //
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+
 
             var jwtOptions = app.ApplicationServices.GetService<JwtBearerOptions>();
             app.UseJwtBearerAuthentication(jwtOptions);

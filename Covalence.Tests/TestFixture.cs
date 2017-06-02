@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,9 @@ namespace Covalence.Tests {
         {
             var builder = new WebHostBuilder()
                 .ConfigureServices(services => {
+                    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+                    JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+
                     var jwtOptions = new JwtBearerOptions
                     {
                         AutomaticAuthenticate = true,
@@ -33,7 +37,7 @@ namespace Covalence.Tests {
                         Authority = "http://localhost:5000",
                         TokenValidationParameters = new TokenValidationParameters
                         {
-                            NameClaimType = OpenIdConnectConstants.Claims.Name,
+                            NameClaimType = OpenIdConnectConstants.Claims.Subject,
                             RoleClaimType = OpenIdConnectConstants.Claims.Role,
                             ValidateAudience = false //Only for testing!
                         },
