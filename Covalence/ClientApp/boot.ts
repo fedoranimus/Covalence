@@ -9,7 +9,7 @@ export function configure(aurelia: Aurelia) {
     .feature(PLATFORM.moduleName('app/resources/index'))
     .plugin(PLATFORM.moduleName('aurelia-api'), config => {
       //config.setDefaultBaseUrl(environment.host);
-      config.registerEndpoint('auth', 'http://localhost:5000/connect/');
+      config.registerEndpoint('auth', 'http://localhost:5000/');
       config.registerEndpoint('api', 'http://localhost:5000/api/');
       //config.registerEndpoint('me', 'http://localhost:5000/api/users/me');
       //config.registerEndpoint('user', 'http://localhost:5000/api/users');
