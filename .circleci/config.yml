@@ -16,7 +16,7 @@ jobs:
           name: "Publish"
           command: |
             ls
-            cd ../Covalence/
+            cd ./Covalence/
             ls
             dotnet publish -c Release
       - setup_remote_docker
