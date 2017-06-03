@@ -29,6 +29,7 @@ jobs:
       - run:
           name: Build and Publish runtime Docker Container
           command: |
+            ls
             TAG=0.1.$CIRCLE_BUILD_NUM
             docker build -t timdturner/covalence:$TAG .
             docker login -u $DOCKER_USER -p $DOCKER_PASS
