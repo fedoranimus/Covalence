@@ -32,9 +32,7 @@ module.exports = ({ prod } = {}) => {
                 'aurelia-templating-resources',
                 'aurelia-templating-router',
                 'aurelia-api',
-                'aurelia-authentication',
-                'flexboxgrid/dist/flexboxgrid.css',
-                'reset-css/reset.css'
+                'aurelia-authentication'
             ],
         },
         output: {
