@@ -205,11 +205,6 @@ namespace Covalence
             };
 
             if(!context.Users.Any()) {
-                //var hasher = new PasswordHasher<ApplicationUser>();
-                //var hashedPassword = hasher.HashPassword(seedUser, "password");
-                //seedUser.PasswordHash = hashedPassword;
-
-                //var userStore = new UserStore<ApplicationUser>(context);
                 var result = await userManager.CreateAsync(seedUser, "123Abc!");
                 if(result.Succeeded) {
                     Console.WriteLine("Added User");
@@ -220,66 +215,12 @@ namespace Covalence
         }
 
         public virtual void ConfigureDatabase(IServiceCollection services) {
-            // Build connection string
-            // SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-            // builder.DataSource = "localhost";   // update me
-            // builder.UserID = "sa";              // update me
-            // builder.Password = "<YourStrong!Passw0rd>";      // update me
-            // builder.InitialCatalog = "master";
-
-            //var connection = @"Server=(172.17.0.2)\mssqllocaldb;Database=Covalence;User Id=sa;Password=YourStrong!Passw0rd;";
-
-            string connectionStringBuilder = new SqliteConnectionStringBuilder(){
-                DataSource = "covalence.db"
-            }.ToString();
-
-            var connection = new SqliteConnection(connectionStringBuilder);
+            var connectionString = @"User Id=postgres;Password=@45jJq#2FJdw;Host=192.168.1.16;Port=5432;Database=covalence";
 
             services.AddDbContext<ApplicationDbContext>(options => {
-                options.UseSqlite(connection);
+                options.UseNpgsql(connectionString);
                 options.UseOpenIddict();
             });
-
-            //For Development
-            // services.AddDbContext<ApplicationDbContext>( options => {
-            //     options.UseInMemoryDatabase();
-            //     options.UseOpenIddict();
-            // });
-        }
-
-        private async Task InitializeAsync(IServiceProvider services, CancellationToken cancellationToken)
-        {
-            // Create a new service scope to ensure the database context is correctly disposed when this methods returns.
-            using (var scope = services.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                await context.Database.EnsureCreatedAsync();
-
-                var manager = scope.ServiceProvider.GetRequiredService<OpenIddictApplicationManager<OpenIddictApplication>>();
-
-                if (await manager.FindByClientIdAsync("aurelia", cancellationToken) == null)
-                {
-                    var application = new OpenIddictApplication
-                    {
-                        ClientId = "aurelia",
-                        DisplayName = "Aurelia client application",
-                        LogoutRedirectUri = "http://localhost:5000/signout-oidc",
-                        RedirectUri = "http://localhost:5000/signin-oidc"
-                    };
-
-                    await manager.CreateAsync(application, cancellationToken);
-                }
-
-                if (await manager.FindByClientIdAsync("resource-server-1", cancellationToken) == null)
-                {
-                    var application = new OpenIddictApplication
-                    {
-                        ClientId = "resource-server-1"
-                    };
-
-                    await manager.CreateAsync(application, "846B62D0-DEF9-4215-A99D-86E6B8DAB342", cancellationToken);
-                }
-            }
         }
     }
 }

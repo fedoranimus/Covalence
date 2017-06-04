@@ -11,15 +11,16 @@
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="1.1.2" />
+    <!--<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="1.1.2" />
     <PackageReference Include="AspNet.Security.OAuth.Validation" Version="1.0.0-*" />
-    <PackageReference Include="AspNet.Security.OAuth.Extensions" Version="1.0.0-*" />
+    <PackageReference Include="AspNet.Security.OAuth.Extensions" Version="1.0.0-*" />-->
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="1.1.2" />
     <PackageReference Include="OpenIddict.Mvc" Version="1.0.0-*" />
     <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="1.0.0-*" />
     <PackageReference Include="OpenIddict" Version="1.0.0-*" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="1.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.1.2" />
   </ItemGroup>
   <ItemGroup>
