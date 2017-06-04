@@ -3,6 +3,8 @@ dist: trusty
 sudo: required
 mono: none
 dotnet: 1.0.1
+node_js:
+  - "7"
 before_install:
   - ls
   - cd ./Covalence.Tests/
