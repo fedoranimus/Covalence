@@ -1,6 +1,6 @@
 language: c#
 mono: none
-dotnet: 1.0.4
+dotnet: 1.0.1
 dist: trusty
 before_install:
   - ls
