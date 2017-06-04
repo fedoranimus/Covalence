@@ -5,6 +5,7 @@ mono: none
 dotnet: 1.0.1
 skip_cleanup: true
 before_install:
+  - nvm ls
   - nvm use 7.7.1
   - node -v
   - cd ./Covalence.Tests/
