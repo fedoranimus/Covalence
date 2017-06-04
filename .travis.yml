@@ -3,12 +3,13 @@ mono: none
 dotnet: 1.1
 dist: trusty
 before_install:
-  - cd Covalence.Test
+  - ls
+  - cd ./Covalence.Test/
 install:
   - dotnet restore
 script:
   - dotnet test
-  - cd ../Covalence
+  - cd ../Covalence/
   - dotnet publish -c Release
 after_success:
   - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
