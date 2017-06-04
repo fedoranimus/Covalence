@@ -15,6 +15,7 @@ script:
   - cd ../Covalence/
   - dotnet publish -c Release
 after_success:
+  - cd ../
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - export REPO=$DOCKER_USER/covalence
   - export TAG=$TRAVIS_BUILD_NUMBER
