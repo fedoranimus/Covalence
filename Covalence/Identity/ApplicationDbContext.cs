@@ -1,6 +1,5 @@
 using Covalence;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace Covalence.Authentication

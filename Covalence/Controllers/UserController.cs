@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
-using AspNet.Security.OAuth.Validation;
 using Microsoft.AspNetCore.Identity;
 using Covalence.Authentication;
 using Covalence.Contracts;
