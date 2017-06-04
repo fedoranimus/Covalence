@@ -15,12 +15,9 @@ script:
   - cd ../Covalence/
   - dotnet publish -c Release
 after_success:
-  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-  - export COMMIT=$TRAVIS_COMMIT::8
-  - export REPO=timdturner/covalence
-  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
-  - docker build -f Dockerfile -t $REPO:$COMMIT .
-  - docker tag $REPO:$COMMIT $REPO:$TAG
-  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS-BUILD-NUMBER
-  - docker push $REPO
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - export REPO=$DOCKER_USER/covalence
+  - export TAG=$TRAVIS_BUILD_NUMBER
+  - docker build -t $REPO:$TAG .
+  - docker push $REPO:$TAG
 
