@@ -1,4 +1,4 @@
-FROM microsoft/aspnetcore:1.1
+FROM microsoft/aspnetcore:1.1.2
 WORKDIR /Covalence
 ENV ASPNETCORE_URLS http://+:80
 EXPOSE 80
