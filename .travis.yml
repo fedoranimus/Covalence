@@ -19,6 +19,7 @@ after_success:
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - export REPO=$DOCKER_USER/covalence
   - export TAG=$TRAVIS_BUILD_NUMBER
-  - docker build -t $REPO:$TAG -t $REPO:latest .
-  - docker push $REPO:$TAG
+  - docker build -t $REPO:$TAG .
+  - docker tag $REPO:$TAG $REPO:latest
+  - docker push $REPO
 
