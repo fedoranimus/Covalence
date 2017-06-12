@@ -17,7 +17,7 @@ namespace Covalence.Tests {
 
         }
 
-        public override void ConfigureDatabase(IServiceCollection services)
+        public override void ConfigureDatabase(IServiceCollection services, IHostingEnvironment env)
         {
             var db = new SqliteConnection("DataSource=:memory:");
             db.Open();

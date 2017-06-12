@@ -21,6 +21,7 @@ using OpenIddict.Models;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Data.Sqlite;
 
 namespace Covalence
 {
@@ -34,7 +35,11 @@ namespace Covalence
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            _env = env;
         }
+
+        private IHostingEnvironment _env { get; set; }
 
         public IConfigurationRoot Configuration { get; }
 
@@ -47,7 +52,7 @@ namespace Covalence
             // Add framework services.
             services.AddMvc();
 
-            ConfigureDatabase(services);            
+            ConfigureDatabase(services, _env);            
 
             // Register the Identity services.
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -111,7 +116,7 @@ namespace Covalence
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext context)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, ApplicationDbContext context)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -131,7 +136,7 @@ namespace Covalence
 
             app.UseOpenIddict();
 
-            if (env.IsDevelopment())
+            if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
 
@@ -198,13 +203,28 @@ namespace Covalence
             context.SaveChanges();
         }
 
-        public virtual void ConfigureDatabase(IServiceCollection services) {
-            var connectionString = @"User Id=postgres;Password=@45jJq#2FJdw;Host=192.168.1.16;Port=5432;Database=covalence";
+        public virtual void ConfigureDatabase(IServiceCollection services, IHostingEnvironment env) {
 
-            services.AddDbContext<ApplicationDbContext>(options => {
-                options.UseNpgsql(connectionString);
-                options.UseOpenIddict();
-            });
+            if(env.IsDevelopment()) 
+            {
+                var db = new SqliteConnection("DataSource=:memory:");
+                db.Open();
+
+                services.AddDbContext<ApplicationDbContext>( options => {
+                    options.UseSqlite(db);
+                    options.UseOpenIddict();
+                });
+            } 
+            else
+            {
+                var connectionString = @"User Id=postgres;Password=@45jJq#2FJdw;Host=192.168.1.16;Port=5432;Database=covalence";
+
+                services.AddDbContext<ApplicationDbContext>(options => {
+                    options.UseNpgsql(connectionString);
+                    options.UseOpenIddict();
+                });
+            }
+
         }
     }
 }
