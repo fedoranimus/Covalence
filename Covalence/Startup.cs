@@ -74,15 +74,8 @@ namespace Covalence
                 // Enable the token endpoint (required to use the password flow).
                 options.EnableTokenEndpoint("/connect/token");
 
-                // Enable the authorization, logout, userinfo, and introspection endpoints.
-                // options.EnableAuthorizationEndpoint("/connect/authorize")
-                //        .EnableLogoutEndpoint("/connect/logout")
-                //        .EnableIntrospectionEndpoint("/connect/introspect")
-                //        .EnableUserinfoEndpoint("/api/userinfo");
-
                 // Allow client applications to use the grant_type=password flow.
                 options.AllowPasswordFlow();
-                //options.AllowImplicitFlow();
                 options.AllowRefreshTokenFlow();
 
                 // Return a JWT rather than a traditional token
@@ -127,11 +120,6 @@ namespace Covalence
             //if(_env.IsDevelopment())
             Seed(app, context);
 
-            // If you prefer using JWT, don't forget to disable the automatic
-            // JWT -> WS-Federation claims mapping used by the JWT middleware:
-            //
-
-
             var jwtOptions = app.ApplicationServices.GetService<JwtBearerOptions>();
             app.UseJwtBearerAuthentication(jwtOptions);
 
@@ -140,8 +128,6 @@ namespace Covalence
                        .AllowAnyMethod()
                        .AllowAnyOrigin()
             );
-
-            //app.UseIdentity();
 
             app.UseOpenIddict();
 
