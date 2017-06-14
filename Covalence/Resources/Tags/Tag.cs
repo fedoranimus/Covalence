@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace Covalence
 {
@@ -11,16 +10,13 @@ namespace Covalence
     
     public class Tag {
         public Tag() {
-            StudyUsers = new HashSet<StudyUserTag>();
-            ExpertUsers = new HashSet<ExpertUserTag>();
-            //StudyUsers = new HashSet<ApplicationUser>();
-            //ExpertUsers = new HashSet<ApplicationUser>();
+            Users = new HashSet<UserTag>();
+            Posts = new HashSet<PostTag>();
         }
         public string Name { get; set; }
         public string Description { get; set; }
-
-        public HashSet<StudyUserTag> StudyUsers { get; set; }
-        public HashSet<ExpertUserTag> ExpertUsers { get; set; }
+        public HashSet<UserTag> Users { get; set; }
+        public HashSet<PostTag> Posts { get; set; }
 
         public override string ToString()
         {

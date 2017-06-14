@@ -7,20 +7,16 @@ namespace Covalence.Authentication
     {
         public ApplicationUser()
         {
-            StudyTags = new HashSet<StudyUserTag>();
-            ExpertTags = new HashSet<ExpertUserTag>();
-            //Connections = new List<Connection>();
-            //StudyTags = new HashSet<Tag>();
-            //ExpertTags = new HashSet<UserTag>();
+            Tags = new HashSet<UserTag>();
+            AuthoredPosts = new List<Post>();
             //Connections = new List<Connection>();
         }
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Location { get; set; }
-
-        public ICollection<StudyUserTag> StudyTags { get; set; }
-        public ICollection<ExpertUserTag> ExpertTags { get; set; }
+        public ICollection<UserTag> Tags { get; set; }
+        public ICollection<Post> AuthoredPosts { get; set; }
 
         //public ICollection<Connection> Connections { get; set; }
     }

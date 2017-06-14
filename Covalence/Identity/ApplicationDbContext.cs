@@ -18,38 +18,41 @@ namespace Covalence.Authentication
             modelBuilder.Entity<Tag>()
                 .HasKey(x => new { x.Name });
 
-            modelBuilder.Entity<StudyUserTag>()
+            modelBuilder.Entity<UserTag>()
                 .HasKey(x => new { x.UserId, x.Name });
 
-            modelBuilder.Entity<ExpertUserTag>()
-                .HasKey(x => new { x.UserId, x.Name });
+            modelBuilder.Entity<PostTag>()
+                .HasKey(x => new { x.PostId, x.Name });
 
-            modelBuilder.Entity<StudyUserTag>()
+            modelBuilder.Entity<UserTag>()
                 .HasOne(ut => ut.User)
-                .WithMany(u => u.StudyTags)
+                .WithMany(u => u.Tags)
                 .HasForeignKey(ut => ut.UserId);
 
-            modelBuilder.Entity<ExpertUserTag>()
-                .HasOne(ut => ut.User)
-                .WithMany(u => u.ExpertTags)
-                .HasForeignKey(ut => ut.UserId);
-
-            modelBuilder.Entity<StudyUserTag>()
+            modelBuilder.Entity<UserTag>()
                 .HasOne(ut => ut.Tag)
-                .WithMany(t => t.StudyUsers)
+                .WithMany(t => t.Users)
                 .HasForeignKey(ut => ut.Name);
 
-            modelBuilder.Entity<ExpertUserTag>()
-                .HasOne(ut => ut.Tag)
-                .WithMany(t => t.ExpertUsers)
-                .HasForeignKey(ut => ut.Name);
+            modelBuilder.Entity<PostTag>()
+                .HasOne(pt => pt.Post)
+                .WithMany(p => p.Tags)
+                .HasForeignKey(pt => pt.PostId);
+
+            modelBuilder.Entity<PostTag>()
+                .HasOne(pt => pt.Tag)
+                .WithMany(t => t.Posts)
+                .HasForeignKey(pt => pt.Name);
+
+            modelBuilder.Entity<Post>()
+                .HasOne(p => p.Author)
+                .WithMany(u => u.AuthoredPosts);
         }
 
         public DbSet<Tag> Tags { get; set; }
-        public DbSet<StudyUserTag> StudyUserTags { get; set; }
-        public DbSet<ExpertUserTag> ExpertUserTags { get; set; }
-        public DbSet<ExpertUserTag> ExpertUsers { get; set; }
-        public DbSet<StudyUserTag> StudyUsers { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<UserTag> UserTags { get; set; }
+        public DbSet<PostTag> PostTags { get; set; }
         //public DbSet<Connection> Connections { get; set; }
     }
 }
