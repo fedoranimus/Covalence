@@ -10,7 +10,6 @@ namespace Covalence
     public interface ITagService {
         IEnumerable<Tag> GetAllTags();
         IEnumerable<Tag> QueryTags(string query);
-        //Tag GetTagById(int id);
         Tag GetTag(string name);
         Task<ApplicationUser> AddTag(Tag tag, ApplicationUser user);
         Task<ApplicationUser> RemoveTag(Tag tag, ApplicationUser user);
@@ -37,12 +36,6 @@ namespace Covalence
             _logger.LogDebug("Finding Tags which contain '{0}'", query);
             return _context.Tags.ToList().Where(t => t.Name.ToUpperInvariant().Contains(query.ToUpperInvariant()));
         }
-
-        // public Tag GetTagById(int id)
-        // {
-        //     _logger.LogDebug("Getting tag with id: {0}", id);
-        //     return _context.Tags.FirstOrDefault(t => t.TagId == id);
-        // }
 
         public Tag GetTag(string name)
         {
