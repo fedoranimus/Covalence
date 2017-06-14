@@ -42,9 +42,7 @@ namespace Covalence.Controllers
             }
 
             var populatedUser = _context.Users.Where(x => x.Id == user.Id)
-                .Include(x => x.StudyTags)
-                    .ThenInclude(ut => ut.Tag)
-                .Include(x => x.ExpertTags)
+                .Include(x => x.Tags)
                     .ThenInclude(ut => ut.Tag)
                 .FirstOrDefault();
 
@@ -55,35 +53,25 @@ namespace Covalence.Controllers
                 LastName = user.LastName,
                 Location = user.Location,
                 Email = user.Email,
-                StudyTags = populatedUser.StudyTags
+                Tags = populatedUser.Tags
                     .Select(ut => new TagContract(){
                         Name = ut.Tag.Name,
                         Description = ut.Tag.Description
-                    }),
-                ExpertTags = populatedUser.ExpertTags
-                    .Select(ut => new TagContract(){
-                        Name = ut.Tag.Name,
-                        Description = ut.Tag.Description
-                    })
+                    })//,
+                //AuthoredPosts = populatedUser.AuthoredPosts
             };
 
             return Ok(userContract); 
         }
 
-        [HttpPost("tag/{tagType}/{tagName}")]
-        public async Task<IActionResult> AddTagToUser(string tagType, string tagName) 
+        [HttpPost("tag/{tagName}")]
+        public async Task<IActionResult> AddTagToUser(string tagName) 
         {
             var user = await _userManager.GetUserAsync(User);
             if(user == null) 
             {
                 _logger.LogError("User not found");
                 return BadRequest();
-            }
-
-            if(!Enum.TryParse(tagType, true, out TagType type)) {
-                var error = "Invalid tag type";
-                _logger.LogError(error);
-                return BadRequest(error);
             }
 
             var tag = _tagService.GetTag(tagName);
@@ -94,7 +82,7 @@ namespace Covalence.Controllers
                 return BadRequest(error);
             }
 
-            user = await _tagService.AddTag(tag, type, user);
+            user = await _tagService.AddTag(tag, user);
             var result = await _userManager.UpdateAsync(user);
 
             if(result.Succeeded)
@@ -109,19 +97,13 @@ namespace Covalence.Controllers
             } 
         }
 
-        [HttpDelete("tag/{tagType}/{tagName}")]
-        public async Task<IActionResult> RemoveTagFromUser(string tagType, string tagName) 
+        [HttpDelete("tag/{tagName}")]
+        public async Task<IActionResult> RemoveTagFromUser(string tagName) 
         {
             var user = await _userManager.GetUserAsync(User);
             if(user == null)
             {
                 return BadRequest();
-            }
-
-            if(!Enum.TryParse(tagType, true, out TagType type)) {
-                var error = "Invalid tag type";
-                _logger.LogError(error);
-                return BadRequest(error);
             }
 
             var tag = _tagService.GetTag(tagName);
@@ -132,7 +114,7 @@ namespace Covalence.Controllers
                 return BadRequest(error);
             }
 
-            user = await _tagService.RemoveTag(tag, type, user);
+            user = await _tagService.RemoveTag(tag, user);
             var result = await _userManager.UpdateAsync(user);
 
             _logger.LogInformation("Removing Tag: {0}", tag.ToString());

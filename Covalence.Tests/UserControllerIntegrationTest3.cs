@@ -21,16 +21,15 @@ namespace Covalence.Tests {
         
         [Fact]
         public async Task AddTagToUser_AddSecondTag_ShouldContainTwoTags() {
-            var tagType = "study";
             var tagName = "Physics";
-            var uri = $"/api/user/tag/{tagType}/{tagName}";
+            var uri = $"/api/user/tag/{tagName}";
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
             var response = await Client.SendAsync(requestMessage);
             response.EnsureSuccessStatusCode();
 
 
             var tagName2 = "Biology";
-            var uri2 = $"/api/user/tag/{tagType}/{tagName2}";
+            var uri2 = $"/api/user/tag/{tagName2}";
             var requestMessage2 = new HttpRequestMessage(HttpMethod.Post, uri2);
             var response2 = await Client.SendAsync(requestMessage2);
             response.EnsureSuccessStatusCode();
@@ -41,7 +40,7 @@ namespace Covalence.Tests {
             var content = await userResponse.Content.ReadAsStringAsync();
             var user = JsonConvert.DeserializeObject<UserContract>(content);
 
-            Assert.Equal(2, user.StudyTags.Count());
+            Assert.Equal(2, user.Tags.Count());
         }
     }
 }

@@ -21,9 +21,8 @@ namespace Covalence.Tests {
 
         [Fact]
         public async Task AddTagToUser_DuplicateTag_ShouldContainSingleTag() {
-            var tagType = "study";
             var tagName = "Physics";
-            var uri = $"/api/user/tag/{tagType}/{tagName}";
+            var uri = $"/api/user/tag/{tagName}";
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
             var response = await Client.SendAsync(requestMessage);
             response.EnsureSuccessStatusCode();
@@ -38,12 +37,11 @@ namespace Covalence.Tests {
             var content = await userResponse.Content.ReadAsStringAsync();
             var user = JsonConvert.DeserializeObject<UserContract>(content);
 
-            Assert.Equal(user.StudyTags.Single().Name, "Physics");    
+            Assert.Equal(user.Tags.Single().Name, "Physics");    
         }
 
         [Fact]
         public async Task RemoveTagFromUser_CorrectData_ShouldContainZeroTags() {
-            var tagType = "study";
             var tagName = "Physics";
 
             // Assign Physics as a Study tag to User from previous test
@@ -52,7 +50,7 @@ namespace Covalence.Tests {
             // createResponse.EnsureSuccessStatusCode();
 
             // Remove Physics from Study tags on User
-            var removeUri = $"/api/user/tag/{tagType}/{tagName}";
+            var removeUri = $"/api/user/tag/{tagName}";
             var requestMessage = new HttpRequestMessage(HttpMethod.Delete, removeUri);
             var response = await Client.SendAsync(requestMessage);
             response.EnsureSuccessStatusCode();
@@ -64,7 +62,7 @@ namespace Covalence.Tests {
             var content = await userResponse.Content.ReadAsStringAsync();
             var user = JsonConvert.DeserializeObject<UserContract>(content);
 
-            Assert.False(user.StudyTags.Any());  
+            Assert.False(user.Tags.Any());  
         }
     }
 }

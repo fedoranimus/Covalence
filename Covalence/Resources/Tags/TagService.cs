@@ -12,9 +12,8 @@ namespace Covalence
         IEnumerable<Tag> QueryTags(string query);
         //Tag GetTagById(int id);
         Tag GetTag(string name);
-        Task<ApplicationUser> AddTag(Tag tag, TagType tagType, ApplicationUser user);
-        Task<ApplicationUser> RemoveTag(Tag tag, TagType tagType, ApplicationUser user);
-        //HashSet<Tag> PopulateTags(ICollection<int> tagIds);
+        Task<ApplicationUser> AddTag(Tag tag, ApplicationUser user);
+        Task<ApplicationUser> RemoveTag(Tag tag, ApplicationUser user);
     }
 
     public class TagService : ITagService
@@ -51,37 +50,19 @@ namespace Covalence
             return _context.Tags.FirstOrDefault(t => t.Name.ToUpperInvariant() == name.ToUpperInvariant());
         }
 
-        public async Task<ApplicationUser> AddTag(Tag tag, TagType tagType, ApplicationUser user)
+        public async Task<ApplicationUser> AddTag(Tag tag, ApplicationUser user)
         {
-            switch(tagType) {
-                case TagType.Study:
-                    user = await _context.Users.Include(x => x.StudyTags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
-                    if(user.StudyTags.Select(ut => ut.Tag).Contains(tag))
-                    {
-                        _logger.LogInformation("{0} already assigned to {1}", tag.ToString(), user.ToString());
-                    }
-                    else
-                    {
-                        _logger.LogInformation("{0} added to {1}", tag.ToString(), user.ToString());
-                        var studyUserTag = new StudyUserTag() { UserId = user.Id, User = user, Name = tag.Name, Tag = tag };
-                        tag.StudyUsers.Add(studyUserTag);
-                        user.StudyTags.Add(studyUserTag);
-                    }
-                    break;
-                case TagType.Expert:
-                    user = await _context.Users.Include(x => x.ExpertTags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
-                    if(user.ExpertTags.Select(ut => ut.Tag).Contains(tag))
-                    {
-                        _logger.LogInformation("{0} already assigned to {1}", tag.ToString(), user.ToString());
-                    }
-                    else 
-                    {
-                        _logger.LogInformation("{0} added to {1}", tag.ToString(), user.ToString());
-                        var expertUserTag = new ExpertUserTag() { UserId = user.Id, User = user, Name = tag.Name, Tag = tag };
-                        tag.ExpertUsers.Add(expertUserTag);
-                        user.ExpertTags.Add(expertUserTag);
-                    }
-                    break;
+            user = await _context.Users.Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
+            if(user.Tags.Select(ut => ut.Tag).Contains(tag))
+            {
+                _logger.LogInformation("{0} already assigned to {1}", tag.ToString(), user.ToString());
+            }
+            else
+            {
+                _logger.LogInformation("{0} added to {1}", tag.ToString(), user.ToString());
+                var userTag = new UserTag() { UserId = user.Id, User = user, Name = tag.Name, Tag = tag };
+                tag.Users.Add(userTag);
+                user.Tags.Add(userTag);
             }
 
             await _context.SaveChangesAsync();
@@ -89,54 +70,24 @@ namespace Covalence
             return user;
         }
 
-        public async Task<ApplicationUser> RemoveTag(Tag tag, TagType tagType, ApplicationUser user) 
+        public async Task<ApplicationUser> RemoveTag(Tag tag, ApplicationUser user) 
         {
-            switch(tagType) {
-                case TagType.Study:
-                    user = await _context.Users.Include(x => x.StudyTags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
-                    if(user.StudyTags.Select(ut => ut.Tag).Contains(tag))
-                    {
-                        var studyUserTag = user.StudyTags.Where(x => x.Name == tag.Name).FirstOrDefault();
-                        _logger.LogInformation($"Removing {tag.ToString()} from {user.ToString()}");
-                        tag.StudyUsers.Remove(studyUserTag);
-                        user.StudyTags.Remove(studyUserTag);
-                    }
-                    else 
-                    {
-                        _logger.LogInformation($"{tag.ToString()} does not exist on {user.ToString()}");
-                    }
-                    break;
-                case TagType.Expert:
-                    user = await _context.Users.Include(x => x.ExpertTags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
-                    if(user.ExpertTags.Select(ut => ut.Tag).Contains(tag))
-                    {
-                        var expertUserTag = user.ExpertTags.Where(x => x.Name == tag.Name).FirstOrDefault();
-                        _logger.LogInformation($"Removing {tag.ToString()} from {user.ToString()}");
-                        tag.ExpertUsers.Remove(expertUserTag);
-                        user.ExpertTags.Remove(expertUserTag);
-                    }
-                    else 
-                    {
-                        _logger.LogInformation($"{tag.ToString()} does not exist on {user.ToString()}");
-                    }
-                    break;
+            user = await _context.Users.Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
+            if(user.Tags.Select(ut => ut.Tag).Contains(tag))
+            {
+                var userTag = user.Tags.Where(x => x.Name == tag.Name).FirstOrDefault();
+                _logger.LogInformation($"Removing {tag.ToString()} from {user.ToString()}");
+                tag.Users.Remove(userTag);
+                user.Tags.Remove(userTag);
+            }
+            else 
+            {
+                _logger.LogInformation($"{tag.ToString()} does not exist on {user.ToString()}");
             }
 
             await _context.SaveChangesAsync();
             
             return user;
         }
-
-        // public HashSet<Tag> PopulateTags(ICollection<int> tagIds)
-        // {
-        //     HashSet<Tag> tags = new HashSet<Tag>();
-
-        //     foreach(var tagId in tagIds)
-        //     {
-        //         tags.Add(GetTagById(tagId));
-        //     }
-
-        //     return tags;
-        // }
     }
 }
