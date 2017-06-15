@@ -20,18 +20,15 @@ namespace Covalence.Tests {
         private static void SeedTags(ApplicationDbContext context)
         {
             context.Tags.Add(new Tag() {
-                    Name = "Physics",
-                    Description = "Study of Motion"
+                    Name = "Physics"
             });
 
             context.Tags.Add(new Tag() {
-                Name = "Chemistry",
-                Description = "Study of Matter"
+                Name = "Chemistry"
             });
 
             context.Tags.Add(new Tag() {
-                Name = "Biology",
-                Description = "Study of Life"
+                Name = "Biology"
             });
         }
     }

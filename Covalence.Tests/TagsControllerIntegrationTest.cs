@@ -29,19 +29,25 @@ namespace Covalence.Tests
             Assert.True(tags.Count == 3);
         }
 
-        // [Theory]
-        // [InlineData(1)]
-        // [InlineData(2)]
-        // [InlineData(3)]
-        // public async Task GetTagById(int id) {
-        //     var response = await Client.GetAsync($"/api/tags/{id}");
+        [Fact]
+        public async Task CreateTag() {
+            var tagName = "neurology";
+            var uri = $"/api/tags/{tagName}";
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
+            var response = await Client.SendAsync(requestMessage);
 
-        //     response.EnsureSuccessStatusCode();
+            var testTag = new Tag() { Name = tagName };
 
-        //     var content = await response.Content.ReadAsStringAsync();
-        //     var tag = JsonConvert.DeserializeObject<Tag>(content);
-        //     Assert.NotNull(tag);
-        // }
+            response.EnsureSuccessStatusCode();
+
+            var allTagsResponse = await Client.GetAsync("/api/tags");
+            allTagsResponse.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
+            var tags = JsonConvert.DeserializeObject<List<Tag>>(content);
+            Assert.True(tags.Count == 4);
+            Assert.Contains(testTag, tags);
+        }
 
         [Theory]
         [InlineData("olo")]

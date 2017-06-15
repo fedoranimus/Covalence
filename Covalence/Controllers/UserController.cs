@@ -55,8 +55,7 @@ namespace Covalence.Controllers
                 Email = user.Email,
                 Tags = populatedUser.Tags
                     .Select(ut => new TagContract(){
-                        Name = ut.Tag.Name,
-                        Description = ut.Tag.Description
+                        Name = ut.Tag.Name
                     })//,
                 //AuthoredPosts = populatedUser.AuthoredPosts
             };
@@ -74,7 +73,7 @@ namespace Covalence.Controllers
                 return BadRequest();
             }
 
-            var tag = _tagService.GetTag(tagName);
+            var tag = await _tagService.GetTag(tagName);
             if(tag == null)
             {
                 var error = $"No tag corresponding to '{tagName}'";
@@ -106,7 +105,7 @@ namespace Covalence.Controllers
                 return BadRequest();
             }
 
-            var tag = _tagService.GetTag(tagName);
+            var tag = await _tagService.GetTag(tagName);
             if(tag == null)
             {
                 var error = $"No tag corresponding to '{tagName}'";

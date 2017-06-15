@@ -8,11 +8,14 @@ using Microsoft.EntityFrameworkCore;
 namespace Covalence
 {
     public interface ITagService {
-        IEnumerable<Tag> GetAllTags();
-        IEnumerable<Tag> QueryTags(string query);
-        Tag GetTag(string name);
+        Task<IEnumerable<Tag>> GetAllTags();
+        Task<IEnumerable<Tag>> QueryTags(string query);
+        Task<Tag> GetTag(string name);
         Task<ApplicationUser> AddTag(Tag tag, ApplicationUser user);
         Task<ApplicationUser> RemoveTag(Tag tag, ApplicationUser user);
+        Task<Post> AddTag(Tag tag, Post post);
+        Task<Post> RemoveTag(Tag tag, Post post);
+        Task CreateTag(string name);
     }
 
     public class TagService : ITagService
@@ -25,22 +28,31 @@ namespace Covalence
             _logger = loggerFactory.CreateLogger<TagService>();
         }
 
-        public IEnumerable<Tag> GetAllTags() 
+        public async Task<IEnumerable<Tag>> GetAllTags() 
         {
             _logger.LogDebug("Getting all tags...");
-            return _context.Tags.AsEnumerable();
+            return await _context.Tags.ToListAsync();
         }
 
-        public IEnumerable<Tag> QueryTags(string query)
+        public async Task<IEnumerable<Tag>> QueryTags(string query)
         {
             _logger.LogDebug("Finding Tags which contain '{0}'", query);
-            return _context.Tags.ToList().Where(t => t.Name.ToUpperInvariant().Contains(query.ToUpperInvariant()));
+            return await _context.Tags.Where(t => t.Name.ToUpperInvariant().Contains(query.ToUpperInvariant())).ToListAsync();
         }
 
-        public Tag GetTag(string name)
+        public async Task<Tag> GetTag(string name)
         {
             _logger.LogDebug("Getting with name: {0}", name);
-            return _context.Tags.FirstOrDefault(t => t.Name.ToUpperInvariant() == name.ToUpperInvariant());
+            return await _context.Tags.FirstOrDefaultAsync(t => t.Name.ToUpperInvariant() == name.ToUpperInvariant());
+        }
+
+        public async Task CreateTag(string tagName)
+        {
+            _logger.LogDebug($"Creating tag {tagName}");
+            var tag = new Tag(){ Name = tagName };
+            await _context.Tags.AddAsync(tag);
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<ApplicationUser> AddTag(Tag tag, ApplicationUser user)
@@ -81,6 +93,34 @@ namespace Covalence
             await _context.SaveChangesAsync();
             
             return user;
+        }
+
+        public async Task<Post> AddTag(Tag tag, Post post) 
+        {
+            post = await _context.Posts.Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
+            if(post.Tags.Select(ut => ut.Tag).Contains(tag))
+            {
+                _logger.LogInformation($"{tag.ToString()} already exists on {post.ToString()}");
+            }
+            else
+            {
+                //TODO   
+            }
+            return post;
+        }
+
+        public async Task<Post> RemoveTag(Tag tag, Post post)
+        {
+            post = await _context.Posts.Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
+            if(post.Tags.Select(ut => ut.Tag).Contains(tag))
+            {
+                //TODO
+            }
+            else
+            {
+                _logger.LogInformation($"{tag.ToString()} does not exist on {post.ToString()}");
+            }
+            return post;
         }
     }
 }

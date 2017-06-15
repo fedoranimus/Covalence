@@ -14,13 +14,12 @@ namespace Covalence
             Posts = new HashSet<PostTag>();
         }
         public string Name { get; set; }
-        public string Description { get; set; }
         public HashSet<UserTag> Users { get; set; }
         public HashSet<PostTag> Posts { get; set; }
 
         public override string ToString()
         {
-            return $"Tag [ Name = {Name}, Description = {Description}]";
+            return $"Tag [ Name = {Name}]";
         }
     }
 }
