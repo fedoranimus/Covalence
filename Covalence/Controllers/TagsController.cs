@@ -24,9 +24,13 @@ namespace Covalence.Controllers
         }
 
         // POST api/tags
-        [HttpPost]
-        public async Task<IActionResult> CreateTag([FromBody] string tagName)
+        [HttpPost("{tagName}")]
+        public async Task<IActionResult> CreateTag(string tagName)
         {
+            if(tagName == null) 
+            {
+                return BadRequest("tagName is null");
+            }
             var existingTag = await _service.GetTag(tagName);
             if(existingTag != null) 
             {
