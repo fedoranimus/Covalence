@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Covalence.Tests {
@@ -10,6 +11,31 @@ namespace Covalence.Tests {
         { 
             Client = fixture.Client;
             Token = fixture.Token;
+        }
+
+        [Fact(Skip = "Not Implemented")]
+        public async Task CreatePost() {
+            Assert.True(false);
+        }
+
+        [Fact(Skip = "Not Implemented")]
+        public async Task GetAllPosts() {
+            Assert.True(false);
+        }
+
+        [Fact(Skip = "Not Implemented")]
+        public async Task DeletePost() {
+            Assert.True(false);
+        }
+
+        [Fact(Skip = "Not Implemented")]
+        public async Task AddTagToPost() {
+            Assert.True(false);
+        }
+
+        [Fact(Skip = "Not Implemented")]
+        public async Task RemoveTagFromPost() {
+            Assert.True(false);
         }
     }
 }
