@@ -113,6 +113,7 @@ namespace Covalence
             });
 
             services.AddScoped<ITagService, TagService>();
+            services.AddScoped<IPostService, PostService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

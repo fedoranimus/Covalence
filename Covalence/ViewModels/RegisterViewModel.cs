@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Covalence.Authentication
+namespace Covalence.ViewModels
 {
     public class RegisterViewModel
     {

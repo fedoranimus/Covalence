@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Covalence.Authentication
+namespace Covalence.ViewModels
 {
     public class LogoutViewModel
     {

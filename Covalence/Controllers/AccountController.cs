@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Covalence.Authentication;
 using System;
+using Covalence.ViewModels;
 
 namespace Covalence.Controllers
 {

@@ -1,5 +1,10 @@
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
+using Covalence.ViewModels;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace Covalence.Tests {
@@ -11,16 +16,35 @@ namespace Covalence.Tests {
         { 
             Client = fixture.Client;
             Token = fixture.Token;
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
         }
 
-        [Fact(Skip = "Not Implemented")]
+        [Fact]
         public async Task CreatePost() {
-            Assert.True(false);
+            var uri = $"/api/post";
+            var tagList = new List<string>(){ "physics", "biology"};
+            PostViewModel model = new PostViewModel(){ Title = "Test Title", Content = "abcdefghijk", Tags = tagList, Category = 1 };
+            var postContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+            var response = await Client.PostAsync(uri, postContent);
+
+            response.EnsureSuccessStatusCode();
         }
 
         [Fact(Skip = "Not Implemented")]
-        public async Task GetAllPosts() {
+        public async Task CreateTagsWithPost() {
             Assert.True(false);
+        }
+
+        [Fact]
+        public async Task GetAllPosts() {
+            var uri = $"/api/post";
+            var response = await Client.GetAsync(uri);
+
+            response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
+            var posts = JsonConvert.DeserializeObject<List<Post>>(content);
+            Assert.True(posts.Count == 1);
         }
 
         [Fact(Skip = "Not Implemented")]

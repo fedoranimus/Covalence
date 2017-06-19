@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Covalence.Controllers
 {
+    //[Authorize]
     [Route("api/[controller]")]
     public class TagsController : Controller
     {
