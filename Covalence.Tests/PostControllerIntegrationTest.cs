@@ -30,6 +30,21 @@ namespace Covalence.Tests {
             response.EnsureSuccessStatusCode();
         }
 
+        [Theory]
+        [InlineData(1)]
+        public async Task GetPost(int postId) {
+            var uri = $"/api/post/{postId}";
+            var response = await Client.GetAsync(uri);
+
+            response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
+            var post = JsonConvert.DeserializeObject<Post>(content);
+            Assert.Equal(postId, post.PostId);
+            Assert.Equal("Test Title", post.Title);
+            Assert.Equal("abcdefghijk", post.Content);
+        }
+
         [Fact(Skip = "Not Implemented")]
         public async Task CreateTagsWithPost() {
             Assert.True(false);
