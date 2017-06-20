@@ -57,7 +57,7 @@ namespace Covalence.Controllers
                     .Select(ut => new TagContract(){
                         Name = ut.Tag.Name
                     })//,
-                //AuthoredPosts = populatedUser.AuthoredPosts
+                //AuthoredPosts = populatedUser.AuthoredPosts //TODO: Return list of authored posts
             };
 
             return Ok(userContract); 

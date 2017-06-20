@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Covalence.Authentication;
+using Covalence.Contracts;
 using Covalence.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -33,8 +36,9 @@ namespace Covalence.Controllers {
             if(ModelState.IsValid) {
                 try 
                 {
-                    await _service.CreatePost(user, model);
-                    return Ok();
+                    var post = await _service.CreatePost(user, model);
+                    var contract = ConvertPostToContract(post);
+                    return Ok(contract);
                 }
                 catch(Exception e) 
                 {
@@ -50,7 +54,13 @@ namespace Covalence.Controllers {
             try
             {
                 var posts = await _service.GetAllPosts();
-                return Ok(posts);
+                var contracts = new List<PostContract>();
+                foreach(var post in posts)
+                {
+                    contracts.Add(ConvertPostToContract(post));
+                }
+
+                return Ok(contracts);
             }
             catch(Exception e) 
             {
@@ -64,12 +74,67 @@ namespace Covalence.Controllers {
             try
             {
                 var post = await _service.GetPost(postId);
-                return Ok(post);
+                var contract = ConvertPostToContract(post);
+                
+                return Ok(contract);
             }
             catch(Exception e)
             {
                 return BadRequest(e);
             }
+        }
+
+        [HttpDelete("{postId}")]
+        public async Task<IActionResult> DeletePost(int postId)
+        {
+            try 
+            {
+                await _service.DeletePost(postId);
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpPut("{postId}")]
+        public async Task<IActionResult> UpdatePost(int postId, [FromBody] PostViewModel model)
+        {
+            try
+            {
+                var post = await _service.UpdatePost(postId, model);
+                var contract = ConvertPostToContract(post);
+                return Ok(contract);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        private PostContract ConvertPostToContract(Post post) 
+        {
+            var remoteUserContract = new RemoteUserContract(){
+                Id = post.Author.Id,
+                FirstName = post.Author.FirstName,
+                LastName = post.Author.LastName
+            };
+
+            return new PostContract()
+                {
+                    PostId = post.PostId,
+                    Author = remoteUserContract,
+                    Category = post.Category,
+                    Content = post.Content,
+                    DateModified = post.DateModified,
+                    DateCreated = post.DateCreated,
+                    Tags = post.Tags
+                        .Select(ut => new TagContract(){
+                            Name = ut.Tag.Name
+                        }),
+                    Title = post.Title
+                };
         }
     }
 }

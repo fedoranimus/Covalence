@@ -15,7 +15,7 @@ namespace Covalence
         Task<ApplicationUser> RemoveTag(Tag tag, ApplicationUser user);
         Task<Post> AddTag(Tag tag, Post post);
         Task<Post> RemoveTag(Tag tag, Post post);
-        Task CreateTag(string name);
+        Task<Tag> CreateTag(string name);
     }
 
     public class TagService : ITagService
@@ -36,23 +36,31 @@ namespace Covalence
 
         public async Task<IEnumerable<Tag>> QueryTags(string query)
         {
-            _logger.LogDebug("Finding Tags which contain '{0}'", query);
+            _logger.LogDebug($"Finding Tags which contain '{query}'");
             return await _context.Tags.Where(t => t.Name.ToUpperInvariant().Contains(query.ToUpperInvariant())).ToListAsync();
         }
 
         public async Task<Tag> GetTag(string name)
         {
-            _logger.LogDebug("Getting with name: {0}", name);
-            return await _context.Tags.FirstOrDefaultAsync(t => t.Name.ToUpperInvariant() == name.ToUpperInvariant());
+            _logger.LogDebug($"Getting with name: {name}");
+            var tag = await _context.Tags.FirstOrDefaultAsync(t => t.Name.ToUpperInvariant() == name.ToUpperInvariant());
+            if(tag == null)
+            {
+                _logger.LogDebug($"Tag {name} does not exist, creating new tag");
+                tag = await CreateTag(name);
+            }
+            return tag;
         }
 
-        public async Task CreateTag(string tagName)
+        public async Task<Tag> CreateTag(string tagName)
         {
             _logger.LogDebug($"Creating tag {tagName}");
             var tag = new Tag(){ Name = tagName };
             await _context.Tags.AddAsync(tag);
 
             await _context.SaveChangesAsync();
+
+            return tag;
         }
 
         public async Task<ApplicationUser> AddTag(Tag tag, ApplicationUser user)
@@ -60,11 +68,11 @@ namespace Covalence
             user = await _context.Users.Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
             if(user.Tags.Select(ut => ut.Tag).Contains(tag))
             {
-                _logger.LogInformation("{0} already assigned to {1}", tag.ToString(), user.ToString());
+                _logger.LogInformation($"{tag.ToString()} already assigned to {user.ToString()}");
             }
             else
             {
-                _logger.LogInformation("{0} added to {1}", tag.ToString(), user.ToString());
+                _logger.LogInformation($"{tag.ToString()} added to {user.ToString()}");
                 var userTag = new UserTag() { UserId = user.Id, User = user, Name = tag.Name, Tag = tag };
                 tag.Users.Add(userTag);
                 user.Tags.Add(userTag);

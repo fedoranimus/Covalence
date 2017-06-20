@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Covalence.Authentication;
 
@@ -16,13 +17,15 @@ namespace Covalence
         public int PostId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public HashSet<PostTag> Tags { get; set; }
+        public ICollection<PostTag> Tags { get; set; }
         public ApplicationUser Author { get; set; }
         public PostType Category { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateModified { get; set; }
 
         public override string ToString()
         {
-            return $"Post [ Category = {Category.ToString()}, Title = {Title} ]";
+            return $"Post {Title} with category {Category.ToString()} created by {Author.ToString()} on {DateCreated.ToString()}";
         }
     }
 }
