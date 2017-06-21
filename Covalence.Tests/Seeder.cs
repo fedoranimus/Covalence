@@ -1,3 +1,4 @@
+using System;
 using Covalence;
 using Covalence.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -13,6 +14,7 @@ namespace Covalence.Tests {
                 context.Database.Migrate();
 
             SeedTags(context);
+            //SeedPost(context);
 
             context.SaveChanges();
         }
@@ -29,6 +31,18 @@ namespace Covalence.Tests {
 
             context.Tags.Add(new Tag() {
                 Name = "Biology"
+            });
+        }
+
+        private static void SeedPost(ApplicationDbContext context)
+        {
+            context.Posts.Add(new Post(){
+                Category = PostType.Mentor,
+                Content = "Seeded Content",
+                Title = "Seeded Post",
+                DateCreated = DateTime.Now,
+                DateModified = DateTime.Now,
+                Author = new ApplicationUser()
             });
         }
     }

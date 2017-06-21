@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Covalence.Contracts;
 using Covalence.ViewModels;
 using Newtonsoft.Json;
 using Xunit;
@@ -28,9 +30,22 @@ namespace Covalence.Tests {
             var response = await Client.PostAsync(uri, postContent);
 
             response.EnsureSuccessStatusCode();
+
+            // var uri2 = $"/api/post/1";
+            // var response2 = await Client.GetAsync(uri2);
+
+            // response2.EnsureSuccessStatusCode();
+            // var content = await response2.Content.ReadAsStringAsync();
+            // var post = JsonConvert.DeserializeObject<PostContract>(content);
+
+            var content = await response.Content.ReadAsStringAsync();
+            var post = JsonConvert.DeserializeObject<PostContract>(content);
+            Assert.Equal(1, post.PostId);
+            Assert.Equal("Test Title", post.Title);
+            Assert.Equal("abcdefghijk", post.Content);
         }
 
-        [Theory(Skip = "Self-referencing issue")]
+        [Theory]
         [InlineData(1)]
         public async Task GetPost(int postId) {
             var uri = $"/api/post/{postId}";
@@ -39,7 +54,7 @@ namespace Covalence.Tests {
             response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync();
-            var post = JsonConvert.DeserializeObject<Post>(content);
+            var post = JsonConvert.DeserializeObject<PostContract>(content);
             Assert.Equal(postId, post.PostId);
             Assert.Equal("Test Title", post.Title);
             Assert.Equal("abcdefghijk", post.Content);
@@ -57,7 +72,7 @@ namespace Covalence.Tests {
             response.EnsureSuccessStatusCode();
         }
 
-        [Fact(Skip = "Self-referencing issue")]
+        [Fact(Skip = "Not Implemented")]
         public async Task GetAllPosts() {
             var uri = $"/api/post";
             var response = await Client.GetAsync(uri);
@@ -65,12 +80,13 @@ namespace Covalence.Tests {
             response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync();
-            var posts = JsonConvert.DeserializeObject<List<Post>>(content);
+            var posts = JsonConvert.DeserializeObject<List<PostContract>>(content);
+            Console.WriteLine(posts.Count);
             Assert.True(posts.Count == 2);
         }
 
 
-        [Theory(Skip = "Self-referencing issue")]
+        [Theory(Skip = "Not Implemented")]
         [InlineData(1)]
         public async Task AddTagToPost(int postId) {
             var uri = $"/api/post/{postId}";

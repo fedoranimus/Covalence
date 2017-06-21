@@ -36,33 +36,22 @@ namespace Covalence.Tests
         }
 
         [Fact]
-        public async Task AddTagToUser_CorrectData_ShouldContainSingleTag() {
-            var tagName = "Physics";
-            var uri = $"/api/user/tag/{tagName}";
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
-            var response = await Client.SendAsync(requestMessage);
+        public async Task AddTagsToUser_CorrectData_ShouldContainThreeTags() {
+            var uri = $"/api/user/tags";
+            var requestContent = new string[] {"Physics", "biology", "dinology"};
+            var body = new StringContent(JsonConvert.SerializeObject(requestContent), Encoding.UTF8, "application/json");
+            
+            var response = await Client.PutAsync(uri, body);
 
             response.EnsureSuccessStatusCode();
 
-            var userResponse = await Client.GetAsync("/api/user");
-            response.EnsureSuccessStatusCode();
-
-            var content = await userResponse.Content.ReadAsStringAsync();
-            var user = JsonConvert.DeserializeObject<UserContract>(content);
-
-            Assert.Equal("Physics", user.Tags.Single().Name);         
-        }
-
-        [Fact(Skip = "Needs to be updated for new behavior")]
-        public async Task AddTagToUser_NonexistentTag_ShouldReturn400Error() {
-            var tagName = "Eatology";
-            var uri = $"/api/user/tag/{tagName}";
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
-            var response = await Client.SendAsync(requestMessage);
+            // var userResponse = await Client.GetAsync("/api/user");
+            // response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync();
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            Assert.Equal($"No tag corresponding to '{tagName}'", content);
+            var user = JsonConvert.DeserializeObject<UserContract>(content);
+
+            Assert.True(user.Tags.Count() == 3);       
         }
 
         // [Fact(Skip="Not Implemented")]

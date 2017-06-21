@@ -15,8 +15,8 @@ namespace Covalence.Contracts
         public string Content { get; set; }
         public RemoteUserContract Author { get; set; }
         public PostType Category { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime DateModified { get; set; }
+        public string DateCreated { get; set; }
+        public string DateModified { get; set; }
         public IEnumerable<TagContract> Tags { get; set; }
 
     }

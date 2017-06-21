@@ -37,7 +37,7 @@ namespace Covalence.Controllers {
                 try 
                 {
                     var post = await _service.CreatePost(user, model);
-                    var contract = ConvertPostToContract(post);
+                    var contract = Converters.ConvertPostToContract(post);
                     return Ok(contract);
                 }
                 catch(Exception e) 
@@ -54,11 +54,7 @@ namespace Covalence.Controllers {
             try
             {
                 var posts = await _service.GetAllPosts();
-                var contracts = new List<PostContract>();
-                foreach(var post in posts)
-                {
-                    contracts.Add(ConvertPostToContract(post));
-                }
+                var contracts = posts.Select(x => Converters.ConvertPostToContract(x)).ToList();
 
                 return Ok(contracts);
             }
@@ -74,7 +70,7 @@ namespace Covalence.Controllers {
             try
             {
                 var post = await _service.GetPost(postId);
-                var contract = ConvertPostToContract(post);
+                var contract = Converters.ConvertPostToContract(post);
                 
                 return Ok(contract);
             }
@@ -104,37 +100,13 @@ namespace Covalence.Controllers {
             try
             {
                 var post = await _service.UpdatePost(postId, model);
-                var contract = ConvertPostToContract(post);
+                var contract = Converters.ConvertPostToContract(post);
                 return Ok(contract);
             }
             catch(Exception e)
             {
                 return BadRequest(e);
             }
-        }
-
-        private PostContract ConvertPostToContract(Post post) 
-        {
-            var remoteUserContract = new RemoteUserContract(){
-                Id = post.Author.Id,
-                FirstName = post.Author.FirstName,
-                LastName = post.Author.LastName
-            };
-
-            return new PostContract()
-                {
-                    PostId = post.PostId,
-                    Author = remoteUserContract,
-                    Category = post.Category,
-                    Content = post.Content,
-                    DateModified = post.DateModified,
-                    DateCreated = post.DateCreated,
-                    Tags = post.Tags
-                        .Select(ut => new TagContract(){
-                            Name = ut.Tag.Name
-                        }),
-                    Title = post.Title
-                };
         }
     }
 }

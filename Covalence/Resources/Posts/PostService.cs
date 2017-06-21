@@ -31,8 +31,6 @@ namespace Covalence {
             var postTags = new HashSet<PostTag>();
             var category = (PostType)model.Category;
 
-            //TOOO: Add create & modified fields
-
             var post = new Post(){
                 Author = user,
                 Content = model.Content,
@@ -66,12 +64,20 @@ namespace Covalence {
 
         public async Task<List<Post>> GetAllPosts() 
         {
-            return await _context.Posts.ToListAsync();
+            return await _context.Posts
+                    .Include(p => p.Author)
+                    .Include(p => p.Tags)
+                        .ThenInclude(pt => pt.Tag)
+                    .ToListAsync();
         }
 
         public async Task<Post> GetPost(int postId)
         {
-            return await _context.Posts.FirstOrDefaultAsync(x => x.PostId == postId);
+            return await _context.Posts
+                    .Include(p => p.Author)
+                    .Include(p => p.Tags)
+                        .ThenInclude(pt => pt.Tag)
+                    .FirstOrDefaultAsync(x => x.PostId == postId);
         }
 
         public async Task DeletePost(int postId)
@@ -83,7 +89,11 @@ namespace Covalence {
 
         public async Task<Post> UpdatePost(int postId, PostViewModel model)
         {
-            var post = await _context.Posts.FirstOrDefaultAsync(x => x.PostId == postId);
+            var post = await _context.Posts
+                        .Include(p => p.Author)
+                        .Include(p => p.Tags)
+                            .ThenInclude(pt => pt.Tag)
+                        .FirstOrDefaultAsync(x => x.PostId == postId);
             var category = (PostType)model.Category;
             var postTags = new HashSet<PostTag>();
 

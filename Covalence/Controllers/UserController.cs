@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Covalence.Authentication;
 using Covalence.Contracts;
+using Covalence.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Collections.Generic;
 
 namespace Covalence.Controllers
 {
@@ -34,7 +36,6 @@ namespace Covalence.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
-            var claims = User.Claims.Select(claim => new { claim.Type, claim.Value }).ToArray();
             if(user == null)
             {
                 _logger.LogError("User not found");
@@ -46,88 +47,70 @@ namespace Covalence.Controllers
                     .ThenInclude(ut => ut.Tag)
                 .FirstOrDefault();
 
-            var userContract = new UserContract()
-            {
-                Id = user.Id,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Location = user.Location,
-                Email = user.Email,
-                Tags = populatedUser.Tags
-                    .Select(ut => new TagContract(){
-                        Name = ut.Tag.Name
-                    })//,
-                //AuthoredPosts = populatedUser.AuthoredPosts //TODO: Return list of authored posts
-            };
+            var userContract = Converters.ConvertUserToContract(populatedUser);
 
             return Ok(userContract); 
         }
 
-        [HttpPost("tag/{tagName}")]
-        public async Task<IActionResult> AddTagToUser(string tagName) 
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser([FromBody] UserViewModel model) 
         {
             var user = await _userManager.GetUserAsync(User);
-            if(user == null) 
+
+            if(user == null)
             {
                 _logger.LogError("User not found");
                 return BadRequest();
             }
 
-            var tag = await _tagService.GetTag(tagName);
-            if(tag == null)
+            if(ModelState.IsValid)
             {
-                var error = $"No tag corresponding to '{tagName}'";
-                _logger.LogError(error);
-                return BadRequest(error);
-            }
+                var userTags = model.Tags
+                    .Select(async t => 
+                        new UserTag() { User = user, UserId = user.Id, Tag = await _tagService.GetTag(t), Name = t.ToUpperInvariant()
+                    }).ToList();
+                    
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Email = model.Email;
+                user.UserName = user.Email;
+                user.Tags = await Task.WhenAll(userTags);
 
-            user = await _tagService.AddTag(tag, user);
-            var result = await _userManager.UpdateAsync(user);
+                await _userManager.UpdateAsync(user);
+                var contract = Converters.ConvertUserToContract(user);
 
-            if(result.Succeeded)
-            {
-                return Ok(result);
+                return Ok(contract);
             }
-            else
-            {
-                var error = "Updating tag failed";
-                _logger.LogError(error);
-                return BadRequest(error);
-            } 
+            return BadRequest("Invalid ViewModel");
         }
 
-        [HttpDelete("tag/{tagName}")]
-        public async Task<IActionResult> RemoveTagFromUser(string tagName) 
+        [HttpPut("tags")]
+        public async Task<IActionResult> UpdateUserTags([FromBody] List<string> tags)
         {
             var user = await _userManager.GetUserAsync(User);
+
             if(user == null)
             {
+                _logger.LogError("User not found");
                 return BadRequest();
             }
 
-            var tag = await _tagService.GetTag(tagName);
-            if(tag == null)
+            if(tags != null)
             {
-                var error = $"No tag corresponding to '{tagName}'";
-                _logger.LogError(error);
-                return BadRequest(error);
+                var userTags = tags
+                    .Select(async t => 
+                        new UserTag() { User = user, UserId = user.Id, Tag = await _tagService.GetTag(t), Name = t.ToUpperInvariant()
+                    }).ToList();
+
+                user.Tags = await Task.WhenAll(userTags);
+
+                await _userManager.UpdateAsync(user);
+                var contract = Converters.ConvertUserToContract(user);
+
+                return Ok(contract);
             }
 
-            user = await _tagService.RemoveTag(tag, user);
-            var result = await _userManager.UpdateAsync(user);
-
-            _logger.LogInformation("Removing Tag: {0}", tag.ToString());
-
-            if(result.Succeeded)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                var error = "Updating tag failed";
-                _logger.LogError(error);
-                return BadRequest(error);
-            }
+            return BadRequest("Invalid Tag List");
         }
 
         [HttpPost("request/connection/{requestedUserId}")]
