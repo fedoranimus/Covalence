@@ -49,7 +49,11 @@ namespace Covalence {
             foreach (var tag in model.Tags)
             {
                 var entityTag = await _tagService.GetTag(tag);
-                var postTag = new PostTag() { PostId = key, Post = post, Name = entityTag.Name, Tag = entityTag };
+
+                var postTag = await _context.PostTags.Where(pt => pt.PostId == key).Where(pt => pt.Name == entityTag.Name).FirstOrDefaultAsync(); //Should probably always be null
+                if (postTag == null)
+                    postTag = new PostTag() { PostId = post.PostId, Post = post, Name = entityTag.Name, Tag = entityTag };
+
                 postTags.Add(postTag);
             };
 
@@ -94,24 +98,32 @@ namespace Covalence {
                         .Include(p => p.Tags)
                             .ThenInclude(pt => pt.Tag)
                         .FirstOrDefaultAsync(x => x.PostId == postId);
-            var category = (PostType)model.Category;
-            var postTags = new HashSet<PostTag>();
 
-            foreach (var tag in model.Tags)
+            if(post != null) 
             {
-                var entityTag = await _tagService.GetTag(tag);
-                var postTag = new PostTag() { PostId = post.PostId, Post = post, Name = entityTag.Name, Tag = entityTag };
-                postTags.Add(postTag);
-            };
+                var category = (PostType)model.Category;
+                var postTags = new HashSet<PostTag>();
 
-            post.Content = model.Content;
-            post.Title = model.Title;
-            post.Tags = postTags;
-            post.Category = category;
-            post.DateModified = DateTime.UtcNow;
-            
-            _context.Posts.Update(post);
-            await _context.SaveChangesAsync();
+                foreach (var tag in model.Tags)
+                {
+                    var entityTag = await _tagService.GetTag(tag);
+                    var postTag = await _context.PostTags.Where(pt => pt.PostId == postId).Where(pt => pt.Name == entityTag.Name).FirstOrDefaultAsync();
+                    if(postTag == null)
+                        postTag = new PostTag() { PostId = post.PostId, Post = post, Name = entityTag.Name, Tag = entityTag };
+
+                    postTags.Add(postTag);
+                };
+
+                post.Content = model.Content;
+                post.Title = model.Title;
+                post.Tags = postTags;
+                post.Category = category;
+                post.DateModified = DateTime.UtcNow;
+                
+                _context.Posts.Update(post);
+                await _context.SaveChangesAsync();
+                return post;
+            }
 
             return post;
         }

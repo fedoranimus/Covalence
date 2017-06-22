@@ -23,30 +23,35 @@ namespace Covalence.Contracts
                 Location = user.Location,
                 Email = user.Email,
                 Tags = user.Tags
-                    .Select(ut => Converters.ConvertTagToContract(ut.Tag))//,
-                //AuthoredPosts = populatedUser.AuthoredPosts //TODO: Return list of authored posts
+                    .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList(),
+                AuthoredPosts = user.AuthoredPosts
+                    .Select(post => Converters.ConvertPostToContract(post)).ToList()
+            };
+        }
+
+        public static RemoteUserContract ConvertRemoteUserToContract(ApplicationUser user)
+        {
+            return new RemoteUserContract(){
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName
             };
         }
 
         public static PostContract ConvertPostToContract(Post post) 
         {
-            var remoteUserContract = new RemoteUserContract(){
-                Id = post.Author.Id,
-                FirstName = post.Author.FirstName,
-                LastName = post.Author.LastName
-            };
 
             return new PostContract()
             {
                 PostId = post.PostId,
                 Title = post.Title,
-                Author = remoteUserContract,
+                Author = Converters.ConvertRemoteUserToContract(post.Author),
                 Category = post.Category,
                 Content = post.Content,
                 DateModified = post.DateModified.ToString(),
                 DateCreated = post.DateCreated.ToString(),
                 Tags = post.Tags
-                    .Select(ut => Converters.ConvertTagToContract(ut.Tag))  
+                    .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList()  
             };
         }
     }

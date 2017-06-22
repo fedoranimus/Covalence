@@ -7,7 +7,7 @@ namespace Covalence.Contracts
         public UserContract()
         {
             Tags = new List<TagContract>();
-            //Posts = new List<PostContract>();
+            AuthoredPosts = new List<PostContract>();
         }
 
         public string Email { get; set; }
@@ -15,8 +15,8 @@ namespace Covalence.Contracts
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Location { get; set;}
-        public IEnumerable<TagContract> Tags { get; set; }
-        //public IEnumerable<PostContract> AuthoredPosts { get; set; }
+        public ICollection<TagContract> Tags { get; set; }
+        public ICollection<PostContract> AuthoredPosts { get; set; }
         //public List<Connection> Connections { get; set; }
     }
 }

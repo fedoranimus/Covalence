@@ -31,7 +31,7 @@ namespace Covalence.Tests
             Assert.True(tags.Count == 3);
         }
 
-        [Fact(Skip = "Needs to be updated to reflect new amount of tags")]
+        [Fact]
         public async Task CreateTag() 
         {
             var tagName = "neurology";
@@ -41,14 +41,6 @@ namespace Covalence.Tests
             var testTag = new Tag() { Name = tagName };
 
             response.EnsureSuccessStatusCode();
-
-            var allTagsResponse = await Client.GetAsync("/api/tag");
-            allTagsResponse.EnsureSuccessStatusCode();
-
-            var content = await allTagsResponse.Content.ReadAsStringAsync();
-            var tags = JsonConvert.DeserializeObject<List<TagContract>>(content);
-            Assert.True(tags.Count == 4);
-            //Assert.Contains(testTag, tags);
         }
 
         [Theory]

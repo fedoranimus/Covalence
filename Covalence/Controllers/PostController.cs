@@ -42,7 +42,7 @@ namespace Covalence.Controllers {
                 }
                 catch(Exception e) 
                 {
-                    return BadRequest($"Failed to create post: {e}");
+                    return BadRequest($"Failed to create post");
                 }
             }    
             return BadRequest("ViewModel is invalid");
@@ -60,7 +60,7 @@ namespace Covalence.Controllers {
             }
             catch(Exception e) 
             {
-                return BadRequest(e);
+                return BadRequest("Failed to get posts");
             }   
         }
 
@@ -76,7 +76,7 @@ namespace Covalence.Controllers {
             }
             catch(Exception e)
             {
-                return BadRequest(e);
+                return BadRequest($"Failed to get post: {postId}");
             }
         }
 
@@ -90,7 +90,7 @@ namespace Covalence.Controllers {
             }
             catch(Exception e)
             {
-                return BadRequest(e);
+                return BadRequest("Failed to delete post");
             }
         }
 
@@ -105,7 +105,7 @@ namespace Covalence.Controllers {
             }
             catch(Exception e)
             {
-                return BadRequest(e);
+                return BadRequest($"Failed to update post: {postId}");
             }
         }
     }

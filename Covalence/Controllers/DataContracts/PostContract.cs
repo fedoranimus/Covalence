@@ -8,7 +8,7 @@ namespace Covalence.Contracts
     {
         public PostContract()
         {
-            Tags = new List<TagContract>();
+            Tags = new HashSet<TagContract>();
         }
         public int PostId { get; set; }
         public string Title { get; set; }
@@ -17,7 +17,7 @@ namespace Covalence.Contracts
         public PostType Category { get; set; }
         public string DateCreated { get; set; }
         public string DateModified { get; set; }
-        public IEnumerable<TagContract> Tags { get; set; }
+        public ICollection<TagContract> Tags { get; set; }
 
     }
 }

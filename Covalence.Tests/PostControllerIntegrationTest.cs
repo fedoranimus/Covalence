@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using Xunit;
 
 namespace Covalence.Tests {
-    public class PostControllerIntegrationTests : IClassFixture<TestFixture<TestStartup>>
+    public class PostControllerIntegrationTests : TestClassBase,IClassFixture<TestFixture<TestStartup>>
     {
         private readonly HttpClient Client;
         private readonly string Token;
@@ -21,7 +21,7 @@ namespace Covalence.Tests {
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
         }
 
-        [Fact]
+        [Fact, Order(1)]
         public async Task CreatePost() {
             var uri = $"/api/post";
             var tagList = new List<string>(){ "physics", "biology"};
@@ -31,13 +31,6 @@ namespace Covalence.Tests {
 
             response.EnsureSuccessStatusCode();
 
-            // var uri2 = $"/api/post/1";
-            // var response2 = await Client.GetAsync(uri2);
-
-            // response2.EnsureSuccessStatusCode();
-            // var content = await response2.Content.ReadAsStringAsync();
-            // var post = JsonConvert.DeserializeObject<PostContract>(content);
-
             var content = await response.Content.ReadAsStringAsync();
             var post = JsonConvert.DeserializeObject<PostContract>(content);
             Assert.Equal(1, post.PostId);
@@ -45,7 +38,7 @@ namespace Covalence.Tests {
             Assert.Equal("abcdefghijk", post.Content);
         }
 
-        [Theory]
+        [Theory, Order(2)]
         [InlineData(1)]
         public async Task GetPost(int postId) {
             var uri = $"/api/post/{postId}";
@@ -60,19 +53,26 @@ namespace Covalence.Tests {
             Assert.Equal("abcdefghijk", post.Content);
         }
 
-        [Fact]
+        [Fact, Order(3)]
         public async Task CreateTagsWithPost() {
             var uri = $"/api/post";
-            var tagList = new List<string>(){ "physics", "biology", "exobiology"};
-            PostViewModel model = new PostViewModel(){ Title = "Test Title", Content = "abcdefghijk", Tags = tagList, Category = 1 };
+            var tagList = new List<string>(){ "physics", "biology", "exobiology" };
+            PostViewModel model = new PostViewModel(){ Title = "Test Title2", Content = "abcdefghijklmn", Tags = tagList, Category = 1 };
             var postContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
         
             var response = await Client.PostAsync(uri, postContent);
 
             response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
+            var post = JsonConvert.DeserializeObject<PostContract>(content);
+            Assert.Equal(2, post.PostId);
+            Assert.Equal("Test Title2", post.Title);
+            Assert.Equal("abcdefghijklmn", post.Content);
+            Assert.Equal(3, post.Tags.Count);
         }
 
-        [Fact(Skip = "Not Implemented")]
+        [Fact, Order(5)]
         public async Task GetAllPosts() {
             var uri = $"/api/post";
             var response = await Client.GetAsync(uri);
@@ -86,11 +86,11 @@ namespace Covalence.Tests {
         }
 
 
-        [Theory(Skip = "Not Implemented")]
+        [Theory, Order(4)]
         [InlineData(1)]
-        public async Task AddTagToPost(int postId) {
+        public async Task UpdatePostTags(int postId) {
             var uri = $"/api/post/{postId}";
-            var tagList = new List<string>(){ "physics", "biology", "chemistry"};
+            var tagList = new List<string>(){ "physics", "biology", "chemistry" };
             PostViewModel model = new PostViewModel(){ Title = "Test Title", Content = "abcdefghijk", Tags = tagList, Category = 1 };
             var postContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
             
@@ -99,15 +99,10 @@ namespace Covalence.Tests {
             response.EnsureSuccessStatusCode();
         }
 
-        [Theory(Skip = "Not Implemented")]
+        [Theory, Order(6)]
         [InlineData(1)]
-        public async Task RemoveTagFromPost(int postId) {
-
-        }
-
-        [Theory]
-        [InlineData(1)]
-        public async Task DeletePost(int postId) {
+        public async Task DeletePost(int postId)
+        {
             var uri = $"/api/post/{postId}";
             var response = await Client.DeleteAsync(uri);
 

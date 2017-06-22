@@ -52,9 +52,9 @@ namespace Covalence.Controllers
             var existingTag = await _service.GetTag(tagName);
             if(existingTag != null) 
             {
-                var error = "Tag already exists";
-                _logger.LogError(error);
-                return BadRequest(error);
+                var response = "Tag already exists";
+                _logger.LogInformation(response);
+                return Ok(response);
             } 
             else 
             {
