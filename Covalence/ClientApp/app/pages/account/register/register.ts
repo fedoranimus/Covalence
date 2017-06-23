@@ -7,9 +7,6 @@ export class Register {
     password: string = "";
     firstName: string = "";
     lastName: string = "";
-    occupation: string = "";
-    employer: string = "";
-
 
     constructor(private authService: AuthService) {
 
@@ -20,9 +17,7 @@ export class Register {
             email: this.email,
             password: this.password,
             firstName: this.firstName,
-            lastName: this.lastName,
-            occupation: this.occupation,
-            employer: this.employer
+            lastName: this.lastName
         });
     }
 

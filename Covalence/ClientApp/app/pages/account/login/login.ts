@@ -1,6 +1,6 @@
 import {AuthService} from 'aurelia-authentication';
 import {inject, computedFrom} from 'aurelia-framework';
-import {User, IUser, IUserData} from '../../infrastructure/user';
+import {User, IUser, IUserData} from '../../../infrastructure/user';
 
 @inject(AuthService)
 export class Login {
