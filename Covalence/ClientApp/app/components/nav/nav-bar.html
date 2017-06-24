@@ -1,24 +1,24 @@
 <template class="nav-bar" bindable="router">
   <require from="./nav.scss"></require>
-  <nav class="nav">
-      <a class="nav__brand" href="#"> 
+  <nav class="pure-menu pure-menu-horizontal">
+      <a class="pure-menu-heading pure-menu-link" href="#"> 
         <span class="nav__brand-logo"></span>
         <span class="nav__brand-name">${router.title}</span>
       </a>
 
-      <ul class="nav__list">
-        <li repeat.for="row of router.navigation | authFilter: isAuthenticated" class="nav__item ${row.isActive ? 'nav__item--active' : ''}">
-          <a class="nav__link" href.bind="row.href">${row.title}</a>
+      <ul class="pure-menu-list">
+        <li repeat.for="row of router.navigation | authFilter: isAuthenticated" class="pure-menu-item ${row.isActive ? 'pure-menu-selected' : ''}">
+          <a class="pure-menu-link" href.bind="row.href">${row.title}</a>
         </li>
       </ul>
       
-      <ul show.bind="!isAuthenticated" class="nav__list--right">
-        <li class="nav__item"><a class="nav__link" href="/#/login">Login</a></li>
-        <li class="nav__item"><a class="nav__link" href="/#/register">Sign Up</a></li>
+      <ul show.bind="!isAuthenticated" class="pure-menu-list pull-right">
+        <li class="pure-menu-item"><a class="pure-menu-link" href="/#/login">Login</a></li>
+        <li class="pure-menu-item"><a class="pure-menu-link" href="/#/register"><span class="pure-menu-span-emphasis">Sign Up<span></a></li>
       </ul>
-      <ul show.bind="isAuthenticated" class="nav__list--right">
-          <li class="nav-item"><a class="nav-link" href="/#/profile">${displayName}</a></li>
-          <li class="nav-item"><a class="nav-link" href="/#/" click.delegate="logout()">Logout</a></li>
+      <ul show.bind="isAuthenticated" class="pure-menu-list pull-right">
+          <li class="pure-menu-item"><a class="pure-menu-link" href="/#/profile">${displayName}</a></li>
+          <li class="pure-menu-item"><a class="pure-menu-link" href="/#/" click.delegate="logout()">Logout</a></li>
       </ul>
 
       <!--<ul class="nav navbar-nav navbar-right">
