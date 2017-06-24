@@ -32,7 +32,8 @@ module.exports = ({ prod } = {}) => {
                 'aurelia-templating-resources',
                 'aurelia-templating-router',
                 'aurelia-api',
-                'aurelia-authentication'
+                'aurelia-authentication',
+                'purecss'
             ],
         },
         output: {
