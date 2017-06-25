@@ -1,12 +1,13 @@
 $primary-color: rgba(124,187,0,1);
-$secondary-color: rgba(0,161,241,1);
+$secondary-color: rgba(76,222,245,1);
 $tertiary-color: rgba(246,83,20,1);
 $light-text-color: rgba(255,255,255,1);
-$dark-text-color: rgba(72,72,72,1);
+$dark-text-color: rgba(34,34,34,1);
 $placeholder-text-color: rgba(187,187,187,1);
 
 $light-text-color--hover: darken($light-text-color, 10%);
 
+$primary-color--hover: darken($primary-color, 5%);
 $secondary-color--hover: darken($secondary-color, 10%);
 
 $dark-background-color: $dark-text-color;

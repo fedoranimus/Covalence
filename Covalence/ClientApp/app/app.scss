@@ -1,3 +1,5 @@
+@import 'colors';
+
 @import url('https://fonts.googleapis.com/css?family=Exo+2');
 
 html, body {
@@ -16,4 +18,29 @@ html, body {
     // height: 100%;
     // margin-top: 38px;
     // height: calc(100% - 38px);
+}
+
+.container {
+    flex: 1 1200px;
+}
+
+.pure-button {
+    background-color: $primary-color;
+    color: $light-text-color;
+}
+
+.large-button {
+    width: auto;
+    font-weight: bold;
+    font-size: 24pt;
+}
+
+.pure-button:hover {
+    color: $light-text-color--hover;
+    background-image: unset;
+}
+
+.vertical-center {
+    display: flex;
+    align-items: center;
 }
