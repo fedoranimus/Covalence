@@ -1,31 +1,27 @@
 <template class="register">
     <require from="./register.scss"></require>
-    <div class="container">
-        <div class="row">
-            <div class="center-form panel col-md-6">
-                <div class="panel-body">
-                    <h2 class="text-center">Sign Up</h2>
-                    <form method="post" name="registerForm">
+    <form class="pure-form pure-form-aligned" method="post" name="registerForm">
+        <fieldset>
+            <legend class="account-header">Sign Up</legend>
 
-                    <div class="form-group has-feedback">
-                        <input class="form-control input-lg" type="text" name="email" value.bind="email" placeholder="Email" required autofocus>
-                        <span class="ion-at form-control-feedback"></span>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <input class="form-control input-lg" type="password" name="password" value.bind="password" placeholder="Password" required>
-                        <span class="ion-key form-control-feedback"></span>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <input class="form-control input-lg" type="password" name="verify-password" value.bind="verifyPassword" placeholder="Verify Password" required>
-                        <span class="ion-key form-control-feedback"></span>
-                    </div>
-
-                    <button type="submit" click.delegate="signup()" class="btn btn-lg  btn-block btn-success">Sign Up</button>
-                    </form>
-                </div>
+            <div class="pure-control-group">
+                <label for="email">Email</label>
+                <input class="form-control input-lg" type="text" name="email" value.bind="email" placeholder="Email Address" required>
             </div>
-        </div>
-    </div>
+
+            <div class="pure-control-group">
+                <label for="password">Password</label>
+                <input class="form-control input-lg" type="password" name="password" value.bind="password" placeholder="Password" required>
+            </div>
+
+            <div class="pure-control-group">
+                <label for="verify-password">Verify Password</label>
+                <input class="form-control input-lg" type="password" name="verify-password" value.bind="verifyPassword" placeholder="Verify Password" required>
+            </div>
+
+            <div class="pure-controls">
+                <button type="submit" click.delegate="signup()" class="pure-button pure-button-primary">Sign Up</button>
+            </div>
+        </fieldset>
+    </form>
 </template>

@@ -44,3 +44,15 @@ html, body {
     display: flex;
     align-items: center;
 }
+
+.vertical-line {
+    display: inline-block;
+    border-left: thin solid $dark-text-color;
+}
+
+.pure-g-box-sizing > div {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 1em;
+}

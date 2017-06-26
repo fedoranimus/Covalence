@@ -1,6 +1,15 @@
 <template>
+    <require from="./account.scss"></require>
     <require from="./register/register"></require>
     <require from="./login/login"></require>
-    <register></register>
-    <login></login>
+    <div class="container">
+        <div class="pure-g pure-g-box-sizing">
+            <div class="pure-u-1 pure-u-lg-1-2">
+                <login></login>
+            </div>
+            <div class="pure-u-1 pure-u-lg-1-2">
+                <register></register>
+            </div>
+        </div>
+    </div>
 </template>
