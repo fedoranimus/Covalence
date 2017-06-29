@@ -1,6 +1,7 @@
 import 'isomorphic-fetch';
 import {Aurelia, PLATFORM} from 'aurelia-framework'
 import authConfig from './app/authConfig';
+import 'bulma/css/bulma.css';
 declare const IS_DEV_BUILD: boolean; // The value is supplied by Webpack during the build
 
 export function configure(aurelia: Aurelia) {

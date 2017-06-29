@@ -14,7 +14,7 @@ module.exports = ({ prod } = {}) => {
         module: {
             loaders: [
                 { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, loader: 'url-loader?limit=100000' },
-                { test: /\.css(\?|$)/, loader: extractCSS.extract([isDevBuild ? 'css-loader' : 'css-loader?minimize']) }
+                { test: /\.css$/, loader: extractCSS.extract([isDevBuild ? 'css-loader' : 'css-loader?minimize']) }
             ]
         },
         entry: {
@@ -33,7 +33,7 @@ module.exports = ({ prod } = {}) => {
                 'aurelia-templating-router',
                 'aurelia-api',
                 'aurelia-authentication',
-                'bulma'
+                'bulma/css/bulma.css'
             ],
         },
         output: {
