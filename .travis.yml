@@ -1,7 +1,6 @@
 language: csharp
 dist: trusty
 sudo: required
-group: deprecated-2017Q2
 mono: none
 dotnet: 1.0.1
 skip_cleanup: true
