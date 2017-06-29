@@ -1,6 +1,6 @@
 language: csharp
 dist: trusty
-sudo: required
+sudo: false
 mono: none
 dotnet: 1.0.1
 skip_cleanup: true
