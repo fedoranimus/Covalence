@@ -78,19 +78,22 @@ namespace Covalence {
                     .ToListAsync();
         }
 
+        //TODO: Implement Search
         public async Task<List<Post>> SearchPosts(string query, int startIndex, int pageSize)
         {
             //https://stackoverflow.com/questions/12730251/convert-result-of-matches-from-regex-into-list-of-string/21123574#21123574
             var matches = MatchQuery(query);
             var tagsMatch = matches.Groups["tags"];
             var contentMatch = matches.Groups["content"];
-            var posts = await _context.Posts.OrderByDescending(p => p.Tags.Count())
+            var unorderedPosts = await _context.Posts
                                 .Include(p => p.Content)
                                 .Include(p => p.Tags)
                                     .ThenInclude(pt => pt.Tag)
                                 .Skip(startIndex)
                                 .Take(pageSize)
                                 .ToListAsync();
+
+            var posts = unorderedPosts.OrderByDescending(x => x.Tags.Select(t => t.Name)).ToList();
 
             return posts;
         }

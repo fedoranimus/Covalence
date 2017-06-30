@@ -81,7 +81,6 @@ namespace Covalence.Tests {
 
             var content = await response.Content.ReadAsStringAsync();
             var posts = JsonConvert.DeserializeObject<List<PostContract>>(content);
-            Console.WriteLine(posts.Count);
             Assert.True(posts.Count == 2);
         }
 
@@ -98,6 +97,19 @@ namespace Covalence.Tests {
 
             response.EnsureSuccessStatusCode();
         }
+
+        // [Theory, Order(5)]
+        // [InlineData("[physics] abc")]
+        // public async Task SearchPosts(string query) {
+        //     var uri = $"/api/post/search/{query}";
+        //     var response = await Client.GetAsync(uri);
+
+        //     response.EnsureSuccessStatusCode();
+
+        //     var content = await response.Content.ReadAsStringAsync();
+        //     var posts = JsonConvert.DeserializeObject<List<PostContract>>(content);
+        //     Assert.True(posts.Count == 2);
+        // }
 
         [Theory, Order(6)]
         [InlineData(1)]
