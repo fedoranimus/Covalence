@@ -6,11 +6,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Covalence.ViewModels;
 using System;
+using System.Text.RegularExpressions;
 
 namespace Covalence {
     public interface IPostService {
         Task<Post> CreatePost(ApplicationUser user, PostViewModel model);
-        Task<List<Post>> GetAllPosts();
+        Task<List<Post>> GetAllPosts(int startIndex, int pageSize);
         Task<Post> GetPost(int postId);
         Task DeletePost(int postId);
         Task<Post> UpdatePost(int postId, PostViewModel model);
@@ -66,13 +67,42 @@ namespace Covalence {
             return post;
         }
 
-        public async Task<List<Post>> GetAllPosts() 
+        public async Task<List<Post>> GetAllPosts(int startIndex, int pageSize) 
         {
             return await _context.Posts
                     .Include(p => p.Author)
                     .Include(p => p.Tags)
                         .ThenInclude(pt => pt.Tag)
+                    .Skip(startIndex)
+                    .Take(pageSize)
                     .ToListAsync();
+        }
+
+        public async Task<List<Post>> SearchPosts(string query, int startIndex, int pageSize)
+        {
+            //https://stackoverflow.com/questions/12730251/convert-result-of-matches-from-regex-into-list-of-string/21123574#21123574
+            var matches = MatchQuery(query);
+            var tagsMatch = matches.Groups["tags"];
+            var contentMatch = matches.Groups["content"];
+            var posts = await _context.Posts.OrderByDescending(p => p.Tags.Count())
+                                .Include(p => p.Content)
+                                .Include(p => p.Tags)
+                                    .ThenInclude(pt => pt.Tag)
+                                .Skip(startIndex)
+                                .Take(pageSize)
+                                .ToListAsync();
+
+            return posts;
+        }
+
+        private Match MatchQuery(string query)
+        {
+            var pattern = @"";
+            var regex = new Regex(pattern, RegexOptions.IgnoreCase);
+
+            var match = regex.Match(query);
+
+            return match;
         }
 
         public async Task<Post> GetPost(int postId)

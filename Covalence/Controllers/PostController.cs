@@ -48,12 +48,12 @@ namespace Covalence.Controllers {
             return BadRequest("ViewModel is invalid");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllPosts() 
+        [HttpGet("{startIndex?}/{pageSize?}")]
+        public async Task<IActionResult> GetAllPosts(int startIndex = 0, int pageSize = 20) 
         {
             try
             {
-                var posts = await _service.GetAllPosts();
+                var posts = await _service.GetAllPosts(startIndex, pageSize);
                 var contracts = posts.Select(x => Converters.ConvertPostToContract(x)).ToList();
 
                 return Ok(contracts);
@@ -106,6 +106,20 @@ namespace Covalence.Controllers {
             catch(Exception e)
             {
                 return BadRequest($"Failed to update post: {postId}");
+            }
+        }
+
+        [HttpGet("/search/{query}/{startIndex?}/{pageSize?}")]
+        public async Task<IActionResult> SearchPosts(string query, int startIndex = 0, int pageSize = 20)
+        {
+            try
+            {
+                //TODO
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return BadRequest($"Unable to find posts");
             }
         }
     }
