@@ -2,39 +2,8 @@
 
 $active-primary-color: darken($primary-color, 10%);
 
-.nav-bar {
+.nav {
     background-color: $primary-color;
-    display: flex;
-    justify-content: center;
-}
-.pure-menu-heading {
-    text-transform: unset;
-}
-
-.pure-menu-link {
-    color: $light-text-color;
-}
-
-.pure-menu-horizontal {
-    width: 1200px;
-}
-
-.pure-menu-span-emphasis {
-    border: thin solid $light-text-color;
-    padding: .25em 1em;
-}
-
-.pure-menu-link:hover {
-    color: $light-text-color--hover;
-    background-color: unset;
-}
-
-.pure-menu-link:focus {
-    background-color: unset;
-}
-
-.pull-right {
-    float: right;
 }
 
 .logo {
@@ -44,4 +13,5 @@ $active-primary-color: darken($primary-color, 10%);
     width: 28px;
     height: 16px;
     display: inline-block;
+    margin-right: .25em;
 }

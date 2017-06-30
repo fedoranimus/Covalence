@@ -1,25 +1,32 @@
-<template class="nav-bar" bindable="router">
+<template bindable="router">
   <require from="./nav.scss"></require>
-  <nav class="pure-menu pure-menu-horizontal">
-      <a class="pure-menu-heading pure-menu-link" href="#"> 
-        <span class="logo"></span>
-        <span class="name">${router.title}</span>
-      </a>
-
-      <ul class="pure-menu-list">
-        <li repeat.for="row of router.navigation | authFilter: isAuthenticated" class="pure-menu-item ${row.isActive ? 'pure-menu-selected' : ''}">
-          <a class="pure-menu-link" href.bind="row.href">${row.title}</a>
-        </li>
-      </ul>
-      
-      <ul show.bind="!isAuthenticated" class="pure-menu-list pull-right">
-        <li class="pure-menu-item"><a class="pure-menu-link" href="/#/login">Login</a></li>
-        <li class="pure-menu-item"><a class="pure-menu-link" href="/#/register"><span class="pure-menu-span-emphasis">Sign Up<span></a></li>
-      </ul>
-      <ul show.bind="isAuthenticated" class="pure-menu-list pull-right">
-          <li class="pure-menu-item"><a class="pure-menu-link" href="/#/profile">${displayName}</a></li>
-          <li class="pure-menu-item"><a class="pure-menu-link" href="/#/" click.delegate="logout()">Logout</a></li>
-      </ul>
+  <nav class="nav">
+    <div class="container">
+      <div class="nav-left">
+        <a class="nav-item" href="#"> 
+          <span class="logo"></span>
+          <span class="name">${router.title}</span>
+        </a>
+        <a repeat.for="row of router.navigation | authFilter: isAuthenticated" class="nav-item ${row.isActive ? 'is-active' : ''}" href.bind="row.href">${row.title}</a>
+      </div>
+        
+      <div class="nav-right" show.bind="!isAuthenticated">
+        <a class="nav-item" href="/#/login">Login</a>
+        <div class="nav-item" >
+          <div class="field">
+          <p class="control">
+            <a class="button" href="/#/register">
+              <span>Sign Up</span>
+            </a>
+          </p>
+          </div>
+        </div>
+      </div>
+      <div class="nav-right" show.bind="isAuthenticated">
+          <a class="nav-item" href="/#/profile">${displayName}</a>
+          <a class="nav-item" href="/#/" click.delegate="logout()">Logout</a>
+      </div>
+    </div>
 
       <!--<ul class="nav navbar-nav navbar-right">
         <li class="loader" if.bind="router.isNavigating">
