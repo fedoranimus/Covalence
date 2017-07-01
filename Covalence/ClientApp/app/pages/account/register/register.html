@@ -1,6 +1,6 @@
 <template class="register">
     <require from="./register.scss"></require>
-    <form method="post" name="registerForm">
+    <form method="post" name="registerForm" submit.delegate="signup()">
         <fieldset>
             <legend class="account-header">Sign Up</legend>
 
@@ -21,7 +21,7 @@
 
             <div class="field">
                 <p class="control">
-                    <button type="submit" onsubmit="signup()" class="button is-primary">Sign Up</button>
+                    <button type="submit" class="button is-primary">Sign Up</button>
                 </p>
             </div>
         </fieldset>

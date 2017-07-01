@@ -1,5 +1,4 @@
 import {autoinject, computedFrom} from 'aurelia-framework';
-//import {MoleculeBackground} from './molecule-background';
 import {TagService} from '../../services/tagService';
 import {Router} from 'aurelia-router';
 import {AuthService} from 'aurelia-authentication';
@@ -11,10 +10,12 @@ export class Home {
 
     zipCode = "";
 
-    moleculeBackground: HTMLElement;
-
     constructor(private tagService: TagService, private router: Router, private authService: AuthService) {
 
+    }
+
+    get isAuthenticated() {
+        return this.authService.isAuthenticated();
     }
 
     async bind() {
@@ -35,10 +36,6 @@ export class Home {
         } catch(e) {
             //console.error(e);
         }  
-    }
-
-    async attached() {
-        //new MoleculeBackground(this.moleculeBackground);
     }
 
     @computedFrom('authService.authenticated')

@@ -1,6 +1,6 @@
 <template class="login">
   <require from="./login.scss"></require>
-  <form method="post" name="loginForm">
+  <form method="post" name="loginForm" submit.delegate="login()">
     <fieldset>
       <legend class="account-header">Log in</legend>
 
@@ -20,7 +20,7 @@
 
       <div class="field">
         <p class="control">
-          <button type="submit" onsubmit="login()" class="button is-primary">Log in</button>
+          <button type="submit" class="button is-primary">Log in</button>
         </p>
         <p class="text-center">
           <a href="#">Forgot your password? (TODO)</a>
