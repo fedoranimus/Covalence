@@ -1,26 +1,28 @@
 <template class="register">
     <require from="./register.scss"></require>
-    <form class="pure-form pure-form-aligned" method="post" name="registerForm">
+    <form method="post" name="registerForm">
         <fieldset>
             <legend class="account-header">Sign Up</legend>
 
-            <div class="pure-control-group">
-                <label for="email">Email</label>
-                <input class="form-control input-lg" type="text" name="email" value.bind="email" placeholder="Email Address" required>
+            <div class="field">
+                <label class="label" for="email">Email</label>
+                <input class="input" type="text" name="email" value.bind="email" placeholder="Email Address" required>
             </div>
 
-            <div class="pure-control-group">
-                <label for="password">Password</label>
-                <input class="form-control input-lg" type="password" name="password" value.bind="password" placeholder="Password" required>
+            <div class="field">
+                <label class="label" for="password">Password</label>
+                <input class="input" type="password" name="password" value.bind="password" placeholder="Password" required>
             </div>
 
-            <div class="pure-control-group">
-                <label for="verify-password">Verify Password</label>
-                <input class="form-control input-lg" type="password" name="verify-password" value.bind="verifyPassword" placeholder="Verify Password" required>
+            <div class="field">
+                <label class="label" for="verify-password">Verify Password</label>
+                <input class="input" type="password" name="verify-password" value.bind="verifyPassword" placeholder="Verify Password" required>
             </div>
 
-            <div class="pure-controls">
-                <button type="submit" click.delegate="signup()" class="pure-button pure-button-primary">Sign Up</button>
+            <div class="field">
+                <p class="control">
+                    <button type="submit" onsubmit="signup()" class="button is-primary">Sign Up</button>
+                </p>
             </div>
         </fieldset>
     </form>
