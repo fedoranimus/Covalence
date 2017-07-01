@@ -1,5 +1,5 @@
 @import 'colors';
-
+@import 'overrides';
 @import url('https://fonts.googleapis.com/css?family=Exo+2');
 
 html, body {
@@ -24,21 +24,7 @@ html, body {
     flex: 1 1200px;
 }
 
-.pure-button {
-    background-color: $primary-color;
-    color: $light-text-color;
-}
 
-.large-button {
-    width: auto;
-    font-weight: bold;
-    font-size: 24pt;
-}
-
-.pure-button:hover {
-    color: $light-text-color--hover;
-    background-image: unset;
-}
 
 .vertical-center {
     display: flex;

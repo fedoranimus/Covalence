@@ -1,0 +1,8 @@
+@import 'colors';
+
+.button.is-primary {
+    background-color: $primary-color;
+    &:hover {
+        background-color: $primary-color--hover;
+    }
+}
