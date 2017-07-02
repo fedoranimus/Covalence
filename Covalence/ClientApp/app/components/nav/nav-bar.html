@@ -12,7 +12,7 @@
         
       <div class="nav-right" show.bind="!isAuthenticated">
         <a class="nav-item" href="/#/login">Login</a>
-        <div class="nav-item" >
+        <div class="nav-item">
           <div class="field">
           <p class="control">
             <a class="button" href="/#/register">
@@ -23,6 +23,15 @@
         </div>
       </div>
       <div class="nav-right" show.bind="isAuthenticated">
+          <div class="nav-item">
+            <div class="field">
+              <p class="control">
+                <a class="button is-success is-inverted is-outlined">
+                  + New Post
+                </a>
+              </p>
+            </div>
+          </div>
           <a class="nav-item" href="/#/profile">${displayName}</a>
           <a class="nav-item" href="/#/" click.delegate="logout()">Logout</a>
       </div>
