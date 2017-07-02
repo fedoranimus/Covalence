@@ -1,0 +1,24 @@
+<template>
+    <require from="./tag-list.scss"></require>
+
+    <span class="headline">
+        <slot name="headline">Fallback</slot>
+    </span>
+
+    <span if.bind="!canEdit">
+        <a click.delegate="toggleEdit()">edit</a>
+    </span>
+    <span if.bind="canEdit">
+        <a class="button is-outlined is-small" click.delegate="toggleEdit()">done</a>
+    </span>
+
+    <ul>
+        <li repeat.for="tag of tags">
+            <span class="tag">
+                ${tag.name}
+                <button if.bind="canEdit" click.delegate="removeTag(tag)" class="delete is-small"></button>
+            </span>
+        </li>
+    </ul>
+    <!--<tag-editor></tag-editor>-->
+</template>
