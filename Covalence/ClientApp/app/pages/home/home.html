@@ -1,5 +1,6 @@
 <template>
     <require from="./marketing/marketing.html"></require>
+    <require from="./app-home/app-home"></require>
     <marketing if.bind="!isAuthenticated"></marketing>
-    <div if.bind="isAuthenticated">Authenticated</div>
+    <app-home if.bind="isAuthenticated"></app-home>
 </template>

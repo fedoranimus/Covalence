@@ -15,7 +15,6 @@ export class App {
     config.addAuthorizeStep(AuthenticateStep);
     config.map([
       { route: '', name: 'home', moduleId: PLATFORM.moduleName('./pages/home/home'), nav: false, title: 'Home' },
-      { route: 'search', name: 'search', moduleId: PLATFORM.moduleName('./pages/search/search'), nav: true, title: 'Search', auth: true },
       { route: 'profile', name: 'profile', moduleId: PLATFORM.moduleName('./pages/profile/profile'), nav: false, title: 'Profile', auth: true },
       { route: 'login', name: 'login', moduleId: PLATFORM.moduleName('./pages/account/account'), nav: false, title: 'Login' },
       { route: 'register', name: 'register', moduleId: PLATFORM.moduleName('./pages/account/account'), nav: false, title: 'Sign Up' },

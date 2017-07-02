@@ -1,0 +1,5 @@
+export class AppHome {
+    constructor() {
+        
+    }
+}
