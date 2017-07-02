@@ -52,6 +52,8 @@ namespace Covalence.Controllers
             return Ok(userContract); 
         }
 
+        //TODO: Get UserById
+
         [HttpPut]
         public async Task<IActionResult> UpdateUser([FromBody] UserViewModel model) 
         {

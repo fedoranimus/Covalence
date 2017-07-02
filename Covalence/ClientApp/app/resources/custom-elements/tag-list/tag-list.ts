@@ -1,24 +1,37 @@
-import {autoinject, bindable} from 'aurelia-framework';
+import { autoinject, bindable } from 'aurelia-framework';
+import { TagService } from '../../../services/tagService';
+import { ITag } from '../../../infrastructure/tag';
 
 @autoinject
 export class TagList {
     public canEdit = false;
-    @bindable tags: any[] = [];
-    constructor() {
+    @bindable tags: ITag[] = [];
+    constructor(private tagService: TagService) {
 
     }
 
-    public toggleEdit() {
+    get hasTags() {
+        return this.tags.length > 0;
+    }
+
+    toggleEdit() {
+        if(this.canEdit) {
+            //TODO: Save the user with this list of tags
+            console.log(`TODO: Saving User`);
+        }
+
         this.canEdit = !this.canEdit;
     }
 
-    public removeTag(tag) {
+    onRemoveTag(tag) {
         const index = this.tags.findIndex(x => x.name == tag.name);
         this.tags.splice(index, 1);
     }
 
-    public addTag(tag) {
-        const index = this.tags.findIndex(x => x.name == tag.name);
+    async onAddTag(event: CustomEvent) {
+        const tagName = event.detail;
+        const index = this.tags.findIndex(x => x.name == tagName);
+        const tag = await this.tagService.getTag(tagName);
         if(index === -1)
             this.tags.push(tag);
     }
