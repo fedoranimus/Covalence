@@ -1,12 +1,13 @@
 import { autoinject, bindable } from 'aurelia-framework';
 import { TagService } from '../../../services/tagService';
+import { UserService } from '../../../services/userService';
 import { ITag } from '../../../infrastructure/tag';
 
 @autoinject
 export class TagList {
     public canEdit = false;
     @bindable tags: ITag[] = [];
-    constructor(private tagService: TagService) {
+    constructor(private tagService: TagService, private userService: UserService) {
 
     }
 
@@ -14,8 +15,9 @@ export class TagList {
         return this.tags.length > 0;
     }
 
-    toggleEdit() {
+    async toggleEdit() {
         if(this.canEdit) {
+            await this.userService.updateUserTags(this.tags.map(({ name }) => name));
             //TODO: Save the user with this list of tags
             console.log(`TODO: Saving User`);
         }
@@ -31,8 +33,11 @@ export class TagList {
     async onAddTag(event: CustomEvent) {
         const tagName = event.detail;
         const index = this.tags.findIndex(x => x.name == tagName);
-        const tag = await this.tagService.getTag(tagName);
-        if(index === -1)
+        
+        if(index === -1) {
+            const tag = await this.tagService.getTag(tagName);
             this.tags.push(tag);
+        }
+            
     }
 }

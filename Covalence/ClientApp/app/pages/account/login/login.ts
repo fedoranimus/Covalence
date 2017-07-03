@@ -1,15 +1,17 @@
 import {AuthService} from 'aurelia-authentication';
-import {inject, computedFrom} from 'aurelia-framework';
-import {User, IUser, IUserData} from '../../../infrastructure/user';
+import {inject, computedFrom, autoinject} from 'aurelia-framework';
+import { IUser } from '../../../infrastructure/user';
+import { UserService } from '../../../services/userService';
 
-@inject(AuthService)
+
+@autoinject
 export class Login {
     email: string = "";
     password: string = "";
 
     providers: any[] = [];
 
-    constructor(private authService: AuthService) {
+    constructor(private authService: AuthService, private userService: UserService) {
 
     }
 
@@ -18,12 +20,13 @@ export class Login {
         return this.authService.authenticated;
     }
 
-    login() {
-        let credentials = { username: this.email, password: this.password, grant_type: "password", scope: "offline_access", resource: "http://localhost:5000" };
-        return this.authService.login(credentials)
-            .then(me => {
-                console.log(me);
-            });
+    async login() {
+        const credentials = { username: this.email, password: this.password, grant_type: "password", scope: "offline_access", resource: "http://localhost:5000" };
+        const token = await this.authService.login(credentials);
+        if(token) {
+            const user = await this.authService.getMe();
+            this.userService.currentUser = user;
+        }
     }
 
     authenticate(name) {

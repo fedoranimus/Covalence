@@ -1,28 +1,49 @@
-import {inject} from 'aurelia-framework';
+import {autoinject} from 'aurelia-framework';
 import {Config} from 'aurelia-api';
-import {ITag} from '../infrastructure/user';
+import {ITag} from '../infrastructure/tag';
+import {IUser, IUserViewModel} from '../infrastructure/user';
+import { AuthService } from 'aurelia-authentication';
 
-@inject(Config)
+@autoinject
 export class UserService {
-    constructor(private config: Config) {
+    private _userStore: IUser|null = null;
+
+    constructor(private config: Config, private authService: AuthService) {
+        if(authService.isAuthenticated()) {
+            let user = JSON.parse(localStorage.getItem('user'));
+            if(!user) {
+                authService.getMe().then(currentUser => {
+                    localStorage.setItem('user', JSON.stringify(currentUser));
+                    this._userStore = currentUser;
+                }); 
+            } else {
+                this._userStore = user;
+            }
+        }     
+    }
+
+    get currentUser() {
+        return this._userStore;
+    }
+
+    set currentUser(user: IUser) {
+        if(!user)
+            localStorage.removeItem('user')
+        else 
+            localStorage.setItem('user', JSON.stringify(user));
         
+        this._userStore = user;
     }
 
-    public addTag(tag: string, tagType: "study"|"expert"): Promise<ITag[]> {
-        return this.config.getEndpoint('api').create('users/me/tags', {
-            tagType: tagType,
-            tagName: tag
-        });
+    public getUser(userId: string): Promise<IUser> {
+        return this.config.getEndpoint('api').findOne('user', userId);
     }
 
-    public removeTag(tag: string, tagType: "study"|"expert"): Promise<void> {
-        return this.config.getEndpoint('api').destroy('users/me/tags', {
-            tagType: tagType,
-            tagName: tag
-        })
+    public updateUser(viewModel: IUserViewModel): Promise<IUser> {
+        return this.config.getEndpoint('api').updateOne('user', this.currentUser.id, null, viewModel);
     }
 
-    public getUser(userId: string): Promise<void> {
-        return this.config.getEndpoint('api').findOne('users', userId);
+    public updateUserTags(tagList: string[]): Promise<IUser> {
+        return this.config.getEndpoint('api').updateOne('user', this.currentUser.id, null, tagList);
     }
 }

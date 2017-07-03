@@ -37,7 +37,12 @@ namespace Covalence.Tests
 
         [Fact]
         public async Task AddTagsToUser_CorrectData_ShouldContainThreeTags() {
-            var uri = $"/api/user/tags";
+            var getUser = await Client.GetAsync("/api/user");
+            var getUserContent = await getUser.Content.ReadAsStringAsync();
+            var userContent = JsonConvert.DeserializeObject<UserContract>(getUserContent);
+
+            var userId = userContent.Id;
+            var uri = $"/api/user/tags/{userId}";
             var requestContent = new string[] {"Physics", "biology", "dinology"};
             var body = new StringContent(JsonConvert.SerializeObject(requestContent), Encoding.UTF8, "application/json");
             

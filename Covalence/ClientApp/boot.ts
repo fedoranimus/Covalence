@@ -12,8 +12,6 @@ export function configure(aurelia: Aurelia) {
       //config.setDefaultBaseUrl(environment.host);
       config.registerEndpoint('auth', 'http://localhost:5000/');
       config.registerEndpoint('api', 'http://localhost:5000/api/');
-      //config.registerEndpoint('me', 'http://localhost:5000/api/users/me');
-      //config.registerEndpoint('user', 'http://localhost:5000/api/users');
       config.setDefaultEndpoint('api');
     })
     .plugin(PLATFORM.moduleName('aurelia-authentication/authenticatedFilterValueConverter'))

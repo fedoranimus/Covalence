@@ -54,12 +54,12 @@ namespace Covalence.Controllers
 
         //TODO: Get UserById
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateUser([FromBody] UserViewModel model) 
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> UpdateUser(string userId, [FromBody] UserViewModel model) 
         {
             var user = await _userManager.GetUserAsync(User);
 
-            if(user == null)
+            if(user == null && user.Id == userId)
             {
                 _logger.LogError("User not found");
                 return BadRequest();
@@ -72,11 +72,11 @@ namespace Covalence.Controllers
                         new UserTag() { User = user, UserId = user.Id, Tag = await _tagService.GetTag(t), Name = t.ToUpperInvariant()
                     }).ToList();
                     
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
-                user.Email = model.Email;
+                user.FirstName = model.FirstName == null ? user.FirstName : model.FirstName;
+                user.LastName = model.LastName == null ? user.LastName : model.LastName;
+                user.Email = model.Email == null ? user.Email : model.Email;
                 user.UserName = user.Email;
-                user.Tags = await Task.WhenAll(userTags);
+                user.Tags = model.Tags == null ? user.Tags : await Task.WhenAll(userTags); //TODO: This is not efficient
 
                 await _userManager.UpdateAsync(user);
                 var contract = Converters.ConvertUserToContract(user);
@@ -86,12 +86,12 @@ namespace Covalence.Controllers
             return BadRequest("Invalid ViewModel");
         }
 
-        [HttpPut("tags")]
-        public async Task<IActionResult> UpdateUserTags([FromBody] List<string> tags)
+        [HttpPut("tags/{userId}")]
+        public async Task<IActionResult> UpdateUserTags(string userId, [FromBody] List<string> tags)
         {
             var user = await _userManager.GetUserAsync(User);
 
-            if(user == null)
+            if(user == null && user.Id == userId)
             {
                 _logger.LogError("User not found");
                 return BadRequest();
