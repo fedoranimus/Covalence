@@ -44,6 +44,6 @@ export class UserService {
     }
 
     public updateUserTags(tagList: string[]): Promise<IUser> {
-        return this.config.getEndpoint('api').updateOne('user', this.currentUser.id, null, tagList);
+        return this.config.getEndpoint('api').updateOne('user/tags', this.currentUser.id, null, tagList);
     }
 }

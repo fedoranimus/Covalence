@@ -16,6 +16,14 @@ namespace Covalence
         Task<Post> AddTag(Tag tag, Post post);
         Task<Post> RemoveTag(Tag tag, Post post);
         Task<Tag> CreateTag(string name);
+
+        Task<ApplicationUser> RemoveTags(List<Tag> tags, ApplicationUser user);
+
+        Task<ApplicationUser> AddTags(List<Tag> tags, ApplicationUser user);
+
+        Task<ApplicationUser> RemoveTags(List<string> tags, ApplicationUser user);
+
+        Task<ApplicationUser> AddTags(List<string> tags, ApplicationUser user);
     }
 
     public class TagService : ITagService
@@ -63,9 +71,46 @@ namespace Covalence
             return tag;
         }
 
+        public async Task<ApplicationUser> RemoveTags(List<string> tags, ApplicationUser user) {
+            foreach(var stringTag in tags) {
+                var tag = await GetTag(stringTag);
+                user = await RemoveTag(tag, user);
+            }
+
+            return user;
+        }
+
+        public async Task<ApplicationUser> RemoveTags(List<Tag> tags, ApplicationUser user)
+        {
+            foreach(var tag in tags) {
+                user = await RemoveTag(tag, user);
+            }
+
+            return user;
+        }
+
+        public async Task<ApplicationUser> AddTags(List<string> tags, ApplicationUser user)
+        {
+            foreach(var stringTag in tags) {
+                var tag = await GetTag(stringTag);
+                user = await AddTag(tag, user);
+            }
+
+            return user;
+        }
+
+        public async Task<ApplicationUser> AddTags(List<Tag> tags, ApplicationUser user)
+        {
+            foreach(var tag in tags) {
+                user = await AddTag(tag, user);
+            }
+
+            return user;
+        }
+
         public async Task<ApplicationUser> AddTag(Tag tag, ApplicationUser user)
         {
-            user = await _context.Users.Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
+            user = await _context.Users.Where(u => u.Id == user.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
             if(user.Tags.Select(ut => ut.Tag).Contains(tag))
             {
                 _logger.LogInformation($"{tag.ToString()} already assigned to {user.ToString()}");
@@ -85,7 +130,7 @@ namespace Covalence
 
         public async Task<ApplicationUser> RemoveTag(Tag tag, ApplicationUser user) 
         {
-            user = await _context.Users.Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
+            user = await _context.Users.Where(u => u.Id == user.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
             if(user.Tags.Select(ut => ut.Tag).Contains(tag))
             {
                 var userTag = user.Tags.Where(x => x.Name == tag.Name).FirstOrDefault();

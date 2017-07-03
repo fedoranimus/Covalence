@@ -99,12 +99,14 @@ namespace Covalence.Controllers
 
             if(tags != null)
             {
-                var userTags = tags
-                    .Select(async t => 
-                        new UserTag() { User = user, UserId = user.Id, Tag = await _tagService.GetTag(t), Name = t.ToUpperInvariant()
-                    }).ToList();
+                // var userTags = tags
+                //     .Select(async t => 
+                //         new UserTag() { User = user, UserId = user.Id, Tag = await _tagService.GetTag(t), Name = t.ToUpperInvariant()
+                //     }).ToList();
 
-                user.Tags = await Task.WhenAll(userTags);
+                // user.Tags = await Task.WhenAll(userTags);
+                user = await _tagService.RemoveTags(tags, user); //can I clear this maybe?
+                user = await _tagService.AddTags(tags, user);
 
                 await _userManager.UpdateAsync(user);
                 var contract = Converters.ConvertUserToContract(user);

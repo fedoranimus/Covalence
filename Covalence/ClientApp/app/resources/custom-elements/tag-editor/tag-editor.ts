@@ -26,6 +26,7 @@ export class TagEditorCustomElement {
 
         let event = DOM.createCustomEvent('add', { bubbles: true, cancelable: true, detail: tagName });
         this.element.dispatchEvent(event);
+        this.tagQuery = "";
     }
 
     get hasSuggestions() {

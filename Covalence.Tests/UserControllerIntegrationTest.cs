@@ -59,6 +59,32 @@ namespace Covalence.Tests
             Assert.True(user.Tags.Count() == 3);       
         }
 
+        [Fact]
+        public async Task RepeatAddTagsToUser_CorrectData_ShouldContainThreeTags() {
+            var getUser = await Client.GetAsync("/api/user");
+            var getUserContent = await getUser.Content.ReadAsStringAsync();
+            var userContent = JsonConvert.DeserializeObject<UserContract>(getUserContent);
+
+            var userId = userContent.Id;
+            var uri = $"/api/user/tags/{userId}";
+            var requestContent = new string[] {"Physics", "biology", "dinology"};
+            var body = new StringContent(JsonConvert.SerializeObject(requestContent), Encoding.UTF8, "application/json");
+            
+            var response = await Client.PutAsync(uri, body);
+
+            response.EnsureSuccessStatusCode();
+
+            // var userResponse = await Client.GetAsync("/api/user");
+            // response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync();
+            var user = JsonConvert.DeserializeObject<UserContract>(content);
+
+            Assert.True(user.Tags.Count() == 3);       
+        }
+
+
+
         // [Fact(Skip="Not Implemented")]
         // public async Task RequestConnectionToUser() {
 
