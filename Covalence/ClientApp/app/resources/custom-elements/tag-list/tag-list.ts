@@ -44,7 +44,9 @@ export class TagList {
 
     async onChangeQuery(event: CustomEvent) {
         const query = event.detail;
-        if(query)
-            this.suggestedTags = await this.tagService.queryTag(query);
+        if(query) {
+            const potentialTags = await this.tagService.queryTag(query); 
+            this.suggestedTags = potentialTags.filter( t => this.tags.findIndex( x => x.name == t.name) === -1);
+        }
     }
 }
