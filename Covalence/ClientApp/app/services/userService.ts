@@ -43,7 +43,13 @@ export class UserService {
         return this.config.getEndpoint('api').updateOne('user', this.currentUser.id, null, viewModel);
     }
 
-    public updateUserTags(tagList: string[]): Promise<IUser> {
-        return this.config.getEndpoint('api').updateOne('user/tags', this.currentUser.id, null, tagList);
+    public updateUserTags(tagList: string[]): Promise<IUser> {   
+        const user = this.config.getEndpoint('api').updateOne('user/tags', this.currentUser.id, null, tagList);
+        this.updateCurrentUserTags(user);
+        return user;
+    }
+
+    private async updateCurrentUserTags(user: Promise<IUser>) {
+        this.currentUser = await user;
     }
 }

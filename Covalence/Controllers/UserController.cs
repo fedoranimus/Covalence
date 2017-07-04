@@ -67,6 +67,7 @@ namespace Covalence.Controllers
 
             if(ModelState.IsValid)
             {
+                user = await _context.Users.Where(u => u.Id == user.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
                 var userTags = model.Tags
                     .Select(async t => 
                         new UserTag() { User = user, UserId = user.Id, Tag = await _tagService.GetTag(t), Name = t.ToUpperInvariant()
@@ -99,14 +100,11 @@ namespace Covalence.Controllers
 
             if(tags != null)
             {
-                // var userTags = tags
-                //     .Select(async t => 
-                //         new UserTag() { User = user, UserId = user.Id, Tag = await _tagService.GetTag(t), Name = t.ToUpperInvariant()
-                //     }).ToList();
-
-                // user.Tags = await Task.WhenAll(userTags);
-                user = await _tagService.RemoveTags(tags, user); //can I clear this maybe?
-                user = await _tagService.AddTags(tags, user);
+                user = await _context.Users.Where(u => u.Id == user.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
+                var tagsToRemove = user.Tags.Select(t => t.Name.ToLowerInvariant()).Except(tags).ToList(); // Get list of current tags not in the new tag list
+                var tagsToAdd = tags.Except(user.Tags.Select(t => t.Name.ToLowerInvariant())).ToList(); // Get list of new tags which aren't in the current tag list
+                user = await _tagService.RemoveTags(tagsToRemove, user); //can I clear this maybe?
+                user = await _tagService.AddTags(tagsToAdd, user);
 
                 await _userManager.UpdateAsync(user);
                 var contract = Converters.ConvertUserToContract(user);

@@ -16,13 +16,13 @@ export class TagEditorCustomElement {
 
     }
 
-    onAdd(tagName: string = null) {
-        if(!tagName)
-            tagName = this.tagQuery;
-
-        let event = DOM.createCustomEvent('add', { bubbles: true, cancelable: true, detail: tagName });
-        this.element.dispatchEvent(event);
-        this.tagQuery = "";
+    onAdd() {
+        if(this.tagQuery && this.tagQuery !== "") {
+            const tagName = this.tagQuery;
+            let event = DOM.createCustomEvent('add', { bubbles: true, cancelable: true, detail: tagName });
+            this.element.dispatchEvent(event);
+            this.tagQuery = "";
+        }
     }
     
     @computedFrom('suggestedTags')

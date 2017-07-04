@@ -9,18 +9,19 @@ export class TagList {
     public canEdit = false;
     public suggestedTags: ITag[] = [];
     @bindable tags: ITag[] = [];
+    public errorState: string|null = null;
     constructor(private tagService: TagService, private userService: UserService) {
 
     }
 
-    @computedFrom('tags')
+    @computedFrom('tags.length')
     get hasTags() {
         return this.tags.length > 0;
     }
 
     async toggleEdit() {
         if(this.canEdit) {
-            await this.userService.updateUserTags(this.tags.map(({ name }) => name));
+            await this.userService.updateUserTags(this.tags.map(({ name }) => name.toLowerCase()));
         }
 
         this.canEdit = !this.canEdit;
@@ -43,10 +44,14 @@ export class TagList {
     }
 
     async onChangeQuery(event: CustomEvent) {
-        const query = event.detail;
-        if(query) {
-            const potentialTags = await this.tagService.queryTag(query); 
-            this.suggestedTags = potentialTags.filter( t => this.tags.findIndex( x => x.name == t.name) === -1);
+        const query: string = event.detail;
+        if(query && !query.includes(" ")) {
+            this.errorState = null;
+            const potentialTags = await this.tagService.queryTag(query);
+            if(potentialTags)
+                this.suggestedTags = potentialTags.filter( t => this.tags.findIndex( x => x.name == t.name) === -1);
+        } else {
+            this.errorState = "Invalid Query; Spaces are not allowed";
         }
     }
 }
