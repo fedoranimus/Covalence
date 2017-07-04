@@ -14,7 +14,7 @@
     </form>
     <aside class="menu" show.bind="hasSuggestions">
         <ul class="menu-list">
-            <li repeat.for="suggestedTag of suggestedTags" click.delegate="selectTag(suggestedTag)" class="suggested-tag">
+            <li tabindex=${$index+1} repeat.for="suggestedTag of suggestedTags" click.delegate="selectTag(suggestedTag)" class="suggested-tag">
                 <a>${suggestedTag.name}</a>
             </li>
         </ul>
