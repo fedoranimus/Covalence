@@ -21,8 +21,6 @@ export class TagList {
     async toggleEdit() {
         if(this.canEdit) {
             await this.userService.updateUserTags(this.tags.map(({ name }) => name));
-            //TODO: Save the user with this list of tags
-            console.log(`TODO: Saving User`);
         }
 
         this.canEdit = !this.canEdit;

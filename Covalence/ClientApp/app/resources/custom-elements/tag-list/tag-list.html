@@ -12,9 +12,9 @@
         <a class="button is-outlined is-small" click.delegate="toggleEdit()">done</a>
     </span>
 
-    <ul>
+    <ul class="tag-list">
         <span class="placeholder" if.bind="!hasTags">Please add your expertise</span>
-        <li repeat.for="tag of tags">
+        <li class="tag-item" repeat.for="tag of tags">
             <span class="tag">
                 ${tag.name}
                 <button if.bind="canEdit" click.delegate="onRemoveTag(tag)" class="delete is-small"></button>
