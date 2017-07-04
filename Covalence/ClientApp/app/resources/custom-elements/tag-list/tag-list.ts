@@ -1,3 +1,4 @@
+import {computedFrom} from 'aurelia-binding';
 import { autoinject, bindable } from 'aurelia-framework';
 import { TagService } from '../../../services/tagService';
 import { UserService } from '../../../services/userService';
@@ -6,11 +7,13 @@ import { ITag } from '../../../infrastructure/tag';
 @autoinject
 export class TagList {
     public canEdit = false;
+    public suggestedTags: ITag[] = [];
     @bindable tags: ITag[] = [];
     constructor(private tagService: TagService, private userService: UserService) {
 
     }
 
+    @computedFrom('tags')
     get hasTags() {
         return this.tags.length > 0;
     }
@@ -39,5 +42,11 @@ export class TagList {
             this.tags.push(tag);
         }
             
+    }
+
+    async onChangeQuery(event: CustomEvent) {
+        const query = event.detail;
+        if(query)
+            this.suggestedTags = await this.tagService.queryTag(query);
     }
 }

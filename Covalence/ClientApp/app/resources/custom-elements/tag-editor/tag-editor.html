@@ -12,13 +12,11 @@
             </p>
         </div>
     </form>
-    <div role="listbox" class="dropdown-menu typeahead" show.bind="hasSuggestions" id="tag-suggestions">
-        <div role="presentation" class="dropdown-inner">
-            <ul role="presentation">
-                <li repeat.for="suggestedTag of suggestedTags" click.delegate="addTag(suggestedTag)" class="suggested-tag">
-                    <a role="option"><span><strong>${suggestedTag.name}</strong></span></a>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <aside class="menu" show.bind="hasSuggestions">
+        <ul class="menu-list">
+            <li repeat.for="suggestedTag of suggestedTags" click.delegate="selectTag(suggestedTag)" class="suggested-tag">
+                <a>${suggestedTag.name}</a>
+            </li>
+        </ul>
+    </aside>
 </template>

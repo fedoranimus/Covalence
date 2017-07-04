@@ -1,24 +1,20 @@
+import {computedFrom} from 'aurelia-binding';
 import {autoinject, bindable, customElement} from 'aurelia-framework';
+import { ITag } from '../../../infrastructure/tag';
 import {DOM} from 'aurelia-pal';
 
 @autoinject
 @customElement('tag-editor')
 export class TagEditorCustomElement {
+    @bindable({ attribute: "debug" }) debug = true;
+    @bindable({ attribute: "suggested-tags" }) suggestedTags: ITag[] = [];
+    @bindable tagQuery = '';
+
+    private fromSelection = false;
 
     constructor(private element: Element) {
 
     }
-
-    /******************************
-     * Bindings
-     ******************************/
-    @bindable({ attribute: "available-tags" }) availableTags = [];
-
-    @bindable({ attribute: "debug" }) debug = true;
-
-    @bindable tagQuery = '';
-
-    @bindable suggestedTags = [];
 
     onAdd(tagName: string = null) {
         if(!tagName)
@@ -28,17 +24,28 @@ export class TagEditorCustomElement {
         this.element.dispatchEvent(event);
         this.tagQuery = "";
     }
-
+    
+    @computedFrom('suggestedTags')
     get hasSuggestions() {
         return this.suggestedTags.length > 0;
     }
 
     tagQueryChanged(query: string) {
-        if(this.debug) console.log(`Query: ${query}`);
-        if(query.length > 0) {
-            this.suggestedTags = []; //TODO: Call API endpoint
-        } else {
-            this.suggestedTags = [];
+        if(!this.fromSelection) {
+            if(this.debug) console.log(`Query: ${query}`);
+            if(query.length > 0) {
+                let event = DOM.createCustomEvent('change', { bubbles: true, cancelable: true, detail: query });
+                this.element.dispatchEvent(event);
+            } else {
+                this.suggestedTags = [];
+            }
         }
+        this.fromSelection = false;
+    }
+
+    selectTag(tag: ITag) {
+        this.fromSelection = true;
+        this.tagQuery = tag.name;
+        this.suggestedTags = [];
     }
 }

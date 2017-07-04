@@ -15,4 +15,8 @@ export class TagService {
     public getTag(tagName: string): Promise<ITag> {
         return this.config.getEndpoint('api').findOne('tag', tagName);
     }
+
+    public queryTag(query: string): Promise<ITag[]> {
+        return this.config.getEndpoint('api').find('tag/query', query);
+    }
 }
