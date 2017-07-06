@@ -22,6 +22,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Data.Sqlite;
+using Covalence.ViewModels;
 
 namespace Covalence
 {
@@ -117,14 +118,14 @@ namespace Covalence
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, ApplicationDbContext context)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, ApplicationDbContext context, IPostService postService, ITagService tagService)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             //TODO: Only see when in development!!!
             //if(_env.IsDevelopment())
-            Seed(app, context);
+            Seed(app, context, postService, tagService);
 
             var jwtOptions = app.ApplicationServices.GetService<JwtBearerOptions>();
             app.UseJwtBearerAuthentication(jwtOptions);
@@ -163,23 +164,27 @@ namespace Covalence
                     defaults: new { controller = "Home", action = "Index" });
             });
         }
-        public virtual async void Seed(IApplicationBuilder app, ApplicationDbContext context) {
+        public virtual async void Seed(IApplicationBuilder app, ApplicationDbContext context, IPostService postService, ITagService tagService) {
             var userManager = app.ApplicationServices.GetService<UserManager<ApplicationUser>>();
             
             context.Database.Migrate();
 
-            if(!context.Tags.Any()) {
-                context.Tags.Add(new Tag() {
+            var physicsTag = new Tag() {
                     Name = "Physics"
-                });
+                };
 
-                context.Tags.Add(new Tag() {
+            var chemistryTag = new Tag() {
                     Name = "Chemistry"
-                });
+                };
 
-                context.Tags.Add(new Tag() {
+            var biologyTag = new Tag() {
                     Name = "Biology"
-                });
+                };
+
+            if(!context.Tags.Any()) {
+                context.Tags.Add(physicsTag);
+                context.Tags.Add(chemistryTag);
+                context.Tags.Add(biologyTag);
             }
 
             var seedUser = new ApplicationUser() {
@@ -189,16 +194,58 @@ namespace Covalence
                 LastName = "Test",
                 Location = "03062",
                 EmailConfirmed = true
+            }; 
+
+            var genji = new ApplicationUser() {
+                Email = "genji@overwatch.com",
+                UserName = "genji@overwatch.com",
+                FirstName = "Genji",
+                LastName = "Shimada",
+                Location = "44600",
+                EmailConfirmed = true
+            };
+
+            var mccree = new ApplicationUser() {
+                Email = "mccree@overwatch.com",
+                UserName = "mccree@overwatch.com",
+                FirstName = "Jesse",
+                LastName = "McCree",
+                Location = "87501",
+                EmailConfirmed = true
             };
 
             if(!context.Users.Any()) {
-                var result = await userManager.CreateAsync(seedUser, "123Abc!");
-                if(result.Succeeded) {
-                    Console.WriteLine("Added User");
+                var user = await userManager.CreateAsync(seedUser, "123Abc!");
+                if(user.Succeeded) {
+                    Console.WriteLine("User Added");
+                }
+
+                var genjiResult = await userManager.CreateAsync(genji, "123Abc!");
+                if(genjiResult.Succeeded) {
+                    Console.WriteLine("Genji Added");
+                }
+
+                var mccreeResult = await userManager.CreateAsync(mccree, "123Abc!");
+                if(mccreeResult.Succeeded) {
+                    Console.WriteLine("McCree Added");
                 }
             }
 
-            context.SaveChanges();
+            await context.SaveChangesAsync();
+
+            await tagService.AddTag(physicsTag, genji);
+            await tagService.AddTag(biologyTag, mccree);
+
+            var post1 = new PostViewModel(){
+                Title = "Test Post 1",
+                Content = "_Lorem ipsum dolor sit amet_, **consectetur** adipiscing elit. Curabitur lectus ipsum, posuere sed ultrices ac, molestie vel lorem. Duis consectetur, nunc in finibus dictum, sapien nunc scelerisque purus, ut elementum metus metus ac odio. Sed augue purus, posuere in dui non, vulputate iaculis leo. Duis at convallis dolor. Proin porttitor odio vitae fringilla mollis. In eget molestie arcu. Aliquam luctus nisi et lorem imperdiet euismod. Integer lorem lectus, aliquet non ante vel, venenatis rutrum velit. Nunc iaculis venenatis laoreet. Curabitur pharetra non felis ut cursus. Aliquam ut laoreet leo. Mauris facilisis, nibh sed pellentesque vulputate, ex arcu sodales felis, vitae tincidunt sem nibh ut elit. Donec ac finibus risus. Duis feugiat tellus facilisis risus suscipit, elementum varius ex efficitur. Praesent eu varius lectus, id sodales est. Nunc tincidunt purus eget neque imperdiet porttitor.",
+                Tags = new List<string>() { "physics", "biology" },
+                Category = (int)PostType.Mentor
+            };
+
+            await postService.CreatePost(genji, post1);
+
+            await context.SaveChangesAsync();
         }
 
         public virtual void ConfigureDatabase(IServiceCollection services, IHostingEnvironment env) {

@@ -2,7 +2,15 @@
     <div class="container">
         <div class="columns">
             <div class="column is-two-thirds">
-                <result-list></result-list>
+                <!--<result-list></result-list>-->
+                <div repeat.for="post of posts">
+                    <span>${post.title}</span>
+                    <span>${post.content}</span>
+                    <span repeat.for="tag of post.tags">
+                        ${tag.name}
+                    </span>
+                    <span>${post.author.firstName} ${post.author.lastName}</span>
+                </div>
             </div>
             <div class="column">
                 <tag-list tags.bind="tags">
