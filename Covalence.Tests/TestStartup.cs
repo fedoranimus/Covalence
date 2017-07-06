@@ -28,7 +28,7 @@ namespace Covalence.Tests {
             });
         }
 
-        public override void Seed(IApplicationBuilder app, ApplicationDbContext context) {
+        public override void Seed(IApplicationBuilder app, ApplicationDbContext context, IPostService postService, ITagService ITagService) {
             app.Seed(context);
         }
     }
