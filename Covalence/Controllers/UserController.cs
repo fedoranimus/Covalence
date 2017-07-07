@@ -75,6 +75,7 @@ namespace Covalence.Controllers
                     
                 user.FirstName = model.FirstName == null ? user.FirstName : model.FirstName;
                 user.LastName = model.LastName == null ? user.LastName : model.LastName;
+                user.IsMentor = (bool)(model.IsMentor == null ? user.IsMentor : model.IsMentor);
                 user.Email = model.Email == null ? user.Email : model.Email;
                 user.UserName = user.Email;
                 user.Tags = model.Tags == null ? user.Tags : await Task.WhenAll(userTags); //TODO: This is not efficient

@@ -15,6 +15,7 @@ namespace Covalence.Contracts
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Location { get; set;}
+        public bool IsMentor { get; set; }
         public ICollection<TagContract> Tags { get; set; }
         public ICollection<PostContract> AuthoredPosts { get; set; }
         //public List<Connection> Connections { get; set; }

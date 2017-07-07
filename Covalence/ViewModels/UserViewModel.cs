@@ -13,6 +13,7 @@ namespace Covalence.ViewModels
         public string Email { get; set; }
         [Display(Name = "Tags")]
         public List<string> Tags { get; set; }
+        public bool? IsMentor { get; set; }
         //TODO: Add Location
     }
 }

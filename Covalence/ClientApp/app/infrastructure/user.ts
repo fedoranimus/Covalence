@@ -8,6 +8,7 @@ export interface IUser {
     tags: ITag[];
     location: string;
     displayName: string;
+    isMentor: boolean;
 }
 
 export interface IUserViewModel {
@@ -16,4 +17,5 @@ export interface IUserViewModel {
     lastName?: string;
     tags?: string[];
     location?: string;
+    isMentor?: boolean;
 }
