@@ -1,4 +1,4 @@
-import { bindable } from 'aurelia-framework';
+import { bindable, autoinject } from 'aurelia-framework';
 import { IPost } from '../../../infrastructure/post';
 
 export class PostList {

@@ -34,7 +34,9 @@ module.exports = ({ prod } = {}) => {
                 'aurelia-api',
                 'aurelia-authentication',
                 'bulma/css/bulma.css',
-                "font-awesome/css/font-awesome.css"
+                "font-awesome/css/font-awesome.css",
+                'markdown-it',
+                'markdown-it-katex'
             ],
         },
         output: {

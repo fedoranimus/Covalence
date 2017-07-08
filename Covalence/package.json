@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@types/markdown-it": "0.0.2",
-    "@types/node": "^8.0.8",
+    "@types/node": "^8.0.9",
     "aspnet-webpack": "^1.0.29",
     "aurelia-webpack-plugin": "^2.0.0-rc.2",
     "css-loader": "^0.28.4",
@@ -42,7 +42,7 @@
     "ts-loader": "^2.2.2",
     "typescript": "2.4.1",
     "url-loader": "^0.5.9",
-    "webpack": "^3.0.0",
+    "webpack": "^3.1.0",
     "webpack-hot-middleware": "^2.18.2"
   }
 }

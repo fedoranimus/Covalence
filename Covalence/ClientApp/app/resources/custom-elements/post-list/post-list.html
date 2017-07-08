@@ -2,15 +2,15 @@
     <article class="media" repeat.for="post of posts">
         <div class="media-content">
             <div class="content">
-                    <div class="level">
-                        <div class="level-left">
-                            <p><strong>${post.title}</strong> <small>by ${post.author.firstName} ${post.author.lastName}</small></p>
-                        </div>
-                        <div class="level-right">
-                            <small>${post.dateModified}</small>
-                        </div>
-                    </div>     
-                    ${post.content}
+                <div class="level">
+                    <div class="level-left">
+                        <p><strong>${post.title}</strong> <small>by ${post.author.firstName} ${post.author.lastName}</small></p>
+                    </div>
+                    <div class="level-right">
+                        <small>${post.dateModified}</small>
+                    </div>
+                </div> 
+                <div innerhtml.bind="post.content | markdown | sanitizeHTML"></div>
             </div>
             <div class="level">
                 <div class="level-left">
