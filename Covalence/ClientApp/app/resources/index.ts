@@ -5,6 +5,7 @@ export function configure(config: FrameworkConfiguration) {
     [
       PLATFORM.moduleName('./custom-elements/tag-editor/tag-editor'),
       PLATFORM.moduleName('./custom-elements/tag-list/tag-list'),
-      PLATFORM.moduleName('./custom-elements/result-list/result-list')
+      PLATFORM.moduleName('./custom-elements/result-list/result-list'),
+      PLATFORM.moduleName('./custom-elements/post-list/post-list')
     ]);
 }

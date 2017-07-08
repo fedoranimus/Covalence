@@ -1,11 +1,11 @@
 <template class="result-list ${needsZeroState ? 'flex-center' : ''}">
     <require from="./result-list.scss"></require>
     <!-- add zero state for no tags -->
-    <div class="zero-state" show.bind="!hasZip">
+    <!--<div class="zero-state" show.bind="!hasZip">
         <span>
             Enter a Zip Code to Find <span class="result-type--capitalize">${resultType}</span>
         </span>
-    </div>
+    </div>-->
     <div class="zero-state" show.bind="!hasResults && hasZip">
         <span>
             No <span class="result-type--capitalize">${resultType}s available</span>
