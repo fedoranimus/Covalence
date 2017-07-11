@@ -1,10 +1,10 @@
 <template>
     <div class="container">
-        <form>
+        <form submit.delegate="isEdit ? updatePost() : createPost()">
             <div class="field">
                 <label class="label">Title</label>
                 <p class="control">
-                    <input class="input" type="text" placeholder="Title">
+                    <input class="input" type="text" placeholder="Title" value.bind="title">
                 </p>
             </div>
             <div class="field">
@@ -15,6 +15,14 @@
             </div>
             <hr>
             <div innerhtml.bind="content | markdown | sanitizeHTML"></div>
+            <div class="field is-grouped">
+                <p class="control">
+                    <button type="submit" class="button is-primary">Submit</button>
+                </p>
+                <p class="control">
+                    <button class="button is-link">Cancel</button>
+                </p>
+            </div>
         </form>
     </div>
 </template>

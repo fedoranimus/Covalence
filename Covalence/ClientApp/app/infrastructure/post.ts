@@ -11,3 +11,9 @@ export interface IPost {
     dateModified:string;
     tags: ITag[];
 }
+
+export enum PostType {
+    Question,
+    Mentor,
+    Item
+}
