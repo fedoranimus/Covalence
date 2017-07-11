@@ -1,0 +1,20 @@
+<template>
+    <div class="container">
+        <form>
+            <div class="field">
+                <label class="label">Title</label>
+                <p class="control">
+                    <input class="input" type="text" placeholder="Title">
+                </p>
+            </div>
+            <div class="field">
+                <label class="label">Message</label>
+                <p class="control">
+                    <textarea class="textarea" placeholder="Textarea" value.bind="content"></textarea>
+                </p>
+            </div>
+            <hr>
+            <div innerhtml.bind="content | markdown | sanitizeHTML"></div>
+        </form>
+    </div>
+</template>
