@@ -19,7 +19,7 @@ export class App {
       { route: 'login', name: 'login', moduleId: PLATFORM.moduleName('./pages/account/account'), nav: false, title: 'Login' },
       { route: 'register', name: 'register', moduleId: PLATFORM.moduleName('./pages/account/account'), nav: false, title: 'Sign Up' },
       { route: 'logout', name: 'logout', redirect: PLATFORM.moduleName('./pages/home/home'), nav: false, title: 'Logout', auth: true },
-      { route: 'post', name: 'post', moduleId: PLATFORM.moduleName('./pages/post-editor/post-editor'), nav: false, title: 'Post', auth: true }
+      { route: 'post/:id?', name: 'post', moduleId: PLATFORM.moduleName('./pages/post-editor/post-editor'), nav: false, title: 'Post', auth: true }
     ]);
     this.router = router;
   }

@@ -15,6 +15,11 @@ export class Post {
 
     }
 
+    activate(params) {
+        if(params)
+            this.postId = params.id;
+    }
+
     async createPost() {
         await this.postService.createPost(this.title, this.content, this.tagList, this.postType);
         this.router.navigateToRoute('home');
