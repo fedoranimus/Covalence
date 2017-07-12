@@ -2,6 +2,8 @@ import { bindable, autoinject } from 'aurelia-framework';
 import { PostService } from '../../services/postService';
 import { PostType } from '../../infrastructure/post';
 import { Router } from 'aurelia-router';
+import { ITag } from "../../infrastructure/tag";
+import { TagService } from "../../services/tagService";
 
 @autoinject
 export class Post {
@@ -11,7 +13,11 @@ export class Post {
     @bindable tagList: string[] = [];
     @bindable postId: number = null;
     @bindable postType = PostType.Mentor;
-    constructor(private postService: PostService, private router: Router) {
+
+    @bindable suggestedTags: ITag[] = [];
+
+    errorState = null;
+    constructor(private postService: PostService, private router: Router, private tagService: TagService) {
 
     }
 
@@ -28,5 +34,15 @@ export class Post {
     async updatePost() {
         await this.postService.updatePost(this.postId, this.title, this.content, this.tagList, this.postType);
         this.router.navigateToRoute('home');
+    }
+
+    async onAddTag(event: CustomEvent) {
+        const tagName = event.detail;
+        const index = this.tagList.findIndex(x => x == tagName);
+        
+        if(index === -1) {
+            const tag = await this.tagService.getTag(tagName);
+            this.tagList.push(tag.name);
+        }
     }
 }

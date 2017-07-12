@@ -42,16 +42,4 @@ export class TagList {
         }
             
     }
-
-    async onChangeQuery(event: CustomEvent) {
-        const query: string = event.detail;
-        if(query && !query.includes(" ")) {
-            this.errorState = null;
-            const potentialTags = await this.tagService.queryTag(query);
-            if(potentialTags)
-                this.suggestedTags = potentialTags.filter( t => this.tags.findIndex( x => x.name == t.name) === -1);
-        } else {
-            this.errorState = "Invalid Query; Spaces are not allowed";
-        }
-    }
 }

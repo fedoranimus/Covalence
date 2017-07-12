@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <form submit.delegate="isEdit ? updatePost() : createPost()">
+        <form id="post_form" submit.delegate="isEdit ? updatePost() : createPost()">
             <div class="field">
                 <label class="label">Title</label>
                 <p class="control">
@@ -15,14 +15,19 @@
             </div>
             <hr>
             <div innerhtml.bind="content | markdown | sanitizeHTML"></div>
-            <div class="field is-grouped">
-                <p class="control">
-                    <button type="submit" class="button is-primary">Submit</button>
-                </p>
-                <p class="control">
-                    <button class="button is-link">Cancel</button>
-                </p>
-            </div>
         </form>
+        <div repeat.for="tag of tagList">
+            <span class="tag">${tag}</span>
+        </div>
+        <tag-editor existing-tags.bind="tagList" add.delegate="onAddTag($event)"></tag-editor>
+
+        <div class="field is-grouped">
+            <p class="control">
+                <button type="submit" class="button is-primary" form="post_form">Submit</button>
+            </p>
+            <p class="control">
+                <button class="button is-link">Cancel</button>
+            </p>
+        </div>
     </div>
 </template>

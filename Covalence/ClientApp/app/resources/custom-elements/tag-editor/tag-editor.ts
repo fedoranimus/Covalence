@@ -2,17 +2,19 @@ import {computedFrom} from 'aurelia-binding';
 import {autoinject, bindable, customElement} from 'aurelia-framework';
 import { ITag } from '../../../infrastructure/tag';
 import {DOM} from 'aurelia-pal';
+import { TagService } from "../../../services/tagService";
 
 @autoinject
 @customElement('tag-editor')
 export class TagEditorCustomElement {
     @bindable({ attribute: "debug" }) debug = true;
-    @bindable({ attribute: "suggested-tags" }) suggestedTags: ITag[] = [];
+    @bindable({ attribute: "existing-tags" }) tags: ITag[] = [];
     @bindable tagQuery = '';
-
+    suggestedTags: ITag[] = [];
+    errorState: string|null = null;
     private fromSelection = false;
 
-    constructor(private element: Element) {
+    constructor(private element: Element, private tagService: TagService) {
 
     }
 
@@ -30,17 +32,27 @@ export class TagEditorCustomElement {
         return this.suggestedTags.length > 0;
     }
 
-    tagQueryChanged(query: string) {
+    async tagQueryChanged(query: string) {
         if(!this.fromSelection) {
             if(this.debug) console.log(`Query: ${query}`);
             if(query.length > 0) {
-                let event = DOM.createCustomEvent('change', { bubbles: true, cancelable: true, detail: query });
-                this.element.dispatchEvent(event);
+                await this.onChangeQuery(query);
             } else {
                 this.suggestedTags = [];
             }
         }
         this.fromSelection = false;
+    }
+
+    async onChangeQuery(query: string) {
+        if(query && !query.includes(" ")) {
+            this.errorState = null;
+            const potentialTags = await this.tagService.queryTag(query);
+            if(potentialTags)
+                this.suggestedTags = potentialTags.filter( t => this.tags.findIndex( x => x.name == t.name) === -1);
+        } else {
+            this.errorState = "Invalid Query; Spaces are not allowed";
+        }
     }
 
     selectTag(tag: ITag) {
