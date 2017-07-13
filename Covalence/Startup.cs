@@ -88,7 +88,8 @@ namespace Covalence
                 options.UseJsonWebTokens();
 
                 // During development, you can disable the HTTPS requirement.
-                options.DisableHttpsRequirement();
+                if(_env.IsDevelopment())
+                    options.DisableHttpsRequirement();
 
                 // Register a new ephemeral key, that is discarded when the application
                 // shuts down. Tokens signed using this key are automatically invalidated.
@@ -103,7 +104,7 @@ namespace Covalence
             {
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
-                RequireHttpsMetadata = false,
+                RequireHttpsMetadata = _env.IsDevelopment() ? false : true,
                 Audience = "http://localhost:5000",
                 Authority = "http://localhost:5000",
                 TokenValidationParameters = new TokenValidationParameters
@@ -123,9 +124,8 @@ namespace Covalence
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            //TODO: Only see when in development!!!
-            //if(_env.IsDevelopment())
-            Seed(app, context, postService, tagService);
+            if(_env.IsDevelopment())
+                Seed(app, context, postService, tagService);
 
             var jwtOptions = app.ApplicationServices.GetService<JwtBearerOptions>();
             app.UseJwtBearerAuthentication(jwtOptions);
