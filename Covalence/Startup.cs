@@ -105,8 +105,8 @@ namespace Covalence
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
                 RequireHttpsMetadata = _env.IsDevelopment() || _env.IsStaging() ? false : true,
-                Audience = "http://localhost:5000",
-                Authority = "http://localhost:5000",
+                Audience = _env.IsDevelopment() || _env.IsStaging() ? "http://localhost:5000" : "https://localhost:5000",
+                Authority = _env.IsDevelopment() || _env.IsStaging() ? "http://localhost:5000" : "https://localhost:5000",
                 TokenValidationParameters = new TokenValidationParameters
                 {
                     NameClaimType = OpenIdConnectConstants.Claims.Subject,
