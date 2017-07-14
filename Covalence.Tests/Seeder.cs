@@ -10,8 +10,8 @@ namespace Covalence.Tests {
     {
         public static void Seed(this IApplicationBuilder app, ApplicationDbContext context)
         {
-            if(!context.Database.EnsureCreated())
-                context.Database.Migrate();
+            // if(!context.Database.EnsureCreated())
+            //     context.Database.Migrate();
 
             SeedTags(context);
             //SeedPost(context);

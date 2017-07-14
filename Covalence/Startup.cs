@@ -88,7 +88,7 @@ namespace Covalence
                 options.UseJsonWebTokens();
 
                 // During development, you can disable the HTTPS requirement.
-                if(_env.IsDevelopment())
+                if(_env.IsDevelopment() || _env.IsStaging())
                     options.DisableHttpsRequirement();
 
                 // Register a new ephemeral key, that is discarded when the application
@@ -104,7 +104,7 @@ namespace Covalence
             {
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
-                RequireHttpsMetadata = _env.IsDevelopment() ? false : true,
+                RequireHttpsMetadata = _env.IsDevelopment() || _env.IsStaging() ? false : true,
                 Audience = "http://localhost:5000",
                 Authority = "http://localhost:5000",
                 TokenValidationParameters = new TokenValidationParameters
@@ -124,7 +124,9 @@ namespace Covalence
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            if(_env.IsDevelopment())
+            context.Database.Migrate();
+
+            if(_env.IsDevelopment() || _env.IsStaging())
                 Seed(app, context, postService, tagService);
 
             var jwtOptions = app.ApplicationServices.GetService<JwtBearerOptions>();
@@ -166,8 +168,6 @@ namespace Covalence
         }
         public virtual async void Seed(IApplicationBuilder app, ApplicationDbContext context, IPostService postService, ITagService tagService) {
             var userManager = app.ApplicationServices.GetService<UserManager<ApplicationUser>>();
-            
-            context.Database.Migrate();
 
             var physicsTag = new Tag() {
                     Name = "Physics"
@@ -270,7 +270,6 @@ namespace Covalence
                     options.UseOpenIddict();
                 });
             }
-
         }
     }
 }

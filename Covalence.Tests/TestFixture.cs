@@ -45,7 +45,7 @@ namespace Covalence.Tests {
                     };
                     services.AddSingleton(jwtOptions);
                 })
-                //.UseEnvironment("Development")
+                .UseEnvironment("Staging")
                 .UseStartup<TStartup>();
             _server = new TestServer(builder);
             var innerHttpMessageHandler = _server.CreateHandler();
