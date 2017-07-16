@@ -6,6 +6,10 @@ $active-primary-color: darken($primary-color, 10%);
     background-color: $primary-color;
 }
 
+.navbar-menu {
+    color: $light-text-color;
+}
+
 a.nav-item {
     color: $light-text-color;
 

@@ -1,33 +1,71 @@
 <template>
+    <require from="./post-editor.scss"></require>
     <div class="container">
-        <form id="post_form" submit.delegate="isEdit ? updatePost() : createPost()">
-            <div class="field">
-                <label class="label">Title</label>
-                <p class="control">
-                    <input class="input" type="text" placeholder="Title" value.bind="title">
-                </p>
-            </div>
-            <div class="field">
-                <label class="label">Message</label>
-                <p class="control">
-                    <textarea class="textarea" placeholder="Textarea" value.bind="content"></textarea>
-                </p>
-            </div>
-            <hr>
-            <div innerhtml.bind="content | markdown | sanitizeHTML"></div>
-        </form>
-        <div repeat.for="tag of tagList">
-            <span class="tag">${tag}</span>
-        </div>
-        <tag-editor existing-tags.bind="tagList" add.delegate="onAddTag($event)"></tag-editor>
+        <div class="columns">
+            <div class="column is-three-quarters">
+                <h1 class="title">Looking for Mentor</h1>
+                <hr>
+                <form id="post_form" submit.delegate="isEdit ? updatePost() : createPost()">
+                    <div class="field">
+                        <label class="label">Title</label>
+                        <p class="control">
+                            <input class="input" type="text" placeholder="What sort of mentor do you want? Please be specific..." value.bind="title">
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Message</label>
+                        <p class="control">
+                            <textarea class="textarea" placeholder="Share a little more information about your situation and why you want a mentor..." value.bind="content"></textarea>
+                        </p>
+                    </div>
+                    <hr>
+                    <div innerhtml.bind="content | markdown | sanitizeHTML"></div>
+                </form>
+                <hr>
+                <span>Tags</span>
+                <div repeat.for="tag of tagList">
+                    <span class="tag">${tag}</span>
+                </div>
+                <tag-editor existing-tags.bind="tagList" add.delegate="onAddTag($event)"></tag-editor>
 
-        <div class="field is-grouped">
-            <p class="control">
-                <button type="submit" class="button is-primary" form="post_form">Submit</button>
-            </p>
-            <p class="control">
-                <button class="button is-link">Cancel</button>
-            </p>
+                <div class="field is-grouped post-buttons">
+                    <p class="control">
+                        <button type="submit" class="button is-primary" form="post_form">Request Mentorship</button>
+                    </p>
+                    <p class="control">
+                        <button class="button is-link">Cancel</button>
+                    </p>
+                </div>
+            </div>
+            <div class="column">
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            Formatting Tips
+                        </p>
+                    </header>
+                    <p class="card-content">
+                        <div class="content">
+                            <ul>
+                                <li>_<i>italics</i>_ or <b>**bold**</b><br></li>
+                                <li>being line with > for quotations</li>
+                                <li>put an empty line between paragraphs</li>
+                            </ul>
+                            <hr>
+                            <ul>
+                                <li>use backticks for code: <code>`const a = 1;`</code></li>
+                                <li>use three backticks for code blocks</li>
+                                <li>use $ for mathematics: $x^2 = 4$</li>
+                                <li>use $$ for multi-line mathematics</li>
+                            </ul>
+                        </div>
+                    </p>
+                    <hr>
+                    <p class="card-content">
+                        You will see real-time formatted text below the text input box.
+                    </p> 
+                </div>
+            </div>
         </div>
     </div>
 </template>
