@@ -1,8 +1,8 @@
 import {AuthService} from 'aurelia-authentication';
 import {autoinject, computedFrom} from 'aurelia-framework';
-import { PostService } from '../../../services/postService';
-import { ITag } from '../../../infrastructure/tag';
-import { IPost } from '../../../infrastructure/post'; 
+import { PostService } from '../../services/postService';
+import { ITag } from '../../infrastructure/tag';
+import { IPost } from '../../infrastructure/post'; 
 
 @autoinject
 export class AppHome {

@@ -1,6 +1,7 @@
 import 'isomorphic-fetch';
-import {Aurelia, PLATFORM} from 'aurelia-framework'
+import { Aurelia, PLATFORM } from 'aurelia-framework'
 import authConfig from './app/authConfig';
+import { AuthService } from 'aurelia-authentication';
 import 'bulma/css/bulma.css';
 declare const IS_DEV_BUILD: boolean; // The value is supplied by Webpack during the build
 
@@ -32,5 +33,11 @@ export function configure(aurelia: Aurelia) {
     aurelia.use.developmentLogging();
   }
 
-  aurelia.start().then(() => aurelia.setRoot(PLATFORM.moduleName('app/app')));
+  aurelia.start().then(() => {
+    const auth = aurelia.container.get(AuthService);
+    if(auth.isAuthenticated())
+      aurelia.setRoot(PLATFORM.moduleName('app/auth-app'));
+    else
+      aurelia.setRoot(PLATFORM.moduleName('app/app'));
+  });
 }

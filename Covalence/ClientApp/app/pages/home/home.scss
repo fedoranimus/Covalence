@@ -1,0 +1,35 @@
+@import '../../colors';
+
+.home {
+    margin-top: 10%;
+}
+
+.home-hero {
+    color: $secondary-color;
+    font-size: 76pt;
+    font-weight: bold;
+    margin-right: .1em;
+}
+
+.home-tagline {
+    color: $dark-text-color;
+    font-weight: lighter;
+    display: flex;
+    flex-flow: column;
+}
+
+.home-tagline-tag {
+    font-size: 48pt;
+    margin-top: .25em;
+}
+
+.home-tagline-line {
+    font-size: 20pt;
+    margin-top: .35em;
+}
+
+.home-get-started {
+    display: flex;
+    justify-content: center;
+    margin-top: 3em;
+}

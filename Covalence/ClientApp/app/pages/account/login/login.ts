@@ -1,7 +1,8 @@
-import {AuthService} from 'aurelia-authentication';
-import {inject, computedFrom, autoinject} from 'aurelia-framework';
+import { AuthService } from 'aurelia-authentication';
+import { inject, computedFrom, autoinject, PLATFORM, Aurelia } from 'aurelia-framework';
 import { IUser } from '../../../infrastructure/user';
 import { UserService } from '../../../services/userService';
+import { Router, RouterConfiguration } from 'aurelia-router';
 
 
 @autoinject
@@ -11,7 +12,7 @@ export class Login {
 
     providers: any[] = [];
 
-    constructor(private authService: AuthService, private userService: UserService) {
+    constructor(private authService: AuthService, private userService: UserService, private app: Aurelia, private router: Router) {
 
     }
 
@@ -26,6 +27,12 @@ export class Login {
         if(token) {
             const user = await this.authService.getMe();
             this.userService.currentUser = user;
+
+            this.router.navigate('/', { replace: true, trigger: false });
+            this.router.reset();
+            //this.router.deactivate();
+
+            this.app.setRoot(PLATFORM.moduleName('app/auth-app'));
         }
     }
 
