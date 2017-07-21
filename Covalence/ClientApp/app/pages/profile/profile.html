@@ -1,23 +1,39 @@
 <template>
     <require from="./profile.scss"></require>
     <div class="container">
-        <!--<label class="switch">
-            <input type="checkbox" checked.bind="isEditable">
-            <div class="slider round"></div>
-        </label>-->
-        <div class="personal_details">
-            <span class="name_input">
-                <input type="text" value.bind="displayName" />
-            </span>
+        <form>
+        <div class="field" validation-errors.bind="firstNameErrors">
+            <label class="label">First Name</label>
+            <div class="control">
+                <input class="input" class.bind="firstNameErrors.length ? 'is-danger' : ''" type="text" value.bind="profile.firstName & validate" placeholder="First Name">
+            </div>
+            <p class="help is-danger" repeat.for="errorInfo of firstNameErrors">${errorInfo.error.message}</p>
         </div>
-        <div class="connections">
-            ${profile.connections}
+
+        <div class="field" validation-errors.bind="lastNameErrors">
+            <label class="label">Last Name</label>
+            <div class="control">
+                <input class="input" class.bind="lastNameErrors.length ? 'is-danger' : ''" type="text" value.bind="profile.lastName & validate" placeholder="Last Name">
+            </div>
+            <p class="help is-danger" repeat.for="errorInfo of lastNameErrors">${errorInfo.error.message}</p>
         </div>
-        <ul class="study_tags">
-            <li repeat.for="tag of profile.studyTags">tag</li>
-        </ul>
-        <ul class="expert_tags">
-            <li repeat.for="tag of profile.expertTags">tag</li>
-        </ul>
+
+        <div class="field" validation-errors.bind="emailErrors">
+            <label class="label">Email</label>
+            <div class="control">
+                <input class="input" class.bind="emailErrors.length ? 'is-danger' : ''" type="email" value.bind="profile.email & validate" placeholder="Email Address">
+            </div>
+
+            <p class="help is-danger" repeat.for="errorInfo of emailErrors">${errorInfo.error.message}</p>
+        </div>
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-primary" disabled.bind="!canSave">Submit</button>
+            </div>
+            <div class="control">
+                <button class="button is-link">Cancel</button>
+            </div>
+        </div>
+        </form>
     </div>
 </template>

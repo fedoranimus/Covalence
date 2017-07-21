@@ -20,7 +20,8 @@ export function configure(aurelia: Aurelia) {
     .plugin(PLATFORM.moduleName('aurelia-authentication/authFilterValueConverter'))
     .plugin(PLATFORM.moduleName('aurelia-authentication'), baseConfig => {
       baseConfig.configure(authConfig);
-    });
+    })
+    .plugin(PLATFORM.moduleName('aurelia-validation'));
     // .plugin('aurelia-google-maps', config => {
     //   config.options({
     //     apiKey: 'AIzaSyCEeOKnNEsBO4T4Nm-54p_l4hOaGAx7U_c',

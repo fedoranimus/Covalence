@@ -33,6 +33,7 @@ module.exports = ({ prod } = {}) => {
                 'aurelia-templating-router',
                 'aurelia-api',
                 'aurelia-authentication',
+                'aurelia-validation',
                 'bulma/css/bulma.css',
                 "font-awesome/css/font-awesome.css",
                 'markdown-it',
