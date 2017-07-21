@@ -10,10 +10,11 @@ $active-primary-color: darken($primary-color, 10%);
     color: $light-text-color;
 }
 
-a.nav-item {
+a.navbar-item {
     color: $light-text-color;
 
     &:hover {
+        background-color: unset;
         color: $light-text-color--hover;
     }
 }
