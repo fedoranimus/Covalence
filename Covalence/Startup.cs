@@ -85,7 +85,7 @@ namespace Covalence
                 options.AllowRefreshTokenFlow();
 
                 // Return a JWT rather than a traditional token
-                options.UseJsonWebTokens();
+                //options.UseJsonWebTokens();
 
                 // During development, you can disable the HTTPS requirement.
                 if(_env.IsDevelopment() || _env.IsStaging())
@@ -94,25 +94,28 @@ namespace Covalence
                 // Register a new ephemeral key, that is discarded when the application
                 // shuts down. Tokens signed using this key are automatically invalidated.
                 // This method should only be used during development.
-                options.AddEphemeralSigningKey();
+                //options.AddEphemeralSigningKey();
             });
 
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+            services.AddAuthentication()
+                    .AddOAuthValidation();
 
-            services.TryAddSingleton(new JwtBearerOptions
-            {
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-                RequireHttpsMetadata = _env.IsDevelopment() || _env.IsStaging() ? false : true,
-                Audience = _env.IsDevelopment() || _env.IsStaging() ? "http://localhost:5000" : "https://localhost:5000",
-                Authority = _env.IsDevelopment() || _env.IsStaging() ? "http://localhost:5000" : "https://localhost:5000",
-                TokenValidationParameters = new TokenValidationParameters
-                {
-                    NameClaimType = OpenIdConnectConstants.Claims.Subject,
-                    RoleClaimType = OpenIdConnectConstants.Claims.Role,
-                }
-            });
+            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            //JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+
+            // services.TryAddSingleton(new JwtBearerOptions
+            // {
+            //     AutomaticAuthenticate = true,
+            //     AutomaticChallenge = true,
+            //     RequireHttpsMetadata = _env.IsDevelopment() || _env.IsStaging() ? false : true,
+            //     Audience = _env.IsDevelopment() || _env.IsStaging() ? "http://localhost:5000" : "https://localhost:5000",
+            //     Authority = _env.IsDevelopment() || _env.IsStaging() ? "http://localhost:5000" : "https://localhost:5000",
+            //     TokenValidationParameters = new TokenValidationParameters
+            //     {
+            //         NameClaimType = OpenIdConnectConstants.Claims.Subject,
+            //         RoleClaimType = OpenIdConnectConstants.Claims.Role,
+            //     }
+            // });
 
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<IPostService, PostService>();
@@ -129,8 +132,8 @@ namespace Covalence
             if(_env.IsDevelopment() || _env.IsStaging())
                 Seed(app, context, postService, tagService);
 
-            var jwtOptions = app.ApplicationServices.GetService<JwtBearerOptions>();
-            app.UseJwtBearerAuthentication(jwtOptions);
+            //var jwtOptions = app.ApplicationServices.GetService<JwtBearerOptions>();
+            //app.UseJwtBearerAuthentication(jwtOptions);
 
             app.UseCors(builder => 
                 builder.AllowAnyHeader()
@@ -138,7 +141,9 @@ namespace Covalence
                        .AllowAnyOrigin()
             );
 
-            app.UseOpenIddict();
+            app.UseAuthentication();
+
+            //app.UseOpenIddict();
 
             if (_env.IsDevelopment())
             {

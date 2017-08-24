@@ -24,32 +24,32 @@ namespace Covalence.Tests {
         public TestFixture()
         {
             var builder = new WebHostBuilder()
-                .ConfigureServices(services => {
-                    JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-                    JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+                // .ConfigureServices(services => {
+                //     JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+                //     JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
 
-                    var jwtOptions = new JwtBearerOptions
-                    {
-                        AutomaticAuthenticate = true,
-                        AutomaticChallenge = true,
-                        RequireHttpsMetadata = false,
-                        Audience = "http://localhost:5000",
-                        Authority = "http://localhost:5000",
-                        TokenValidationParameters = new TokenValidationParameters
-                        {
-                            NameClaimType = OpenIdConnectConstants.Claims.Subject,
-                            RoleClaimType = OpenIdConnectConstants.Claims.Role,
-                            ValidateAudience = false //Only for testing!
-                        },
-                        BackchannelHttpHandler = _testMessageHandler
-                    };
-                    services.AddSingleton(jwtOptions);
-                })
+                //     var jwtOptions = new JwtBearerOptions
+                //     {
+                //         AutomaticAuthenticate = true,
+                //         AutomaticChallenge = true,
+                //         RequireHttpsMetadata = false,
+                //         Audience = "http://localhost:5000",
+                //         Authority = "http://localhost:5000",
+                //         TokenValidationParameters = new TokenValidationParameters
+                //         {
+                //             NameClaimType = OpenIdConnectConstants.Claims.Subject,
+                //             RoleClaimType = OpenIdConnectConstants.Claims.Role,
+                //             ValidateAudience = false //Only for testing!
+                //         },
+                //         BackchannelHttpHandler = _testMessageHandler
+                //     };
+                //     services.AddSingleton(jwtOptions);
+                // })
                 .UseEnvironment("Staging")
                 .UseStartup<TStartup>();
             _server = new TestServer(builder);
-            var innerHttpMessageHandler = _server.CreateHandler();
-            _testMessageHandler.WrappedMessageHandler = innerHttpMessageHandler;
+            //var innerHttpMessageHandler = _server.CreateHandler();
+            //_testMessageHandler.WrappedMessageHandler = innerHttpMessageHandler;
 
             _context = _server.Host.Services.GetRequiredService<ApplicationDbContext>();
 

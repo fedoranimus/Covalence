@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using Covalence.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using AspNet.Security.OAuth.Validation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Covalence.Controllers
 {
-    //[Authorize]
+    //[Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     public class TagController : Controller
     {

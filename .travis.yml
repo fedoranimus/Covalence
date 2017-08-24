@@ -2,7 +2,7 @@ language: csharp
 dist: trusty
 sudo: required
 mono: none
-dotnet: 1.0.1
+dotnet: 2.0.0
 skip_cleanup: true
 before_install:
   - nvm install 8

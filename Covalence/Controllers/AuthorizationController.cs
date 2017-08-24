@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using AspNet.Security.OpenIdConnect.Extensions;
+//using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http.Authentication;
 using AspNet.Security.OpenIdConnect.Server;
 using Covalence.Authentication;
 using AspNet.Security.OpenIdConnect.Primitives;
@@ -21,80 +21,54 @@ namespace Covalence.Controllers
     //[Route("api/[controller]")]
     public class AuthorizationController : Controller
     {
-        private readonly OpenIddictApplicationManager<OpenIddictApplication> _applicationManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<AuthorizationController> _logger;
         private readonly IOptions<IdentityOptions> _identityOptions;
 
         public AuthorizationController(
-            OpenIddictApplicationManager<OpenIddictApplication> applicationManager,
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             ILogger<AuthorizationController> logger,
             IOptions<IdentityOptions> identityOptions)
         {
-            _applicationManager = applicationManager;
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
             _identityOptions = identityOptions;
         }
 
-        [HttpPostAttribute("connect/token"), ProducesAttribute("application/json")]
+        [HttpPost("~/connect/token"), Produces("application/json")]
         public async Task<IActionResult> Exchange(OpenIdConnectRequest request)
         {
             Debug.Assert(request.IsTokenRequest(),
                 "The OpenIddict binder for ASP.NET Core MVC is not registered. " +
                 "Make sure services.AddOpenIddict().AddMvcBinders() is correctly called.");
-                
-            if(request.IsPasswordGrantType())
+
+            if (request.IsPasswordGrantType())
             {
-                var user = await _userManager.FindByNameAsync(request.Username); //should this be email instead?
-                if(user == null) 
+                var user = await _userManager.FindByNameAsync(request.Username);
+                if (user == null)
                 {
                     return BadRequest(new OpenIdConnectResponse
                     {
                         Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                        ErrorDescription = "The username or password is invalid."
+                        ErrorDescription = "The username/password couple is invalid."
                     });
                 }
 
-                // Ensure the user is allowed to log in
-                if(!await _signInManager.CanSignInAsync(user))
+                // Validate the username/password parameters and ensure the account is not locked out.
+                var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: true);
+                if (!result.Succeeded)
                 {
-                    return BadRequest( new OpenIdConnectResponse
-                    {
-                        Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                        ErrorDescription = "The specified user is not allowed to sign in."
-                    });
-                }
-
-                // TODO two-factor auth test
-
-                // TODO user lockout test
-
-                // Ensure the password is valid
-                if(!await _userManager.CheckPasswordAsync(user, request.Password))
-                {
-                    if(_userManager.SupportsUserLockout)
-                    {
-                        await _userManager.AccessFailedAsync(user);
-                    }
-
                     return BadRequest(new OpenIdConnectResponse
                     {
                         Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                        ErrorDescription = "The username or password is invalid."
+                        ErrorDescription = "The username/password couple is invalid."
                     });
                 }
 
-                if(_userManager.SupportsUserLockout)
-                {
-                    await _userManager.ResetAccessFailedCountAsync(user);
-                }
-
-                // Create a new authentication ticket
+                // Create a new authentication ticket.
                 var ticket = await CreateTicketAsync(request, user);
 
                 return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
@@ -103,7 +77,7 @@ namespace Covalence.Controllers
             return BadRequest(new OpenIdConnectResponse
             {
                 Error = OpenIdConnectConstants.Errors.UnsupportedGrantType,
-                ErrorDescription = "The specified Grant Type is not supported."
+                ErrorDescription = "The specified grant type is not supported."
             });
         }
 

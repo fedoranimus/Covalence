@@ -8,14 +8,12 @@ using Covalence.Authentication;
 using Covalence.Contracts;
 using Covalence.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using System;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Collections.Generic;
+using AspNet.Security.OAuth.Validation;
 
 namespace Covalence.Controllers
 {
-    [Authorize(ActiveAuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    //[Authorize(ActiveAuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     public class UserController : Controller
     {
