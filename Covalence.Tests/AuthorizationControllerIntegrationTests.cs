@@ -48,7 +48,7 @@ namespace Covalence.Tests
 
             //Console.WriteLine("{0}, {1}", loginContent.access_token.Length, loginContent.access_token);
 
-            Assert.Equal(loginContent.token_type, "Bearer");
+            Assert.Equal("Bearer", loginContent.token_type);
             Assert.True(loginContent.access_token.Length > 0);
         }
     }
