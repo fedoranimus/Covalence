@@ -9,6 +9,8 @@ using AspNet.Security.OpenIdConnect.Primitives;
 using System.Net.Http;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Logging;
+using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace Covalence.Tests {
     public class TestStartup : Startup  
@@ -28,8 +30,37 @@ namespace Covalence.Tests {
             });
         }
 
-        public override void Seed(IApplicationBuilder app, ApplicationDbContext context, IPostService postService, ITagService ITagService) {
-            app.Seed(context);
+        public override void Seed(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IPostService postService, ITagService ITagService) {
+            SeedTags(context);
+
+            context.SaveChanges();
+        }
+
+        private static void SeedTags(ApplicationDbContext context)
+        {
+            context.Tags.Add(new Tag() {
+                    Name = "Physics"
+            });
+
+            context.Tags.Add(new Tag() {
+                Name = "Chemistry"
+            });
+
+            context.Tags.Add(new Tag() {
+                Name = "Biology"
+            });
+        }
+
+        private static void SeedPost(ApplicationDbContext context)
+        {
+            context.Posts.Add(new Post(){
+                Category = PostType.Mentor,
+                Content = "Seeded Content",
+                Title = "Seeded Post",
+                DateCreated = DateTime.Now,
+                DateModified = DateTime.Now,
+                Author = new ApplicationUser()
+            });
         }
     }
 }

@@ -100,40 +100,20 @@ namespace Covalence
             services.AddAuthentication()
                     .AddOAuthValidation();
 
-            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            //JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
-
-            // services.TryAddSingleton(new JwtBearerOptions
-            // {
-            //     AutomaticAuthenticate = true,
-            //     AutomaticChallenge = true,
-            //     RequireHttpsMetadata = _env.IsDevelopment() || _env.IsStaging() ? false : true,
-            //     Audience = _env.IsDevelopment() || _env.IsStaging() ? "http://localhost:5000" : "https://localhost:5000",
-            //     Authority = _env.IsDevelopment() || _env.IsStaging() ? "http://localhost:5000" : "https://localhost:5000",
-            //     TokenValidationParameters = new TokenValidationParameters
-            //     {
-            //         NameClaimType = OpenIdConnectConstants.Claims.Subject,
-            //         RoleClaimType = OpenIdConnectConstants.Claims.Role,
-            //     }
-            // });
-
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<IPostService, PostService>();
+            services.AddScoped<UserManager<ApplicationUser>, UserManager<ApplicationUser>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, ApplicationDbContext context, IPostService postService, ITagService tagService)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, ApplicationDbContext context, IPostService postService, ITagService tagService, IServiceProvider serviceProvider)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseAuthentication();
+
             context.Database.Migrate();
-
-            if(_env.IsDevelopment() || _env.IsStaging())
-                Seed(app, context, postService, tagService);
-
-            //var jwtOptions = app.ApplicationServices.GetService<JwtBearerOptions>();
-            //app.UseJwtBearerAuthentication(jwtOptions);
 
             app.UseCors(builder => 
                 builder.AllowAnyHeader()
@@ -141,9 +121,10 @@ namespace Covalence
                        .AllowAnyOrigin()
             );
 
-            app.UseAuthentication();
-
-            //app.UseOpenIddict();
+            if(_env.IsDevelopment() || _env.IsStaging()) {
+                var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
+                Seed(userManager, context, postService, tagService);
+            }
 
             if (_env.IsDevelopment())
             {
@@ -171,8 +152,7 @@ namespace Covalence
                     defaults: new { controller = "Home", action = "Index" });
             });
         }
-        public virtual async void Seed(IApplicationBuilder app, ApplicationDbContext context, IPostService postService, ITagService tagService) {
-            var userManager = app.ApplicationServices.GetService<UserManager<ApplicationUser>>();
+        public virtual async void Seed(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IPostService postService, ITagService tagService) {
 
             var physicsTag = new Tag() {
                     Name = "Physics"
