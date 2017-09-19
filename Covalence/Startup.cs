@@ -23,6 +23,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Data.Sqlite;
 using Covalence.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace Covalence
 {
@@ -52,6 +54,11 @@ namespace Covalence
 
             // Add framework services.
             services.AddMvc();
+
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new RequireHttpsAttribute());
+            });
 
             ConfigureDatabase(services, _env);            
 
@@ -110,6 +117,11 @@ namespace Covalence
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            var options = new RewriteOptions()
+                                .AddRedirectToHttps();
+
+            app.UseRewriter(options);
 
             app.UseAuthentication();
 
