@@ -1,5 +1,5 @@
 export default {
   debug: true,
   testing: true,
-  host: "http://localhost:3000"
+  host: "https://localhost:5000"
 };
