@@ -54,7 +54,7 @@ namespace Covalence.Tests {
             _context = _server.Host.Services.GetRequiredService<ApplicationDbContext>();
 
             Client = _server.CreateClient();
-            Client.BaseAddress = new Uri("http://localhost:5000");
+            Client.BaseAddress = new Uri("https://localhost:5000");
 
             Token = FetchToken();
         }
@@ -75,7 +75,7 @@ namespace Covalence.Tests {
             keyValues.Add(new KeyValuePair<string, string>("password", "123Abc!"));
             keyValues.Add(new KeyValuePair<string, string>("grant_type", "password"));
             keyValues.Add(new KeyValuePair<string, string>("scope", "offline_access, profile, email, roles"));
-            keyValues.Add(new KeyValuePair<string, string>("resource", "http://localhost:5000"));
+            keyValues.Add(new KeyValuePair<string, string>("resource", "https://localhost:5000"));
 
             var loginBody = new FormUrlEncodedContent(keyValues);
             
