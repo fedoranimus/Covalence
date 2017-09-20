@@ -51,12 +51,12 @@ namespace Covalence
         public void ConfigureServices(IServiceCollection services)
         {
 
-            if(_env.IsProduction()) {
-                services.Configure<MvcOptions>(options =>
-                {
-                    options.Filters.Add(new RequireHttpsAttribute());
-                });
-            }
+            // if(_env.IsProduction()) {
+            //     services.Configure<MvcOptions>(options =>
+            //     {
+            //         options.Filters.Add(new RequireHttpsAttribute());
+            //     });
+            // }
             // Enable CORS
             services.AddCors();
 
@@ -121,12 +121,12 @@ namespace Covalence
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            // if(_env.IsProduction()) {
-            //     var options = new RewriteOptions()
-            //                     .AddRedirectToHttps();
+            if(_env.IsProduction()) {
+                var options = new RewriteOptions()
+                                .AddRedirectToHttps();
 
-            //     app.UseRewriter(options);
-            // }
+                app.UseRewriter(options);
+            }
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
