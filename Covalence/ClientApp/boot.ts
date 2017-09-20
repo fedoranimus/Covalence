@@ -11,8 +11,14 @@ export function configure(aurelia: Aurelia) {
     .feature(PLATFORM.moduleName('app/resources/index'))
     .plugin(PLATFORM.moduleName('aurelia-api'), config => {
       //config.setDefaultBaseUrl(environment.host);
-      config.registerEndpoint('auth', 'https://localhost:5000/');
-      config.registerEndpoint('api', 'https://localhost:5000/api/');
+      if(!IS_DEV_BUILD) { // TODO: Refactor
+        config.registerEndpoint('auth', 'https://localhost:5000/');
+        config.registerEndpoint('api', 'https://localhost:5000/api/');
+      } else {
+        config.registerEndpoint('auth', 'http://localhost:5000/');
+        config.registerEndpoint('api', 'http://localhost:5000/api/');
+      }
+
       config.setDefaultEndpoint('api');
     })
     .plugin(PLATFORM.moduleName('aurelia-authentication/authenticatedFilterValueConverter'))
