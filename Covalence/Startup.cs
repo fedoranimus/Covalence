@@ -50,6 +50,13 @@ namespace Covalence
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            if(_env.IsProduction()) {
+                services.Configure<MvcOptions>(options =>
+                {
+                    options.Filters.Add(new RequireHttpsAttribute());
+                });
+            }
             // Enable CORS
             services.AddCors();
 
@@ -91,8 +98,8 @@ namespace Covalence
                 //options.UseJsonWebTokens();
 
                 // During development, you can disable the HTTPS requirement.
-                //if(_env.IsDevelopment() || _env.IsStaging())
-                    //options.DisableHttpsRequirement();
+                if(!_env.IsProduction())
+                    options.DisableHttpsRequirement();
 
                 // Register a new ephemeral key, that is discarded when the application
                 // shuts down. Tokens signed using this key are automatically invalidated.
@@ -113,6 +120,13 @@ namespace Covalence
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            if(_env.IsProduction()) {
+                var options = new RewriteOptions()
+                                .AddRedirectToHttps();
+
+                app.UseRewriter(options);
+            }
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
