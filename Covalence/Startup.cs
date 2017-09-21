@@ -98,8 +98,8 @@ namespace Covalence
                 //options.UseJsonWebTokens();
 
                 // During development, you can disable the HTTPS requirement.
-                //if(!_env.IsProduction())
-                   // options.DisableHttpsRequirement();
+                if(!_env.IsProduction())
+                   options.DisableHttpsRequirement();
 
                 // Register a new ephemeral key, that is discarded when the application
                 // shuts down. Tokens signed using this key are automatically invalidated.

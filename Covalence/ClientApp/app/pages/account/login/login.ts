@@ -22,7 +22,7 @@ export class Login {
     }
 
     async login() {
-        const credentials = { username: this.email, password: this.password, grant_type: "password", scope: "offline_access", resource: "http://localhost:5000" };
+        const credentials = { username: this.email, password: this.password, grant_type: "password", scope: "offline_access", resource: "https://localhost:5000" };
         const token = await this.authService.login(credentials);
         if(token) {
             const user = await this.authService.getMe();
