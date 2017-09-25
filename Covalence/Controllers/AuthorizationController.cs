@@ -47,13 +47,21 @@ namespace Covalence.Controllers
 
             if (request.IsPasswordGrantType())
             {
-                var user = await _userManager.FindByNameAsync(request.Username);
+                var user = await _userManager.FindByEmailAsync(request.Username);
                 if (user == null)
                 {
                     return BadRequest(new OpenIdConnectResponse
                     {
                         Error = OpenIdConnectConstants.Errors.InvalidGrant,
                         ErrorDescription = "The username/password couple is invalid."
+                    });
+                }
+
+                if(!await _userManager.IsEmailConfirmedAsync(user)) {
+                    return BadRequest(new OpenIdConnectResponse
+                    {
+                        Error = OpenIdConnectConstants.Errors.AccessDenied,
+                        ErrorDescription = "You must have a confirmed email to log in."
                     });
                 }
 

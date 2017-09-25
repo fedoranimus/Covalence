@@ -38,6 +38,10 @@ namespace Covalence
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
+
+            if(env.IsDevelopment())
+                builder.AddUserSecrets<Startup>();
+            
             Configuration = builder.Build();
 
             _env = env;
@@ -50,23 +54,20 @@ namespace Covalence
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            // if(_env.IsProduction()) {
-            //     services.Configure<MvcOptions>(options =>
-            //     {
-            //         options.Filters.Add(new RequireHttpsAttribute());
-            //     });
-            // }
             // Enable CORS
             services.AddCors();
 
             // Add framework services.
             services.AddMvc();
 
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+
             ConfigureDatabase(services, _env);            
 
             // Register the Identity services.
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(config => {
+                    config.SignIn.RequireConfirmedEmail = true;
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -112,6 +113,7 @@ namespace Covalence
 
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<IPostService, PostService>();
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<UserManager<ApplicationUser>, UserManager<ApplicationUser>>();
         }
 
@@ -172,6 +174,8 @@ namespace Covalence
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
+
+            
         }
         public virtual async void Seed(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IPostService postService, ITagService tagService) {
 
