@@ -5,8 +5,6 @@ import {autoinject} from 'aurelia-framework';
 export class Register {
     email: string = "";
     password: string = "";
-    firstName: string = "";
-    lastName: string = "";
 
     constructor(private authService: AuthService) {
 
@@ -15,9 +13,7 @@ export class Register {
     signup() {
         return this.authService.signup({
             email: this.email,
-            password: this.password,
-            firstName: this.firstName,
-            lastName: this.lastName
+            password: this.password
         });
     }
 
