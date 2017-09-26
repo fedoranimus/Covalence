@@ -61,9 +61,8 @@ namespace Covalence
 
             // Add framework services.
             services.AddMvc();
-
-            if(!_env.IsStaging())
-                services.Configure<AuthMessageSenderOptions>(Configuration);
+                
+            services.Configure<AuthMessageSenderOptions>(Configuration);
 
             ConfigureDatabase(services, _env);            
 
