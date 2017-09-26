@@ -4,6 +4,12 @@ using SendGrid.Helpers.Mail;
 using System.Threading.Tasks;
 
 namespace Covalence {
+    
+    public interface IEmailSender
+    {
+        Task SendEmailAsync(string email, string subject, string message);
+    }
+
     public class EmailSender : IEmailSender 
     {
         public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor)
@@ -32,10 +38,5 @@ namespace Covalence {
             msg.AddTo(new EmailAddress(email));
             return client.SendEmailAsync(msg);
         }
-    }
-
-    public interface IEmailSender
-    {
-        Task SendEmailAsync(string email, string subject, string message);
     }
 }

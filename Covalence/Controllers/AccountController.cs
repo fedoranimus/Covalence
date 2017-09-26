@@ -17,9 +17,9 @@ namespace Covalence.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly ILogger<AccountController> _logger;
-        private readonly EmailSender _emailSender;
+        private readonly IEmailSender _emailSender;
         
-        public AccountController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, ILogger<AccountController> logger, EmailSender emailSender) 
+        public AccountController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, ILogger<AccountController> logger, IEmailSender emailSender) 
         {
             _userManager = userManager;
             _context = context;
@@ -31,7 +31,7 @@ namespace Covalence.Controllers
         [Route("register")]
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
             _logger.LogInformation("Registering {0} {1} with email {2}", model.FirstName, model.LastName, model.Email);
@@ -59,7 +59,7 @@ namespace Covalence.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if(ModelState.IsValid)
@@ -83,17 +83,17 @@ namespace Covalence.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             if(userId == null || code == null)
             {
-                return BadRequest("User or Code does not exist");
+                return BadRequest("Code not included");
             }
 
             var user = await _userManager.FindByIdAsync(userId);
             if(user == null)
             {
+                // Don't reveal the user does not exist
                 return BadRequest("User does not exist");
             }
             var result = await _userManager.ConfirmEmailAsync(user, code);
@@ -102,7 +102,6 @@ namespace Covalence.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if(!ModelState.IsValid)

@@ -57,16 +57,19 @@ namespace Covalence
             // Enable CORS
             services.AddCors();
 
+            services.AddTransient<IEmailSender, EmailSender>();
+
             // Add framework services.
             services.AddMvc();
 
-            services.Configure<AuthMessageSenderOptions>(Configuration);
+            if(!_env.IsStaging())
+                services.Configure<AuthMessageSenderOptions>(Configuration);
 
             ConfigureDatabase(services, _env);            
 
             // Register the Identity services.
             services.AddIdentity<ApplicationUser, IdentityRole>(config => {
-                    config.SignIn.RequireConfirmedEmail = true;
+                    config.SignIn.RequireConfirmedEmail = _env.IsProduction();
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -113,7 +116,7 @@ namespace Covalence
 
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<IPostService, PostService>();
-            services.AddTransient<IEmailSender, EmailSender>();
+            
             services.AddScoped<UserManager<ApplicationUser>, UserManager<ApplicationUser>>();
         }
 
@@ -122,13 +125,6 @@ namespace Covalence
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
-            // if(_env.IsProduction()) {
-            //     var options = new RewriteOptions()
-            //                     .AddRedirectToHttps();
-
-            //     app.UseRewriter(options);
-            // }
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -144,7 +140,8 @@ namespace Covalence
                        .AllowAnyOrigin()
             );
 
-            if(_env.IsDevelopment() || _env.IsStaging()) {
+            if(_env.IsDevelopment() || _env.IsStaging()) 
+            {
                 var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
                 Seed(userManager, context, postService, tagService);
             }
@@ -273,7 +270,7 @@ namespace Covalence
             } 
             else
             {
-                var connectionString = @"User Id=postgres;Password=@45jJq#2FJdw;Host=192.168.1.16;Port=5432;Database=covalence";
+                var connectionString = @"User Id=postgres;Password=@45jJq#2FJdw;Host=192.168.1.16;Port=5432;Database=covalence"; // TODO: Regenerate password and store in env var
 
                 services.AddDbContext<ApplicationDbContext>(options => {
                     options.UseNpgsql(connectionString);
