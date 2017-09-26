@@ -57,14 +57,6 @@ namespace Covalence.Controllers
                     });
                 }
 
-                // if(!await _userManager.IsEmailConfirmedAsync(user)) { // TODO: I don't know if I need this
-                //     return BadRequest(new OpenIdConnectResponse
-                //     {
-                //         Error = OpenIdConnectConstants.Errors.AccessDenied,
-                //         ErrorDescription = "You must have a confirmed email to log in."
-                //     });
-                // }
-
                 // Validate the username/password parameters and ensure the account is not locked out.
                 var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: true);
                 if (!result.Succeeded)
