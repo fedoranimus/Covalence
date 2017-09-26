@@ -39,7 +39,7 @@ namespace Covalence
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
-            if(env.IsDevelopment())
+            if(!env.IsProduction())
                 builder.AddUserSecrets<Startup>();
             
             Configuration = builder.Build();
