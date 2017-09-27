@@ -270,7 +270,6 @@ namespace Covalence
             else
             {
                 var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
-                Console.WriteLine(connectionString);
 
                 services.AddDbContext<ApplicationDbContext>(options => {
                     options.UseNpgsql(connectionString);
