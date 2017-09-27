@@ -34,10 +34,10 @@ namespace Covalence.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
-            _logger.LogInformation("Registering {0} {1} with email {2}", model.FirstName, model.LastName, model.Email);
+            _logger.LogInformation("Registering {0}", model.Email);
             if(ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, Location = model.Location };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if(result.Succeeded)
                 {
