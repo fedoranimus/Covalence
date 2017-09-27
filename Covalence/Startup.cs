@@ -269,7 +269,7 @@ namespace Covalence
             } 
             else
             {
-                var connectionString = @"User Id=postgres;Password=@45jJq#2FJdw;Host=192.168.1.16;Port=5432;Database=covalence"; // TODO: Regenerate password and store in env var
+                var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
 
                 services.AddDbContext<ApplicationDbContext>(options => {
                     options.UseNpgsql(connectionString);
