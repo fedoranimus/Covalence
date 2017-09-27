@@ -8,13 +8,13 @@ namespace Covalence
         public static Task SendEmailConfirmationAsync(this IEmailSender emailSender, string email, string link)
         {
             return emailSender.SendEmailAsync(email, "Confirm your email",
-                $"Please confirm your account by clicking this link: <a href='{HtmlEncoder.Default.Encode(link)}'>link</a>");
+                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(link)}'>clicking this link</a>");
         }
 
         public static Task SendForgotPasswordAsync(this IEmailSender emailSender, string email, string link)
         {
             return emailSender.SendEmailAsync(email, "Reset Password",
-                   $"Please reset your password by clicking here: <a href='{HtmlEncoder.Default.Encode(link)}'>link</a>");
+                   $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(link)}'>clicking this link</a>");
         }
     }
 }
