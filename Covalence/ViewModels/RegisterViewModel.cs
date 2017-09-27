@@ -15,13 +15,10 @@ namespace Covalence.ViewModels
         [DisplayAttribute(Name = "Password")]
         public string Password { get; set; }
 
-        [RequiredAttribute]
         [DisplayAttribute(Name = "First Name")]
         public string FirstName { get; set; }
-        [RequiredAttribute]
         [DisplayAttribute(Name = "Last Name")]
         public string LastName { get; set;}
-        [RequiredAttribute]
         [DisplayAttribute(Name = "Location")]
         public string Location { get; set; }
     }
