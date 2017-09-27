@@ -9,7 +9,7 @@ namespace Covalence
         {
             return urlHelper.Action(
                 action: nameof(AccountController.ConfirmEmail),
-                controller: "Account",
+                controller: "account",
                 values: new { userId, code },
                 protocol: scheme
             );
@@ -19,7 +19,7 @@ namespace Covalence
         {
             return urlHelper.Action(
                 action: nameof(AccountController.ResetPassword),
-                controller: "Account",
+                controller: "account",
                 values: new { userId, code },
                 protocol: scheme
             );
