@@ -10,11 +10,15 @@ export class Register {
 
     }
 
-    signup() {
-        return this.authService.signup({
-            email: this.email,
-            password: this.password
-        });
+    async signup() {
+        try {
+            await this.authService.signup({
+                email: this.email,
+                password: this.password
+            });
+        } catch(e) {
+            console.log(e);
+        }
     }
 
 }

@@ -23,17 +23,22 @@ export class Login {
 
     async login() {
         const credentials = { username: this.email, password: this.password, grant_type: "password", scope: "offline_access", resource: "https://localhost:5000" };
-        const token = await this.authService.login(credentials);
-        if(token) {
-            const user = await this.authService.getMe();
-            this.userService.currentUser = user;
-
-            this.router.navigate('/', { replace: true, trigger: false });
-            this.router.reset();
-            //this.router.deactivate();
-
-            this.app.setRoot(PLATFORM.moduleName('app/auth-app'));
+        try {
+            const token = await this.authService.login(credentials);
+            if(token) {
+                const user = await this.authService.getMe();
+                this.userService.currentUser = user;
+    
+                this.router.navigate('/', { replace: true, trigger: false });
+                this.router.reset();
+                //this.router.deactivate();
+    
+                this.app.setRoot(PLATFORM.moduleName('app/auth-app'));
+            }
+        } catch(e) {
+            console.log("login failed", e);
         }
+        
     }
 
     authenticate(name) {
