@@ -1,6 +1,6 @@
 <template class="login">
   <require from="./login.scss"></require>
-  <form method="post" name="loginForm" submit.delegate="login()">
+  <form method="post" name="loginForm" submit.delegate="login()" class="login-form">
     <fieldset>
       <legend class="account-header">Log in</legend>
 
@@ -24,7 +24,10 @@
         </p>
         <p show.bind="error !== null" class="help is-danger">${error}</p>
         <p class="text-center">
-          <a href="#">Forgot your password? (TODO)</a>
+          <a href="#/forgot-password">Forgot your password?</a>
+        </p>
+        <p class="text-center">
+          <a href="#/register">Don't have an account?</a>
         </p>
       </div>
     </fieldset>          

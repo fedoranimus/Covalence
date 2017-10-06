@@ -43,7 +43,7 @@ namespace Covalence.Controllers {
                 }
                 catch(Exception e) 
                 {
-                    return BadRequest($"Failed to create post");
+                    return BadRequest("Failed to create post");
                 }
             }    
             return BadRequest("ViewModel is invalid");
