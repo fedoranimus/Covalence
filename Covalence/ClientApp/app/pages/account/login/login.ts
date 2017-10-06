@@ -3,6 +3,7 @@ import { inject, computedFrom, autoinject, PLATFORM, Aurelia } from 'aurelia-fra
 import { IUser } from '../../../infrastructure/user';
 import { UserService } from '../../../services/userService';
 import { Router, RouterConfiguration } from 'aurelia-router';
+import { ErrorHandler } from '../../../utils/errorHandler';
 
 
 @autoinject
@@ -11,6 +12,8 @@ export class Login {
     password: string = "";
 
     providers: any[] = [];
+
+    private error: string = null;
 
     constructor(private authService: AuthService, private userService: UserService, private app: Aurelia, private router: Router) {
 
@@ -22,6 +25,7 @@ export class Login {
     }
 
     async login() {
+        this.error = null;
         const credentials = { username: this.email, password: this.password, grant_type: "password", scope: "offline_access", resource: "https://localhost:5000" };
         try {
             const token = await this.authService.login(credentials);
@@ -36,7 +40,7 @@ export class Login {
                 this.app.setRoot(PLATFORM.moduleName('app/auth-app'));
             }
         } catch(e) {
-            console.log("login failed", e);
+            this.error = ErrorHandler.formatError(await e.text());
         }
         
     }
