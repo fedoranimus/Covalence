@@ -52,4 +52,8 @@ export class UserService {
     private async updateCurrentUserTags(user: Promise<IUser>) {
         this.currentUser = await user;
     }
+
+    public forgotPassword(email: string) {
+        this.config.getEndpoint('api').post('account/forgotpassword', { email: email });
+   }
 }

@@ -57,10 +57,11 @@ namespace Covalence.Controllers
             return BadRequest(ModelState);
         }
 
+        [Route("forgotpassword")]
         [HttpPost]
         [AllowAnonymous]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordViewModel model)
         {
             if(ModelState.IsValid)
             {
@@ -103,7 +104,7 @@ namespace Covalence.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordViewModel model)
         {
             if(!ModelState.IsValid)
             {
