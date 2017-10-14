@@ -102,7 +102,8 @@ namespace Covalence.Controllers
             return Redirect("https://covalence.timdturner.com/");
         }
 
-        [HttpGet]
+        [HttpPost]
+        [Route("resetpassword")]
         [AllowAnonymous]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordViewModel model)
         {
