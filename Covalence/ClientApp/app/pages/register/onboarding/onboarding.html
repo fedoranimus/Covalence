@@ -1,0 +1,30 @@
+<template>
+    Welcome to <b>Covalence</b>
+
+    <form>
+        <div class="field">
+            <label class="label">First Name</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="Enter your first name..." value.bind="model.firstName">
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Last Name</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="Enter your last name..." value.bind="model.lastName">
+        </div>
+        </div>
+        <div class="field">
+            <label class="label">Zip Code</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="Enter your zip code..." value.bind="model.zipCode">
+            </div>
+        </div>
+
+        <span>Tags</span>
+        <div repeat.for="tag of tagList">
+            <span class="tag">${tag}</span>
+        </div>
+        <tag-editor existing-tags.bind="tagList" add.delegate="onAddTag($event)"></tag-editor>
+    </form>
+</template>
