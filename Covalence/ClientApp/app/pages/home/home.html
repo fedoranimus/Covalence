@@ -4,20 +4,28 @@
         <div class="container">
             <div class="columns">
                 <div class="column vertical-center">
-                    <div class="home-hero">Be Covalent
-                    </div>
-                </div>
-                <div class="column vertical-center">
-                    <div class="home-tagline">
+                    <div class="home-information">
                         <span class="home-tagline-tag">Share your expertise</span>
                         <span class="home-tagline-tag">Share your studies</span>
                         <span class="home-tagline-line">Connecting mentors and experts with students and researchers around the world.</span>
+                        <div class="home-get-started field is-grouped">
+                                <p class="control is-expanded">
+                                    <input class="input" type="email" placeholder="Enter your email address..." value.bind="emailAddress">
+                                </p>
+                                <p class="control">
+                                    <a class="button is-primary" route-href="route: register; params.bind: { email:emailAddress }">Get Started</a>
+                                </p>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="column vertical-center">
+                    <div class="home-illustration">
+                        <img alt="illustration" />
                     </div>
                 </div>
             </div>
-            <div class="home-get-started">
-                <a class="button is-primary is-large" href="/#/register">Get Started</a>
-            </div>
+
         </div>
     </div>
 </template>

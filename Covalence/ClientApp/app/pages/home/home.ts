@@ -1,4 +1,4 @@
-import {autoinject, computedFrom} from 'aurelia-framework';
+import {autoinject, computedFrom, bindable} from 'aurelia-framework';
 import {TagService} from '../../services/tagService';
 import {Router} from 'aurelia-router';
 import {AuthService} from 'aurelia-authentication';
@@ -8,7 +8,7 @@ export class Home {
     suggestedTags = [];
     tags = [];
 
-    zipCode = "";
+    @bindable emailAddress: string = "";
 
     constructor(private tagService: TagService, private router: Router, private authService: AuthService) {
 

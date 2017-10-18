@@ -24,8 +24,6 @@ html, body {
     flex: 1 1200px;
 }
 
-
-
 .vertical-center {
     display: flex;
     align-items: center;
@@ -43,6 +41,6 @@ html, body {
     padding: 1em;
 }
 
-.nav-header {
-    background-color: $primary-color;
+.button {
+    border-radius: 5px;
 }

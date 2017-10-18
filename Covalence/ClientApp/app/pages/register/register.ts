@@ -20,7 +20,8 @@ export class Register {
         this.controller.subscribe(event => this.validate());
     }
 
-    activate() {
+    activate(params) {
+        this.model.email = params.email;
         this.setupValidation();
     }
 

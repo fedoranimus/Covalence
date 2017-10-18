@@ -3,28 +3,35 @@
 $active-primary-color: darken($primary-color, 10%);
 
 .navbar {
-    background-color: $primary-color;
+
 }
 
 .navbar-menu {
-    color: $light-text-color;
+    color: $dark-text-color;
 }
 
 a.navbar-item {
-    color: $light-text-color;
+    color: $dark-text-color;
 
     &:hover {
         background-color: unset;
-        color: $light-text-color--hover;
+        color: $dark-text-color--hover;
+    }
+}
+
+.navbar-brand {
+    .name {
+        font-weight: bold;
+        font-size: 18pt;
     }
 }
 
 .logo {
-    background-image: url('../../images/brand.svg');
-    background-size: 28px 16px;
+    background-image: url('../../images/brand_color.png');
+    background-size: 60px 32px;
     background-repeat: no-repeat;
-    width: 28px;
-    height: 16px;
+    width: 60px;
+    height: 32px;
     display: inline-block;
     margin-right: .25em;
 }
