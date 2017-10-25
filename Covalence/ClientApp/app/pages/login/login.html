@@ -1,35 +1,29 @@
-<template class="login">
+<template>
   <require from="./login.scss"></require>
-  <form method="post" name="loginForm" submit.delegate="login()" class="login-form">
-    <fieldset>
-      <legend class="account-header">Log in</legend>
+  <form method="post" name="loginForm" submit.delegate="login()" class="login-form container">
+    <div class="field" validation-errors.bind="emailErrors">
+      <label class="label" for="email">Email</label>
+      <input class="input" type="email" name="email" value.bind="model.email" placeholder="Email Address" required autofocus>
+      <p class="help is-danger" repeat.for="errorInfo of emailErrors">${errorInfo.error.message}</p>
+    </div>
 
-      <div class="field">
-        <label class="label" for="email">Email</label>
-        <p class="control">
-          <input class="input" type="email" name="email" value.bind="email" placeholder="Email Address" required autofocus>
-        </p>
-      </div>
+    <div class="field" validation-errors.bind="passwordErrors">
+      <label class="label" for="password">Password</label>
+      <input class="input" type="password" name="password" value.bind="model.password" placeholder="Password" required>
+      <p class="help is-danger" repeat.for="errorInfo of passwordErrors">${errorInfo.error.message}</p>
+    </div>
 
-      <div class="field">
-        <label class="label" for="password">Password</label>
-        <p class="control">
-          <input class="input" type="password" name="password" value.bind="password" placeholder="Password" required>
-        </p>
-      </div>
-
-      <div class="field">
-        <p class="control">
-          <button type="submit" class="button is-primary">Log in</button>
-        </p>
-        <p show.bind="error !== null" class="help is-danger">${error}</p>
-        <p class="text-center">
-          <a href="#/forgot-password">Forgot your password?</a>
-        </p>
-        <p class="text-center">
-          <a href="#/register">Don't have an account?</a>
-        </p>
-      </div>
-    </fieldset>          
+    <div class="field">
+      <p class="control">
+        <button type="submit" class="button is-primary" disabled.bind="!canLogin">Log in</button>
+      </p>
+      <p show.bind="error !== null" class="help is-danger">${error}</p>
+      <p class="text-center">
+        <a href="#/forgot-password">Forgot your password?</a>
+      </p>
+      <p class="text-center">
+        <a href="#/register">Don't have an account?</a>
+      </p>
+    </div>        
   </form>
 </template>

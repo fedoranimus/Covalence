@@ -10,7 +10,7 @@ export class Register {
         verifyPassword: ""
     };
 
-    canSave: boolean;
+    canSave: boolean = false;
 
     private controller: ValidationController;
 

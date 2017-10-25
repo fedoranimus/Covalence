@@ -1,7 +1,8 @@
 <template>
-    Welcome to <b>Covalence</b>
-
-    <form>
+    <p>Welcome to <b>Covalence</b></p>
+    <p>Add some details about yourself here.</p>
+    <p>Other users will find this information useful when browsing for mentorship opportunities!</p>
+    <form method="post" name="onboardForm">
         <div class="field">
             <label class="label">First Name</label>
             <div class="control">
@@ -12,7 +13,7 @@
             <label class="label">Last Name</label>
             <div class="control">
                 <input class="input" type="text" placeholder="Enter your last name..." value.bind="model.lastName">
-        </div>
+            </div>
         </div>
         <div class="field">
             <label class="label">Zip Code</label>

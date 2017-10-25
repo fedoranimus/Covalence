@@ -1,32 +1,28 @@
 <template class="register">
     <require from="./register.scss"></require>
     <form method="post" name="registerForm" submit.delegate="signup()" class="register-form">
-        <fieldset>
-            <legend class="account-header">Sign Up</legend>
+        <div class="field" validation-errors.bind="emailErrors">
+            <label class="label" for="email">Email</label>
+            <input class="input" type="text" name="email" value.bind="model.email & validate" placeholder="Email Address" required>
+            <p class="help is-danger" repeat.for="errorInfo of emailErrors">${errorInfo.error.message}</p>
+        </div>
 
-            <div class="field" validation-errors.bind="emailErrors">
-                <label class="label" for="email">Email</label>
-                <input class="input" type="text" name="email" value.bind="model.email & validate" placeholder="Email Address" required>
-                <p class="help is-danger" repeat.for="errorInfo of emailErrors">${errorInfo.error.message}</p>
-            </div>
+        <div class="field" validation-errors.bind="passwordErrors">
+            <label class="label" for="password">Password</label>
+            <input class="input" type="password" name="password" value.bind="model.password & validate" placeholder="Password" required>
+            <p class="help is-danger" repeat.for="errorInfo of passwordErrors">${errorInfo.error.message}</p>
+        </div>
 
-            <div class="field" validation-errors.bind="passwordErrors">
-                <label class="label" for="password">Password</label>
-                <input class="input" type="password" name="password" value.bind="model.password & validate" placeholder="Password" required>
-                <p class="help is-danger" repeat.for="errorInfo of passwordErrors">${errorInfo.error.message}</p>
-            </div>
+        <div class="field" validation-errors.bind="verifyPasswordErrors">
+            <label class="label" for="verify-password">Verify Password</label>
+            <input class="input" type="password" name="verify-password" value.bind="model.verifyPassword & validate" placeholder="Verify Password" required>
+            <p class="help is-danger" repeat.for="errorInfo of verifyPasswordErrors">${errorInfo.error.message}</p>
+        </div>
 
-            <div class="field" validation-errors.bind="verifyPasswordErrors">
-                <label class="label" for="verify-password">Verify Password</label>
-                <input class="input" type="password" name="verify-password" value.bind="model.verifyPassword & validate" placeholder="Verify Password" required>
-                <p class="help is-danger" repeat.for="errorInfo of verifyPasswordErrors">${errorInfo.error.message}</p>
-            </div>
-
-            <div class="field">
-                <p class="control">
-                    <button disabled.bind="!canSave" type="submit" class="button is-primary">Sign Up</button>
-                </p>
-            </div>
-        </fieldset>
+        <div class="field">
+            <p class="control">
+                <button disabled.bind="!canSave" type="submit" class="button is-primary">Sign Up</button>
+            </p>
+        </div>
     </form>
 </template>
