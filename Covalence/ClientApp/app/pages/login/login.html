@@ -3,13 +3,13 @@
   <form method="post" name="loginForm" submit.delegate="login()" class="login-form container">
     <div class="field" validation-errors.bind="emailErrors">
       <label class="label" for="email">Email</label>
-      <input class="input" type="email" name="email" value.bind="model.email" placeholder="Email Address" required autofocus>
+      <input class="input" type="email" name="email" value.bind="model.email & validate" placeholder="Email Address" required autofocus>
       <p class="help is-danger" repeat.for="errorInfo of emailErrors">${errorInfo.error.message}</p>
     </div>
 
     <div class="field" validation-errors.bind="passwordErrors">
       <label class="label" for="password">Password</label>
-      <input class="input" type="password" name="password" value.bind="model.password" placeholder="Password" required>
+      <input class="input" type="password" name="password" value.bind="model.password & validate" placeholder="Password" required>
       <p class="help is-danger" repeat.for="errorInfo of passwordErrors">${errorInfo.error.message}</p>
     </div>
 
