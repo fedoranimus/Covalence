@@ -14,8 +14,6 @@ export class Login {
         password: ""
     }
 
-    providers: any[] = [];
-
     private error: string = null;
 
     canLogin: boolean = false;
@@ -74,13 +72,6 @@ export class Login {
             this.error = ErrorHandler.formatError(await e.text());
         }
         
-    }
-
-    authenticate(name) {
-        return this.authService.authenticate(name)
-            .then(response => {
-                this.providers[name] = true;            
-            });
     }
 }
 
