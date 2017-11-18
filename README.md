@@ -15,5 +15,6 @@ Primary Repo for Covalence
  1. Users can then connect with like-minded people and communicate via email.
  
  ## Future Enhancements
- Marketplace
- Real-time Chat
+ 
+ 1. Marketplace
+ 1. Real-time Chat
