@@ -1,41 +1,69 @@
 <template>
     <require from="./home.scss"></require>
     <div class="home">
-        <div class="container">
-            <div class="columns">
-                <div class="column vertical-center">
-                    <div class="home-information">
-                        <span class="home-tagline-tag">Share your expertise</span>
-                        <span class="home-tagline-tag">Share your studies</span>
-                        <span class="home-tagline-line">Connecting mentors and experts with students and researchers around the world.</span>
-                        <div class="home-get-started field is-grouped">
-                                <p class="control is-expanded">
-                                    <input class="input" type="email" placeholder="Enter your email address..." value.bind="emailAddress">
-                                </p>
-                                <p class="control">
-                                    <a class="button is-primary" route-href="route: register; params.bind: { email:emailAddress }">Get Started</a>
-                                </p>
+        <section class="hero is-medium">
+            <div class="hero-body">
+                <div class="container">
+                    <div class="columns">
+                        <div class="column">
+                            <div class="description">
+                                <h1 class="title">Ask for help</h1>
+                                <h2 class="subtitle">Find those willing to help near you.</h2>
+                                <h1 class="title">Give back to all communities</h1>
+                                <h2 class="subtitle">Connecting mentors and experts with students and researchers around the world.</h2>
+                                <div class="home-get-started field is-grouped">
+                                    <p class="control is-expanded">
+                                        <input class="input" type="email" placeholder="Enter your email address..." value.bind="emailAddress">
+                                    </p>
+                                    <p class="control">
+                                        <a class="button is-primary" route-href="route: register; params.bind: { email:emailAddress }">Get Started</a>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    
-                </div>
-                <div class="column vertical-center">
-                    <div class="home-illustration">
-                        <img alt="illustration" src="../../images/lab_illustration.png" />
+                        <div class="column">
+                            <div class="home-illustration">
+                                <img alt="illustration" src="../../images/lab_illustration.png" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="columns">
-                <div class="how-it-works">
-                    Tell me how
+            </section>
+            <section class="section is-medium">
+                <div class="title has-text-centered">
+                    How does it work?
                 </div>
-                <div class="column">
-                    Find a Mentor
+            <div class="tile is-ancestor">
+                <div class="tile is-parent">
+                    <article class="tile is-child box">
+                        <p class="subtitle has-text-centered">Find a Mentor</p>
+                        <p class="has-text-centered">Search for more experienced experts and easily request help</p>
+                    </article>
                 </div>
-                <div class="column">
-                    Be a Mentor
+                <div class="tile is-parent">
+                        <article class="tile is-child box">
+                    <h1 class="subtitle has-text-centered">Be a Mentor</h1>
+                    <p class="has-text-centered">Willing to mentor? Helping out others can also cultivate your own skills</p>
+                    </article>
+                </div>
+                <div class="tile is-parent">
+                    <article class="tile is-child box">
+                        <h1 class="subtitle has-text-centered">Build your Network</h1>
+                        <p class="has-text-centered">Connecting with others allows for communication and promotes real-world interaction</p>
+                    </article>
                 </div>
             </div>
         </div>
+    </section>
     </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered">
+                <p>
+                    <strong>Copyright 2018 Covalence.</strong> Source code is licensed <a href="https://opensource.org/licenses/mit-license.php">MIT</a>. Available on <a href="https://github.com/fedoranimus/Covalence">Github</a>
+                </p>
+            </div>
+        </div>
+    </footer>
 </template>

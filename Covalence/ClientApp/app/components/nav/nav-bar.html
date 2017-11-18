@@ -6,6 +6,12 @@
           <span class="logo"></span>
           <span class="name">${router.title}</span>
         </a>
+        
+        <button class="button navbar-burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
       <div class="navbar-menu">
         <div class="navbar-start">
@@ -14,7 +20,7 @@
         
         <!-- Unauthenticated Navbar -->
         <div class="navbar-end" show.bind="!isAuthenticated">
-          <a class="navbar-item" href="/#/login">Login</a>
+          <a class="navbar-item" href="/#/login">Log In</a>
           <div class="navbar-item">
             <div class="field">
               <p class="control">
@@ -45,7 +51,6 @@
             <a class="navbar-item" href="/#/" click.delegate="logout()">Logout</a>
         </div>
       </div>
-
       <!--<ul class="nav navbar-nav navbar-right">
         <li class="loader" if.bind="router.isNavigating">
           <i class="fa fa-spinner fa-spin fa-2x"></i>

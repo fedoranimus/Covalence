@@ -24,6 +24,10 @@ html, body {
     flex: 1 1200px;
 }
 
+.column {
+    display: flex;
+}
+
 .vertical-center {
     display: flex;
     align-items: center;

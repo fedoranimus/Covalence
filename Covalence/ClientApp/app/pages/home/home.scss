@@ -1,9 +1,5 @@
 @import '../../colors';
 
-.home {
-    margin-top: 10%;
-}
-
 .home-hero {
     color: $secondary-color;
     font-size: 76pt;
@@ -33,4 +29,15 @@
     display: flex;
     justify-content: center;
     margin-top: 3em;
+}
+
+.description {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.how-it-works {
+    display: flex;
+    flex: 1;
 }
