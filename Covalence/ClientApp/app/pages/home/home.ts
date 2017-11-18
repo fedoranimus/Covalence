@@ -22,4 +22,8 @@ export class Home {
     get authenticated() {
         return this.authService.authenticated;
     }
+
+    get currentYear() {
+        return new Date().getFullYear();
+    }
 }
