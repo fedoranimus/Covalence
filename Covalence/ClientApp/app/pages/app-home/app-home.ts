@@ -19,10 +19,8 @@ export class AppHome {
                 let user = await this.authService.getMe();
                 this.tags = user.tags;
                 console.debug("Authenticated", user);
-
-                this.posts = await this.postService.getAllPosts();
             } catch(e) {
-                //console.error(e);
+                console.error(e);
             }
         }
     }

@@ -13,8 +13,6 @@ namespace Covalence
         Task<Tag> GetTag(string name);
         Task<ApplicationUser> AddTag(Tag tag, ApplicationUser user);
         Task<ApplicationUser> RemoveTag(Tag tag, ApplicationUser user);
-        Task<Post> AddTag(Tag tag, Post post);
-        Task<Post> RemoveTag(Tag tag, Post post);
         Task<Tag> CreateTag(string name);
 
         Task<ApplicationUser> RemoveTags(List<Tag> tags, ApplicationUser user);
@@ -146,34 +144,6 @@ namespace Covalence
             await _context.SaveChangesAsync();
             
             return user;
-        }
-
-        public async Task<Post> AddTag(Tag tag, Post post) 
-        {
-            post = await _context.Posts.Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
-            if(post.Tags.Select(ut => ut.Tag).Contains(tag))
-            {
-                _logger.LogInformation($"{tag.ToString()} already exists on {post.ToString()}");
-            }
-            else
-            {
-                //TODO   
-            }
-            return post;
-        }
-
-        public async Task<Post> RemoveTag(Tag tag, Post post)
-        {
-            post = await _context.Posts.Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
-            if(post.Tags.Select(ut => ut.Tag).Contains(tag))
-            {
-                //TODO
-            }
-            else
-            {
-                _logger.LogInformation($"{tag.ToString()} does not exist on {post.ToString()}");
-            }
-            return post;
         }
     }
 }

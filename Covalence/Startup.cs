@@ -114,13 +114,13 @@ namespace Covalence
                     .AddOAuthValidation();
 
             services.AddScoped<ITagService, TagService>();
-            services.AddScoped<IPostService, PostService>();
+            //services.AddScoped<IPostService, PostService>();
             
             services.AddScoped<UserManager<ApplicationUser>, UserManager<ApplicationUser>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, ApplicationDbContext context, IPostService postService, ITagService tagService, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, ApplicationDbContext context, ITagService tagService, IServiceProvider serviceProvider)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -142,7 +142,7 @@ namespace Covalence
             if(_env.IsDevelopment() || _env.IsStaging()) 
             {
                 var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
-                Seed(userManager, context, postService, tagService);
+                Seed(userManager, context, tagService);
             }
 
             if (_env.IsDevelopment())
@@ -173,7 +173,7 @@ namespace Covalence
 
             
         }
-        public virtual async void Seed(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IPostService postService, ITagService tagService) {
+        public virtual async void Seed(UserManager<ApplicationUser> userManager, ApplicationDbContext context, ITagService tagService) {
 
             var physicsTag = new Tag() {
                     Name = "Physics"
@@ -241,16 +241,6 @@ namespace Covalence
 
             await tagService.AddTag(physicsTag, genji);
             await tagService.AddTag(biologyTag, mccree);
-
-            var post1 = new PostViewModel(){
-                Title = "Test Post 1",
-                Content = @"_Lorem ipsum dolor sit amet_, **consectetur** adipiscing elit. $\sqrt{3x-1}+(1+x)^2$ 
-                Curabitur lectus ipsum, posuere sed ultrices ac, molestie vel lorem. Duis consectetur, nunc in finibus dictum, sapien nunc scelerisque purus, ut elementum metus metus ac odio. Sed augue purus, posuere in dui non, vulputate iaculis leo. Duis at convallis dolor. Proin porttitor odio vitae fringilla mollis. In eget molestie arcu. Aliquam luctus nisi et lorem imperdiet euismod. Integer lorem lectus, aliquet non ante vel, venenatis rutrum velit. Nunc iaculis venenatis laoreet. Curabitur pharetra non felis ut cursus. Aliquam ut laoreet leo. Mauris facilisis, nibh sed pellentesque vulputate, ex arcu sodales felis, vitae tincidunt sem nibh ut elit. Donec ac finibus risus. Duis feugiat tellus facilisis risus suscipit, elementum varius ex efficitur. Praesent eu varius lectus, id sodales est. Nunc tincidunt purus eget neque imperdiet porttitor.",
-                Tags = new List<string>() { "physics", "biology" },
-                Category = (int)PostType.Mentor
-            };
-
-            await postService.CreatePost(genji, post1);
 
             await context.SaveChangesAsync();
         }

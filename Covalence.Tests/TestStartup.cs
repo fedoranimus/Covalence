@@ -30,7 +30,7 @@ namespace Covalence.Tests {
             });
         }
 
-        public override void Seed(UserManager<ApplicationUser> userManager, ApplicationDbContext context, IPostService postService, ITagService ITagService) {
+        public override void Seed(UserManager<ApplicationUser> userManager, ApplicationDbContext context, ITagService ITagService) {
             SeedTags(context);
 
             context.SaveChanges();

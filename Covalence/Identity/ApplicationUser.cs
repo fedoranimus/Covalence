@@ -8,7 +8,6 @@ namespace Covalence.Authentication
         public ApplicationUser()
         {
             Tags = new HashSet<UserTag>();
-            AuthoredPosts = new List<Post>();
             //Connections = new List<Connection>();
         }
 
@@ -17,7 +16,6 @@ namespace Covalence.Authentication
         public string Location { get; set; }
         public bool IsMentor { get; set; }
         public ICollection<UserTag> Tags { get; set; }
-        public ICollection<Post> AuthoredPosts { get; set; }
 
         //public ICollection<Connection> Connections { get; set; }
     }
