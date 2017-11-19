@@ -114,7 +114,6 @@ namespace Covalence
                     .AddOAuthValidation();
 
             services.AddScoped<ITagService, TagService>();
-            //services.AddScoped<IPostService, PostService>();
             
             services.AddScoped<UserManager<ApplicationUser>, UserManager<ApplicationUser>>();
         }
