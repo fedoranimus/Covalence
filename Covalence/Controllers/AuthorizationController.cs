@@ -7,7 +7,6 @@ using AspNet.Security.OpenIdConnect.Extensions;
 //using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Authentication;
 using AspNet.Security.OpenIdConnect.Server;
-using Covalence.Authentication;
 using AspNet.Security.OpenIdConnect.Primitives;
 using OpenIddict.Core;
 using OpenIddict.Models;

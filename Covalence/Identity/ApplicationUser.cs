@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
-namespace Covalence.Authentication
+namespace Covalence
 {
     public class ApplicationUser : IdentityUser
     {

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Covalence.Authentication;
 using Covalence.Contracts;
 using Covalence.ViewModels;
 using Microsoft.EntityFrameworkCore;

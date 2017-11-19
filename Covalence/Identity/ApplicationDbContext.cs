@@ -2,7 +2,7 @@ using Covalence;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Covalence.Authentication
+namespace Covalence
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

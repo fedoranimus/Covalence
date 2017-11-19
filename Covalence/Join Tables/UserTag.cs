@@ -1,5 +1,3 @@
-using Covalence.Authentication;
-
 namespace Covalence
 {
     public class UserTag

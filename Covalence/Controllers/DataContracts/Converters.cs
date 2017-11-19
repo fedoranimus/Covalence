@@ -1,5 +1,4 @@
 using System.Linq;
-using Covalence.Authentication;
 
 namespace Covalence.Contracts
 {
