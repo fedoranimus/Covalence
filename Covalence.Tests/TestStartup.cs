@@ -50,17 +50,5 @@ namespace Covalence.Tests {
                 Name = "Biology"
             });
         }
-
-        private static void SeedPost(ApplicationDbContext context)
-        {
-            context.Posts.Add(new Post(){
-                Category = PostType.Mentor,
-                Content = "Seeded Content",
-                Title = "Seeded Post",
-                DateCreated = DateTime.Now,
-                DateModified = DateTime.Now,
-                Author = new ApplicationUser()
-            });
-        }
     }
 }
