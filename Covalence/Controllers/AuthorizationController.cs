@@ -50,13 +50,15 @@ namespace Covalence.Controllers
                 var user = await _userManager.FindByEmailAsync(request.Username);
                 if (user == null)
                 {
-                    return BadRequest("Invalid username or password.");
+                    _logger.LogDebug("User {0} not found", request.Username);
+                    return BadRequest("Invalid username or password."); // TODO Don't leak this information
                 }
 
                 // Validate the username/password parameters and ensure the account is not locked out.
                 var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: true);
                 if (!result.Succeeded)
                 {
+                    _logger.LogDebug("Sign-in Failed: {0}", result);
                     return BadRequest("Invalid username or password");
                 }
 
