@@ -140,7 +140,7 @@ namespace Covalence
             if(_env.IsDevelopment() || _env.IsStaging()) 
             {
                 var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
-                Seed(userManager, context, tagService);
+                //Seed(userManager, context, tagService);
             }
 
             if (_env.IsDevelopment())
