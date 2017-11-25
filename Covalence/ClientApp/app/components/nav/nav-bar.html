@@ -33,20 +33,6 @@
         </div>
         <!-- Authenticated Navbar -->
         <div class="navbar-end" show.bind="isAuthenticated">
-            <div class="navbar-item">
-              <div class="field">
-                <p class="control">
-                  <a class="button is-success is-inverted is-outlined" href="/#/post">
-                    <span class="icon is-small">
-                      <i class="fa fa-plus"></i>
-                    </span>
-                    <span>
-                      Request Mentor
-                    </span>
-                  </a>
-                </p>
-              </div>
-            </div>
             <a class="navbar-item" href="/#/profile">${displayName}</a>
             <a class="navbar-item" href="/#/" click.delegate="logout()">Logout</a>
         </div>
