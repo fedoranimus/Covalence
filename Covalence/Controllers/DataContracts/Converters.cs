@@ -23,9 +23,8 @@ namespace Covalence.Contracts
                 Location = user.Location,
                 Email = user.Email,
                 Tags = user.Tags
-                    .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList()
-                // AuthoredPosts = user.AuthoredPosts
-                //     .Select(post => Converters.ConvertPostToContract(post)).ToList()
+                    .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList(),
+                NeedsOnboarding = user.NeedsOnboarding
             };
         }
 
@@ -42,13 +41,7 @@ namespace Covalence.Contracts
 
         public static List<RemoteUserContract> ConvertRemoteUserListToContract(List<ApplicationUser> users)
         {
-            return users.Select(user => new RemoteUserContract(){
-                Id = user.Id,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Tags = user.Tags
-                    .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList()
-            }).ToList();
+            return users.Select(user => ConvertRemoteUserToContract(user)).ToList();
         }
     }
 }

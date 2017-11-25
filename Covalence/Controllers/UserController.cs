@@ -92,6 +92,7 @@ namespace Covalence.Controllers
                 user.Email = model.Email == null ? user.Email : model.Email;
                 user.UserName = user.Email;
                 user.Tags = model.Tags == null ? user.Tags : await Task.WhenAll(userTags); //TODO: This is not efficient
+                user.NeedsOnboarding = (bool)(model.NeedsOnboarding == null ? user.NeedsOnboarding : model.NeedsOnboarding);
 
                 await _userManager.UpdateAsync(user);
                 var contract = Converters.ConvertUserToContract(user);

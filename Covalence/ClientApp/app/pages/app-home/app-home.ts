@@ -1,3 +1,4 @@
+import { Router } from 'aurelia-router';
 import {AuthService} from 'aurelia-authentication';
 import {autoinject, computedFrom} from 'aurelia-framework';
 import { PostService } from '../../services/postService';
@@ -7,9 +8,8 @@ import { IPost } from '../../infrastructure/post';
 @autoinject
 export class AppHome {
     public tags: ITag[] = [];
-    public posts: IPost[] = [];
 
-    constructor(private authService: AuthService, private postService: PostService) {
+    constructor(private authService: AuthService, private router: Router) {
         
     }
 
@@ -17,6 +17,10 @@ export class AppHome {
         if(this.authenticated) { //check if user is logged in
             try {
                 let user = await this.authService.getMe();
+
+                if(user.needsOnboarding)
+                    this.router.navigate('onboard', { replace: true, trigger: false });
+
                 this.tags = user.tags;
                 console.debug("Authenticated", user);
             } catch(e) {

@@ -6,12 +6,12 @@ namespace Covalence.Contracts
     {
         public RemoteUserContract()
         {
-
+            Tags = new List<TagContract>();
         }
 
         public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; } 
-        public List<Tag> Tags { get; set; }
+        public ICollection<TagContract> Tags { get; set; }
     }
 }
