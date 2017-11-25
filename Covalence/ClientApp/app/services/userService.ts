@@ -55,5 +55,9 @@ export class UserService {
 
     public forgotPassword(email: string) {
         this.config.getEndpoint('api').post('account/forgotpassword', { email: email });
-   }
+    }
+
+    public getAllUsers(): Promise<IUser[]> {
+        return this.config.getEndpoint('api').find('user/list');
+    }
 }

@@ -1,20 +1,20 @@
-<template>
-    <article class="media" repeat.for="post of posts">
+<template bindable="users">
+    <article class="media" repeat.for="user of users">
         <div class="media-content">
             <div class="content">
                 <div class="level">
                     <div class="level-left">
-                        <p><strong>${post.title}</strong> <small>by ${post.author.firstName} ${post.author.lastName}</small></p>
+                        <p><strong>${user.firstName}</strong> <!--<small>by ${post.author.firstName} ${post.author.lastName}</small>--></p>
                     </div>
-                    <div class="level-right">
+                    <!-- <div class="level-right">
                         <small>${post.dateModified}</small>
-                    </div>
+                    </div> -->
                 </div> 
-                <div innerhtml.bind="post.content | markdown | sanitizeHTML"></div>
+                <!-- <div innerhtml.bind="post.content | markdown | sanitizeHTML"></div> -->
             </div>
             <div class="level">
                 <div class="level-left">
-                    <div class="level-item" repeat.for="tag of post.tags">
+                    <div class="level-item" repeat.for="tag of user.tags">
                         <span class="tag">
                             ${tag.name}
                         </span>

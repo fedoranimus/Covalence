@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Covalence.Contracts
@@ -33,8 +34,21 @@ namespace Covalence.Contracts
             return new RemoteUserContract(){
                 Id = user.Id,
                 FirstName = user.FirstName,
-                LastName = user.LastName
+                LastName = user.LastName,
+                Tags = user.Tags
+                    .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList()
             };
+        }
+
+        public static List<RemoteUserContract> ConvertRemoteUserListToContract(List<ApplicationUser> users)
+        {
+            return users.Select(user => new RemoteUserContract(){
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Tags = user.Tags
+                    .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList()
+            }).ToList();
         }
     }
 }
