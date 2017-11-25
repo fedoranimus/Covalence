@@ -18,9 +18,6 @@ export class AppHome {
             try {
                 let user = await this.authService.getMe();
 
-                if(user.needsOnboarding)
-                    this.router.navigate('onboard', { replace: true, trigger: false });
-
                 this.tags = user.tags;
                 console.debug("Authenticated", user);
             } catch(e) {

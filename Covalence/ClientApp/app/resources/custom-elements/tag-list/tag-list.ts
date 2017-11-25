@@ -32,14 +32,12 @@ export class TagList {
         this.tags.splice(index, 1);
     }
 
-    async onAddTag(event: CustomEvent) {
-        const tagName = event.detail;
+    async onAddTag(tagName: string) {
         const index = this.tags.findIndex(x => x.name == tagName);
         
         if(index === -1) {
             const tag = await this.tagService.getTag(tagName);
             this.tags.push(tag);
-        }
-            
+        }      
     }
 }

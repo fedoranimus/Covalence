@@ -42,6 +42,14 @@ export class NavBar {
             return "";
     }
 
+    @computedFrom('this.profile.firstName', 'this.profile.lastName')
+    get hasDisplayName() {
+        if(this.profile.firstName && this.profile.lastName)
+            return true;
+        
+        return false;
+    }
+
     //@computedFrom('authService.authenticated')
     get isAuthenticated() {
         return this.auth.isAuthenticated();
