@@ -10,6 +10,7 @@ export class TagEditorCustomElement {
     @bindable({ attribute: "debug" }) debug = true;
     @bindable({ attribute: "existing-tags" }) tags: ITag[] = [];
     @bindable tagQuery = '';
+    @bindable placeholder = "Search for a tag";
     suggestedTags: ITag[] = [];
     errorState: string|null = null;
     private fromSelection = false;

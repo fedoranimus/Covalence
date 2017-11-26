@@ -29,15 +29,20 @@
             <div class="field" validation-errors.bind="bioErrors">
                 <label class="label">Bio</label>
                 <div class="control">
-                    <textarea class="textarea" placeholder="Tell me a little about yourself..." value.bind="model.bio & validate"></textarea>
+                    <textarea class="textarea" placeholder="Tell me a little about yourself...Other users will use this information to decide whether or not to connect with you..." value.bind="model.bio & validate"></textarea>
                     <p class="help is-danger" repeat.for="errorInfo of bioErrors">${errorInfo.error.message}</p>
                 </div>
             </div>
 
             <div class="field" validation-errors.bind="tagsErrors">
                 <span>Tags</span>
-                <div class="tags" repeat.for="tag of model.tags">
-                    <span class="tag">${tag}</span>
+                <div class="field">
+                    <div if.bind="model.tags.length > 0" class="tags" repeat.for="tag of model.tags">
+                        <span class="tag">${tag}</span>
+                    </div>
+                    <div else>
+                        Please add at least 1 tag using the input below.
+                    </div>
                 </div>
                 <tag-editor existing-tags.bind="model.tags" add.delegate="onAddTag($event.detail)"></tag-editor>
                 <p class="help is-danger" repeat.for="errorInfo of tagsErrors">${errorInfo.error.message}</p>

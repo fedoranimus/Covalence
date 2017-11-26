@@ -1,17 +1,15 @@
 <template class="tag-editor">
     <require from="./tag-editor.scss"></require>
-    <form submit.delegate="onAdd()">
-        <div class="field has-addons">
-            <p class="control is-expanded">
-                <input class="input" value.bind="tagQuery & debounce:500" type="text" placeholder="Search for a tag">
-            </p>
-            <p class="control">
-                <button type="submit" class="button is-info">
-                    Add
-                </button>
-            </p>
-        </div>
-    </form>
+    <div class="field has-addons">
+        <p class="control is-expanded">
+            <input class="input" value.bind="tagQuery & debounce:500" type="text" placeholder.bind="placeholder">
+        </p>
+        <p class="control">
+            <button class="button is-info" click.delegate="onAdd()">
+                Add
+            </button>
+        </p>
+    </div>
     <aside class="menu" show.bind="hasSuggestions">
         <ul class="menu-list">
             <li tabindex=${$index+1} repeat.for="suggestedTag of suggestedTags" click.delegate="selectTag(suggestedTag)" class="suggested-tag">

@@ -53,6 +53,9 @@ export class Onboarding {
 
     public async onboard() {
         console.log(this.model);
+
+        //TODO Call API
+        //Ensure needsOnboarding = true
     }
 }
 
