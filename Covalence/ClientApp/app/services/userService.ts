@@ -60,4 +60,9 @@ export class UserService {
     public getAllUsers(): Promise<IUser[]> {
         return this.config.getEndpoint('api').find('user/list');
     }
+
+    public async onboardUser(viewModel: IUserViewModel): Promise<void> {
+        viewModel.needsOnboarding = false;
+        this.currentUser = await this.config.getEndpoint('api').updateOne('user', this.currentUser.id, null, viewModel);
+    }
 }

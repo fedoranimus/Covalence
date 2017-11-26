@@ -1,6 +1,8 @@
+import { UserService } from './../../../services/userService';
 import { TagService } from './../../../services/tagService';
 import { bindable, autoinject } from "aurelia-framework";
 import { Validator, ValidationController, ValidationControllerFactory, ValidationRules, validateTrigger } from 'aurelia-validation';
+import { Router } from 'aurelia-router';
 
 @autoinject
 export class Onboarding {
@@ -13,9 +15,14 @@ export class Onboarding {
     };;
 
     canSave: boolean = false;
+    isLoading: boolean = false;
     private controller: ValidationController;
 
-    constructor(private validator: Validator, private controllerFactory: ValidationControllerFactory, private tagService: TagService) {
+    constructor(private validator: Validator, 
+                private controllerFactory: ValidationControllerFactory, 
+                private tagService: TagService, 
+                private userService: UserService, 
+                private router: Router) {
         this.controller = controllerFactory.createForCurrentScope(validator);
         this.controller.validateTrigger = validateTrigger.changeOrBlur;
         this.controller.subscribe(event => this.validate());
@@ -51,11 +58,17 @@ export class Onboarding {
         this.validate();
     }
 
+    onRemoveTag(tagName: string) {
+        const index = this.model.tags.findIndex(x => x == tagName);
+        this.model.tags.splice(index, 1);
+    }
+
     public async onboard() {
         console.log(this.model);
-
-        //TODO Call API
-        //Ensure needsOnboarding = true
+        this.isLoading = true;
+        await this.userService.onboardUser(this.model);
+        this.isLoading = false;
+        this.router.navigate('home', { replace: true, trigger: false });
     }
 }
 

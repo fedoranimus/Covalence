@@ -18,4 +18,5 @@ export interface IUserViewModel {
     tags?: string[];
     location?: string;
     isMentor?: boolean;
+    needsOnboarding?: boolean;
 }
