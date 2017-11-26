@@ -1,7 +1,7 @@
-import {computedFrom} from 'aurelia-binding';
-import {autoinject, bindable, customElement} from 'aurelia-framework';
+import { computedFrom } from 'aurelia-binding';
+import { autoinject, bindable, customElement } from 'aurelia-framework';
 import { ITag } from '../../../infrastructure/tag';
-import {DOM} from 'aurelia-pal';
+import { DOM } from 'aurelia-pal';
 import { TagService } from "../../../services/tagService";
 
 @autoinject
@@ -21,10 +21,12 @@ export class TagEditorCustomElement {
     onAdd() {
         if(this.tagQuery && this.tagQuery !== "") {
             const tagName = this.tagQuery;
-            let event = DOM.createCustomEvent('add', { bubbles: true, cancelable: true, detail: tagName });
+            const event = DOM.createCustomEvent('add', { bubbles: true, cancelable: true, detail: tagName });
             this.element.dispatchEvent(event);
             this.tagQuery = "";
         }
+
+        return false;
     }
     
     @computedFrom('suggestedTags')
