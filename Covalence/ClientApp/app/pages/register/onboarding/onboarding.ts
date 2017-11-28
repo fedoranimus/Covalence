@@ -67,8 +67,7 @@ export class Onboarding {
         this.isLoading = true;
         await this.userService.onboardUser(this.model);
         this.isLoading = false;
-        this.router.navigate('/', { replace: true, trigger: false });
-        this.router.reset();
+        this.router.navigate('/');
     }
 }
 

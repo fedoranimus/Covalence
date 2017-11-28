@@ -34,7 +34,7 @@ export class NavBar {
 
     }
 
-    @computedFrom('this.profile.firstName', 'this.profile.lastName')
+    @computedFrom('this.profile')
     get displayName() {
         if(this.isAuthenticated && this.profile)
             return `${this.profile.firstName} ${this.profile.lastName}`;
@@ -42,7 +42,7 @@ export class NavBar {
             return "";
     }
 
-    @computedFrom('this.profile.firstName', 'this.profile.lastName')
+    @computedFrom('this.profile')
     get hasDisplayName() {
         if(this.isAuthenticated && this.profile && this.profile.firstName && this.profile.lastName)
             return true;
