@@ -64,11 +64,11 @@ export class Onboarding {
     }
 
     public async onboard() {
-        console.log(this.model);
         this.isLoading = true;
         await this.userService.onboardUser(this.model);
         this.isLoading = false;
-        this.router.navigate('home', { replace: true, trigger: false });
+        this.router.navigate('/', { replace: true, trigger: false });
+        this.router.reset();
     }
 }
 

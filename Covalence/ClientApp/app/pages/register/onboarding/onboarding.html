@@ -52,7 +52,7 @@
 
             <div class="field">
                 <div class="control">
-                    <button class="button is-primary is-pulled-right" type="submit" disabled.bind="!canSave">Save</button>
+                    <button class="button is-primary is-pulled-right ${ isLoading ? 'is-loading':''}" type="submit" disabled.bind="!canSave">Save</button>
                 </div>
             </div>
         </form>
