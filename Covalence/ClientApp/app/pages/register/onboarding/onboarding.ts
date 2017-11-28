@@ -12,7 +12,7 @@ export class Onboarding {
         zipCode: "",
         bio: "",
         tags: []
-    };;
+    }
 
     canSave: boolean = false;
     isLoading: boolean = false;
