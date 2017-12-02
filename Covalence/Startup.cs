@@ -137,12 +137,6 @@ namespace Covalence
                        .AllowAnyOrigin()
             );
 
-            if(_env.IsDevelopment() || _env.IsStaging()) 
-            {
-                var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
-                //Seed(userManager, context, tagService);
-            }
-
             if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -170,77 +164,6 @@ namespace Covalence
             });
 
             
-        }
-        public virtual async void Seed(UserManager<ApplicationUser> userManager, ApplicationDbContext context, ITagService tagService) {
-
-            var physicsTag = new Tag() {
-                    Name = "Physics"
-                };
-
-            var chemistryTag = new Tag() {
-                    Name = "Chemistry"
-                };
-
-            var biologyTag = new Tag() {
-                    Name = "Biology"
-                };
-
-            if(!context.Tags.Any()) {
-                context.Tags.Add(physicsTag);
-                context.Tags.Add(chemistryTag);
-                context.Tags.Add(biologyTag);
-            }
-
-            var seedUser = new ApplicationUser() {
-                Email = "fixture@test.com",
-                UserName = "fixture@test.com",
-                FirstName = "Fixture",
-                LastName = "Test",
-                Location = "03062",
-                EmailConfirmed = true
-            }; 
-
-            var genji = new ApplicationUser() {
-                Email = "genji@overwatch.com",
-                UserName = "genji@overwatch.com",
-                FirstName = "Genji",
-                LastName = "Shimada",
-                Location = "44600",
-                EmailConfirmed = true
-            };
-
-            var mccree = new ApplicationUser() {
-                Email = "mccree@overwatch.com",
-                UserName = "mccree@overwatch.com",
-                FirstName = "Jesse",
-                LastName = "McCree",
-                Location = "87501",
-                EmailConfirmed = true
-            };
-
-            if(!context.Users.Any()) {
-                var user = await userManager.CreateAsync(seedUser, "123Abc!");
-                if(user.Succeeded) {
-                    Console.WriteLine("User Added");
-                }
-
-                var genjiResult = await userManager.CreateAsync(genji, "123Abc!");
-                if(genjiResult.Succeeded) {
-                    Console.WriteLine("Genji Added");
-                }
-
-                var mccreeResult = await userManager.CreateAsync(mccree, "123Abc!");
-                if(mccreeResult.Succeeded) {
-                    Console.WriteLine("McCree Added");
-                }
-            }
-
-            await context.SaveChangesAsync();
-
-            await tagService.AddTag(physicsTag, genji);
-            await tagService.AddTag(biologyTag, mccree);
-
-            await context.SaveChangesAsync();
         }
 
         public virtual void ConfigureDatabase(IServiceCollection services, IHostingEnvironment env) {

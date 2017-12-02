@@ -28,26 +28,5 @@ namespace Covalence.Tests {
                 options.UseOpenIddict();
             });
         }
-
-        public override void Seed(UserManager<ApplicationUser> userManager, ApplicationDbContext context, ITagService ITagService) {
-            SeedTags(context);
-
-            context.SaveChanges();
-        }
-
-        private static void SeedTags(ApplicationDbContext context)
-        {
-            context.Tags.Add(new Tag() {
-                    Name = "Physics"
-            });
-
-            context.Tags.Add(new Tag() {
-                Name = "Chemistry"
-            });
-
-            context.Tags.Add(new Tag() {
-                Name = "Biology"
-            });
-        }
     }
 }
