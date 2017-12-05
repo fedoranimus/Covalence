@@ -9,6 +9,7 @@ export interface IUser {
     location: string;
     displayName: string;
     isMentor: boolean;
+    needsOnboarding: boolean;
 }
 
 export interface IUserViewModel {

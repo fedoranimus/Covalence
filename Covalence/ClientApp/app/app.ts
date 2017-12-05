@@ -18,7 +18,7 @@ export class App {
       { route: 'login', name: 'login', moduleId: PLATFORM.moduleName('./pages/login/login'), nav: false, title: 'Login' },
       { route: 'register/:email?', name: 'register', moduleId: PLATFORM.moduleName('./pages/register/register'), nav: false, title: 'Sign Up' },
       { route: 'forgot-password', name: 'forgot-password', moduleId: PLATFORM.moduleName("./pages/login/forgot-password/forgot-password"), nav: false, title: 'Forgot Password'  }
-    ]);
+    ]).mapUnknownRoutes(PLATFORM.moduleName('./pages/not-found.html'));
     this.router = router;
   }
 }

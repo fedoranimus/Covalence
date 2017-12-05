@@ -61,11 +61,8 @@ export class Login {
             if(token) {
                 const user = await this.authService.getMe();
                 this.userService.currentUser = user;
-    
-                if(user.needsOnboarding)
-                    this.router.navigate('onboard', { replace: true, trigger: false });
-                else
-                    this.router.navigate('/', { replace: true, trigger: false });
+
+                this.router.navigate('/', { replace: true, trigger: false });
                     
                 this.router.reset();
                 //this.router.deactivate();

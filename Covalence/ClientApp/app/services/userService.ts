@@ -23,6 +23,9 @@ export class UserService {
     }
 
     get currentUser() {
+        if(this._userStore == null)
+            this._userStore = JSON.parse(localStorage.getItem('user'));
+            
         return this._userStore;
     }
 
