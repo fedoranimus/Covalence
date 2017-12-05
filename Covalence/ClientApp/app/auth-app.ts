@@ -23,7 +23,7 @@ export class AuthApp {
             { route: 'logout', name: 'logout', redirect: PLATFORM.moduleName('./pages/home/home'), nav: false, title: 'Logout', auth: true },
             { route: 'post/:id?', name: 'post', moduleId: PLATFORM.moduleName('./pages/post-editor/post-editor'), nav: false, title: 'Post', auth: true },
             { route: 'onboard', name: 'onboard', moduleId: PLATFORM.moduleName('./pages/register/onboarding/onboarding'), nav: false, title: 'Welcome to Covalence', auth: true }
-        ]).mapUnknownRoutes(PLATFORM.moduleName('./pages/not-found.html'));
+        ]).mapUnknownRoutes(PLATFORM.moduleName('./pages/not-found'));
         this.router = router;
     }
 }
