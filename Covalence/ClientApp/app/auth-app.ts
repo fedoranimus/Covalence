@@ -36,7 +36,6 @@ export class CheckOnboarding {
     }
 
     run(navigationInstruction: NavigationInstruction, next: Next): Promise<any> {
-        console.log("Preactivate");
         const user = this.userService.currentUser;
         if(!user || navigationInstruction.config.route === 'onboard')
             return next();
