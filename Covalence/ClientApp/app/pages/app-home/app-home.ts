@@ -4,12 +4,15 @@ import {autoinject, computedFrom} from 'aurelia-framework';
 import { PostService } from '../../services/postService';
 import { ITag } from '../../infrastructure/tag';
 import { IPost } from '../../infrastructure/post'; 
+import { IUser } from '../../infrastructure/user';
+import { SearchService } from '../../services/searchService';
 
 @autoinject
 export class AppHome {
     public tags: ITag[] = [];
+    users: IUser[] = [];
 
-    constructor(private authService: AuthService, private router: Router) {
+    constructor(private authService: AuthService, private router: Router, private searchService: SearchService) {
         
     }
 
@@ -20,13 +23,24 @@ export class AppHome {
 
                 this.tags = user.tags;
                 console.debug("Authenticated", user);
+
+                this.getResults();
             } catch(e) {
                 console.error(e);
             }
         }
     }
 
-
+    private async getResults() {
+        if(this.authenticated) {
+            try {
+                this.users = await this.searchService.getAllUsers();
+                console.debug("AppHome", this.users);
+            } catch(e) {
+                console.error(e);
+            }
+        }
+    }
 
     @computedFrom('authService.authenticated')
     get authenticated() {

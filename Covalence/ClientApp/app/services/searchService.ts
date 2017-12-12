@@ -1,14 +1,19 @@
-import {inject} from 'aurelia-framework';
+import {inject, autoinject} from 'aurelia-framework';
 import {Config} from 'aurelia-api';
 import {Result, IResult} from '../infrastructure/result';
+import { IUser } from '../infrastructure/user';
 
-@inject(Config)
+@autoinject
 export class SearchService {
     constructor(private config: Config) {
 
     }
 
-    public getResults(resultType: "mentors"|"proteges"): Promise<IResult[]> {
-        return this.config.getEndpoint('api').find(resultType);
+    public getResults(): Promise<IResult[]> {
+        return null;
+    }
+
+    public getAllUsers(): Promise<IUser[]> {
+        return this.config.getEndpoint('api').find('user/list');
     }
 }

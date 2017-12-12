@@ -16,9 +16,9 @@ namespace Covalence
         public string LastName { get; set; }
         public string Location { get; set; }
         public bool IsMentor { get; set; }
+        public string Bio { get; set; }
         public ICollection<UserTag> Tags { get; set; }
         public bool NeedsOnboarding { get; set; }
-
         //public ICollection<Connection> Connections { get; set; }
     }
 }
