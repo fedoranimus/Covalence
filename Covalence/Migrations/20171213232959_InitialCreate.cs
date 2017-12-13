@@ -28,6 +28,7 @@ namespace Covalence.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
+                    Bio = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
@@ -37,6 +38,7 @@ namespace Covalence.Migrations
                     Location = table.Column<string>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    NeedsOnboarding = table.Column<bool>(nullable: false),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
@@ -254,11 +256,11 @@ namespace Covalence.Migrations
                     Id = table.Column<string>(nullable: false),
                     ApplicationId = table.Column<string>(nullable: true),
                     AuthorizationId = table.Column<string>(nullable: true),
-                    Ciphertext = table.Column<string>(nullable: true),
                     ConcurrencyToken = table.Column<string>(nullable: true),
                     CreationDate = table.Column<DateTimeOffset>(nullable: true),
                     ExpirationDate = table.Column<DateTimeOffset>(nullable: true),
-                    Hash = table.Column<string>(nullable: true),
+                    Payload = table.Column<string>(nullable: true),
+                    ReferenceId = table.Column<string>(nullable: true),
                     Status = table.Column<string>(nullable: true),
                     Subject = table.Column<string>(nullable: false),
                     Type = table.Column<string>(nullable: false)
@@ -271,13 +273,13 @@ namespace Covalence.Migrations
                         column: x => x.ApplicationId,
                         principalTable: "OpenIddictApplications",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_OpenIddictTokens_OpenIddictAuthorizations_AuthorizationId",
                         column: x => x.AuthorizationId,
                         principalTable: "OpenIddictAuthorizations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -339,9 +341,9 @@ namespace Covalence.Migrations
                 column: "AuthorizationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OpenIddictTokens_Hash",
+                name: "IX_OpenIddictTokens_ReferenceId",
                 table: "OpenIddictTokens",
-                column: "Hash",
+                column: "ReferenceId",
                 unique: true);
 
             migrationBuilder.CreateIndex(

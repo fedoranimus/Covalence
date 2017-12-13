@@ -21,6 +21,9 @@ namespace Covalence
         Task<ApplicationUser> RemoveTags(List<string> tags, ApplicationUser user);
 
         Task<ApplicationUser> AddTags(List<string> tags, ApplicationUser user);
+
+        Task<List<Tag>> GetTagsByName(List<string> names);
+        Task<Tag> GetTagByName(string name);
     }
 
     public class TagService : ITagService
@@ -47,6 +50,22 @@ namespace Covalence
 
         public async Task<Tag> GetTag(string name)
         {
+            var tag = await GetTagByName(name);
+            return tag;
+        }
+
+        public async Task<List<Tag>> GetTagsByName(List<string> names) {
+            var tags = new List<Tag>();
+
+            foreach(var name in names) {
+                var tag = await GetTagByName(name);
+                tags.Add(tag);
+            }
+
+            return tags;
+        }
+
+        public async Task<Tag> GetTagByName(string name) {
             _logger.LogDebug($"Getting with name: {name}");
             var tag = await _context.Tags.FirstOrDefaultAsync(t => t.Name.ToUpperInvariant() == name.ToUpperInvariant());
             if(tag == null)
@@ -70,7 +89,7 @@ namespace Covalence
 
         public async Task<ApplicationUser> RemoveTags(List<string> tags, ApplicationUser user) {
             foreach(var stringTag in tags) {
-                var tag = await GetTag(stringTag);
+                var tag = await GetTagByName(stringTag);
                 user = await RemoveTag(tag, user);
             }
 
@@ -89,7 +108,7 @@ namespace Covalence
         public async Task<ApplicationUser> AddTags(List<string> tags, ApplicationUser user)
         {
             foreach(var stringTag in tags) {
-                var tag = await GetTag(stringTag);
+                var tag = await GetTagByName(stringTag);
                 user = await AddTag(tag, user);
             }
 

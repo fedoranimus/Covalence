@@ -49,22 +49,6 @@ namespace Covalence.Controllers
             return Ok(userContract); 
         }
 
-        [HttpGet("list")]
-        public async Task<IActionResult> GetAll() {
-            var currentUser = await _userManager.GetUserAsync(User);
-
-            if(currentUser == null)
-            {
-                _logger.LogError("User not found");
-                return BadRequest();
-            }
-
-            var users = await _context.Users.Where(u => u.Id != currentUser.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).ToListAsync();
-
-            var contract = Converters.ConvertRemoteUserListToContract(users);
-            return Ok(contract);
-        }
-
         //TODO: Get UserById
 
         [HttpPut("{userId}")]
@@ -99,7 +83,7 @@ namespace Covalence.Controllers
 
                 return Ok(contract);
             }
-            return BadRequest("Invalid ViewModel");
+            return BadRequest(ModelState);
         }
 
         [HttpPut("tags/{userId}")]

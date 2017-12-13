@@ -11,8 +11,8 @@ using System;
 namespace Covalence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171125150410_Onboarding")]
-    partial class Onboarding
+    [Migration("20171213232959_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,6 +26,8 @@ namespace Covalence.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("Bio");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -295,8 +297,6 @@ namespace Covalence.Migrations
 
                     b.Property<string>("AuthorizationId");
 
-                    b.Property<string>("Ciphertext");
-
                     b.Property<string>("ConcurrencyToken")
                         .IsConcurrencyToken();
 
@@ -304,7 +304,9 @@ namespace Covalence.Migrations
 
                     b.Property<DateTimeOffset?>("ExpirationDate");
 
-                    b.Property<string>("Hash");
+                    b.Property<string>("Payload");
+
+                    b.Property<string>("ReferenceId");
 
                     b.Property<string>("Status");
 
@@ -320,7 +322,7 @@ namespace Covalence.Migrations
 
                     b.HasIndex("AuthorizationId");
 
-                    b.HasIndex("Hash")
+                    b.HasIndex("ReferenceId")
                         .IsUnique();
 
                     b.ToTable("OpenIddictTokens");
@@ -395,13 +397,11 @@ namespace Covalence.Migrations
                 {
                     b.HasOne("OpenIddict.Models.OpenIddictApplication", "Application")
                         .WithMany("Tokens")
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ApplicationId");
 
                     b.HasOne("OpenIddict.Models.OpenIddictAuthorization", "Authorization")
                         .WithMany("Tokens")
-                        .HasForeignKey("AuthorizationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AuthorizationId");
                 });
 #pragma warning restore 612, 618
         }
