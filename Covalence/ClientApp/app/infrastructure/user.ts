@@ -10,6 +10,7 @@ export interface IUser {
     displayName: string;
     isMentor: boolean;
     needsOnboarding: boolean;
+    emailConfirmed: boolean;
 }
 
 export interface IUserViewModel {

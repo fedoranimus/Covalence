@@ -33,7 +33,7 @@
         </div>
         <!-- Authenticated Navbar -->
         <div class="navbar-end" show.bind="isAuthenticated">
-            <a show.bind="hasDisplayName" class="navbar-item" href="/#/profile">${displayName}</a>
+            <a show.bind="hasDisplayName" class="navbar-item" href="/#/profile">${this.profile.firstName} ${this.profile.lastName}</a>
             <a class="navbar-item" href="/#/" click.delegate="logout()">Logout</a>
         </div>
       </div>
@@ -43,4 +43,7 @@
         </li>
       </ul>-->
   </nav>
+  <article if.bind="isAuthenticated" show.bind="!emailConfirmed" class="banner level">
+    <span class="level-item">Please verify your email, by checking "${profile.email}", to become a full member of Covalence</span>
+  </article>
 </template>

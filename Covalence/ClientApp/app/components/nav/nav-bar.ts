@@ -34,25 +34,26 @@ export class NavBar {
 
     }
 
-    @computedFrom('this.profile')
-    get displayName() {
-        if(this.isAuthenticated && this.profile)
-            return `${this.profile.firstName} ${this.profile.lastName}`;
-        else
-            return "";
-    }
 
     @computedFrom('this.profile')
     get hasDisplayName() {
-        if(this.isAuthenticated && this.profile && this.profile.firstName && this.profile.lastName)
+        if(this.auth.authenticated && this.profile && this.profile.firstName && this.profile.lastName)
             return true;
         
         return false;
     }
 
-    //@computedFrom('authService.authenticated')
+    @computedFrom('this.profile')
+    get emailConfirmed() {
+        if(this.auth.authenticated && this.profile && !this.profile.emailConfirmed)
+            return false;
+
+        return true;
+    }
+
+    @computedFrom('authService.authenticated')
     get isAuthenticated() {
-        return this.auth.isAuthenticated();
+        return this.auth.authenticated;
     }
 
     logout() {

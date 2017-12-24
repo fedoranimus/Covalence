@@ -98,7 +98,7 @@ namespace Covalence.Controllers
                 return BadRequest("User does not exist");
             }
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            return Redirect("https://covalence.timdturner.com/#/onboard");
+            return Redirect("https://covalence.timdturner.com/");
         }
 
         [HttpPost]

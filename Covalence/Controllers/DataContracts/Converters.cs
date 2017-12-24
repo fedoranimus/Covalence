@@ -23,6 +23,7 @@ namespace Covalence.Contracts
                 Location = user.Location,
                 Email = user.Email,
                 Bio = user.Bio,
+                EmailConfirmed = user.EmailConfirmed,
                 Tags = user.Tags
                     .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList(),
                 NeedsOnboarding = user.NeedsOnboarding

@@ -17,7 +17,6 @@ using System.Diagnostics;
 
 namespace Covalence.Controllers
 {
-    //[Route("api/[controller]")]
     public class AuthorizationController : Controller
     {
         private readonly SignInManager<ApplicationUser> _signInManager;

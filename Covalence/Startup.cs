@@ -67,7 +67,7 @@ namespace Covalence
 
             // Register the Identity services.
             services.AddIdentity<ApplicationUser, IdentityRole>(config => {
-                    config.SignIn.RequireConfirmedEmail = _env.IsProduction();
+                    //config.SignIn.RequireConfirmedEmail = _env.IsProduction();
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
