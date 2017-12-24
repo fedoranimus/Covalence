@@ -9,11 +9,11 @@ export class SearchService {
 
     }
 
-    public getResults(): Promise<IResult[]> {
-        return null;
+    public getResults(query: any): Promise<IResult[]> {
+        return this.config.getEndpoint('api').post('search', query);
     }
 
     public getAllUsers(): Promise<IUser[]> {
-        return this.config.getEndpoint('api').find('user/list');
+        return this.config.getEndpoint('api').find('search/list');
     }
 }

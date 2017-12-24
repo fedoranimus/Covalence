@@ -50,7 +50,7 @@ namespace Covalence.Controllers
                 if (user == null)
                 {
                     _logger.LogDebug("User {0} not found", request.Username);
-                    return BadRequest("Invalid username or password."); // TODO Don't leak this information
+                    return BadRequest("Invalid username or password.");
                 }
 
                 // Validate the username/password parameters and ensure the account is not locked out.

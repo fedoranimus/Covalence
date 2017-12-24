@@ -12,6 +12,7 @@ using Covalence.ViewModels;
 
 namespace Covalence.Controllers
 {
+    [Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     public class SearchController : Controller
     {
@@ -43,7 +44,7 @@ namespace Covalence.Controllers
             return Ok(contract);
         }
 
-        [HttpPost("search")]
+        [HttpPost]
         public async Task<IActionResult> Search([FromBody] SearchViewModel model) {
             if(!ModelState.IsValid)
             {

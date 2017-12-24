@@ -22,6 +22,7 @@ namespace Covalence.Contracts
                 LastName = user.LastName,
                 Location = user.Location,
                 Email = user.Email,
+                Bio = user.Bio,
                 Tags = user.Tags
                     .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList(),
                 NeedsOnboarding = user.NeedsOnboarding
@@ -34,6 +35,7 @@ namespace Covalence.Contracts
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                Bio = user.Bio,
                 Tags = user.Tags
                     .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList()
             };
