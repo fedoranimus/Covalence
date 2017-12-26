@@ -33,7 +33,7 @@
         </div>
         <!-- Authenticated Navbar -->
         <div class="navbar-end" show.bind="isAuthenticated">
-            <a show.bind="hasDisplayName" class="navbar-item" href="/#/profile">${this.profile.firstName} ${this.profile.lastName}</a>
+            <a show.bind="hasDisplayName" class="navbar-item" href="/#/profile">${profile.firstName} ${profile.lastName}</a>
             <a class="navbar-item" href="/#/" click.delegate="logout()">Logout</a>
         </div>
       </div>

@@ -35,7 +35,7 @@ export class NavBar {
     }
 
 
-    @computedFrom('this.profile')
+    @computedFrom('profile.firstName')
     get hasDisplayName() {
         if(this.auth.authenticated && this.profile && this.profile.firstName && this.profile.lastName)
             return true;
@@ -43,7 +43,7 @@ export class NavBar {
         return false;
     }
 
-    @computedFrom('this.profile')
+    @computedFrom('profile.emailConfirmed')
     get emailConfirmed() {
         if(this.auth.authenticated && this.profile && !this.profile.emailConfirmed)
             return false;
