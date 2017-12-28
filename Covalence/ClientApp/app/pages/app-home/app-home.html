@@ -5,9 +5,17 @@
                 <user-list users.bind="users"></user-list>
             </div>
             <div class="column">
-                <tag-list tags.bind="tags">
+                <!-- <tag-list tags.bind="tags">
                     <span slot="headline">Expertise</span>
-                </tag-list>
+                </tag-list> -->
+                <article>
+                    <h2>Connections</h2>
+                    <ul>
+                        <li repeat.for="connection of connections">
+                            ${connection.requestingFirstName} ${connection.requestingLastName}:${connection.state}
+                        </li>
+                    </ul>
+                </article>
             </div>
         </div>
     </div>

@@ -26,8 +26,7 @@ namespace Covalence.Contracts
                 EmailConfirmed = user.EmailConfirmed,
                 Tags = user.Tags
                     .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList(),
-                NeedsOnboarding = user.NeedsOnboarding,
-                Connections = Converters.ConvertConnectionListToContract(user.Connections)
+                NeedsOnboarding = user.NeedsOnboarding
             };
         }
 

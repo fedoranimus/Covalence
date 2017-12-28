@@ -8,8 +8,8 @@ using System;
 namespace Covalence
 {
     public interface IConnectionService {
-        Task<ApplicationUser> RequestConnection(ApplicationUser RequestingUser, ApplicationUser RequestedUser);
-        Task<ApplicationUser> AcceptConnection(ApplicationUser RequestingUser, ApplicationUser RequestedUser);
+        Task RequestConnection(ApplicationUser RequestingUser, ApplicationUser RequestedUser);
+        Task AcceptConnection(ApplicationUser RequestingUser, ApplicationUser RequestedUser);
     }
 
     public class ConnectionService : IConnectionService {
@@ -21,10 +21,7 @@ namespace Covalence
             _logger = loggerFactory.CreateLogger<ConnectionService>();
         }
 
-        public async Task<ApplicationUser> RequestConnection(ApplicationUser requestingUser, ApplicationUser requestedUser) {
-            requestingUser = await _context.Users.Where(u => u.Id == requestingUser.Id).Include(x => x.Connections).FirstOrDefaultAsync();
-            requestedUser = await _context.Users.Where(u => u.Id == requestedUser.Id).Include(x => x.Connections).FirstOrDefaultAsync();
-
+        public async Task RequestConnection(ApplicationUser requestingUser, ApplicationUser requestedUser) {
             var connection = new Connection() {
                 RequestedUser = requestedUser,
                 RequestedUserId = requestedUser.Id,
@@ -32,38 +29,20 @@ namespace Covalence
                 RequestingUserId = requestingUser.Id
             };
 
-            try 
-            {
-                requestingUser.Connections.Add(connection);
-                requestedUser.Connections.Add(connection);                
-            }
-            catch (Exception e) {
-                _logger.LogError("Couldn't request connection");
-                return requestingUser;
-            }
+            var connections = await _context.Connections.AddAsync(connection);
 
             await _context.SaveChangesAsync();
-
-            return requestingUser;
         }
 
-        public async Task<ApplicationUser> AcceptConnection(ApplicationUser requestingUser, ApplicationUser requestedUser) {
-            requestingUser = await _context.Users.Where(u => u.Id == requestingUser.Id).Include(x => x.Connections).FirstOrDefaultAsync();
-            requestedUser = await _context.Users.Where(u => u.Id == requestedUser.Id).Include(x => x.Connections).FirstOrDefaultAsync();
-
-            var requestedConnection = requestedUser.Connections.FirstOrDefault(c => c.RequestedUser == requestedUser && c.RequestingUser == requestingUser);
-            requestedConnection.State = ConnectionState.Connected;
-
-            var requestingConnection = requestingUser.Connections.FirstOrDefault(c => c.RequestedUser == requestedUser && c.RequestingUser == requestingUser);
-            requestingConnection.State = ConnectionState.Connected;
+        public async Task AcceptConnection(ApplicationUser requestingUser, ApplicationUser requestedUser) {
+            var connection = await _context.Connections.FindAsync(requestingUser.Id, requestedUser.Id);
+            connection.State = ConnectionState.Connected;
 
             await _context.SaveChangesAsync();
-
-            return requestedUser;
         }
 
-        public async void RejectConnection() {
-
+        public async Task RejectConnection() {
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -9,7 +9,6 @@ namespace Covalence
         {
             Tags = new HashSet<UserTag>();
             NeedsOnboarding = true;
-            Connections = new HashSet<Connection>();
         }
 
         public string FirstName { get; set; }
@@ -19,6 +18,5 @@ namespace Covalence
         public string Bio { get; set; }
         public ICollection<UserTag> Tags { get; set; }
         public bool NeedsOnboarding { get; set; }
-        public ICollection<Connection> Connections { get; set; }
     }
 }

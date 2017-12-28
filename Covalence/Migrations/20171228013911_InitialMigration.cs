@@ -208,18 +208,11 @@ namespace Covalence.Migrations
                 {
                     RequestingUserId = table.Column<string>(nullable: false),
                     RequestedUserId = table.Column<string>(nullable: false),
-                    ApplicationUserId = table.Column<string>(nullable: true),
                     State = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Connections", x => new { x.RequestingUserId, x.RequestedUserId });
-                    table.ForeignKey(
-                        name: "FK_Connections_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Connections_AspNetUsers_RequestedUserId",
                         column: x => x.RequestedUserId,
@@ -350,11 +343,6 @@ namespace Covalence.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Connections_ApplicationUserId",
-                table: "Connections",
-                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Connections_RequestedUserId",

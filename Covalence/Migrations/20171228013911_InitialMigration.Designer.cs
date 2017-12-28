@@ -11,7 +11,7 @@ using System;
 namespace Covalence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171228005425_InitialMigration")]
+    [Migration("20171228013911_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,13 +88,9 @@ namespace Covalence.Migrations
 
                     b.Property<string>("RequestedUserId");
 
-                    b.Property<string>("ApplicationUserId");
-
                     b.Property<int>("State");
 
                     b.HasKey("RequestingUserId", "RequestedUserId");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("RequestedUserId");
 
@@ -349,10 +345,6 @@ namespace Covalence.Migrations
 
             modelBuilder.Entity("Covalence.Connection", b =>
                 {
-                    b.HasOne("Covalence.ApplicationUser")
-                        .WithMany("Connections")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("Covalence.ApplicationUser", "RequestedUser")
                         .WithMany()
                         .HasForeignKey("RequestedUserId")

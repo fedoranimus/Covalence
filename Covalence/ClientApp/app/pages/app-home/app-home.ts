@@ -1,3 +1,4 @@
+import { ConnectionService } from './../../services/connectionService';
 import { Router } from 'aurelia-router';
 import {AuthService} from 'aurelia-authentication';
 import {autoinject, computedFrom} from 'aurelia-framework';
@@ -11,8 +12,9 @@ import { SearchService } from '../../services/searchService';
 export class AppHome {
     public tags: ITag[] = [];
     users: IUser[] = [];
+    connections: any[] = [];
 
-    constructor(private authService: AuthService, private router: Router, private searchService: SearchService) {
+    constructor(private authService: AuthService, private router: Router, private searchService: SearchService, private connectionService: ConnectionService) {
         
     }
 
@@ -21,8 +23,9 @@ export class AppHome {
             try {
                 let user = await this.authService.getMe();
 
+                this.connections = await this.connectionService.getConnections();
                 this.tags = user.tags;
-                console.debug("Authenticated", user);
+                console.debug("Authenticated", user, this.connections);
 
                 this.getResults();
             } catch(e) {

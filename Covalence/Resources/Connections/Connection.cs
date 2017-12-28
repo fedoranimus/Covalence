@@ -4,7 +4,8 @@ namespace Covalence
     public enum ConnectionState
     {
         Pending,
-        Connected
+        Connected,
+        Blocked
     }
     public class Connection
     {

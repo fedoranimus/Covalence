@@ -87,13 +87,9 @@ namespace Covalence.Migrations
 
                     b.Property<string>("RequestedUserId");
 
-                    b.Property<string>("ApplicationUserId");
-
                     b.Property<int>("State");
 
                     b.HasKey("RequestingUserId", "RequestedUserId");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("RequestedUserId");
 
@@ -348,10 +344,6 @@ namespace Covalence.Migrations
 
             modelBuilder.Entity("Covalence.Connection", b =>
                 {
-                    b.HasOne("Covalence.ApplicationUser")
-                        .WithMany("Connections")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("Covalence.ApplicationUser", "RequestedUser")
                         .WithMany()
                         .HasForeignKey("RequestedUserId")
