@@ -1,4 +1,4 @@
-import { ConnectionService } from './../../services/connectionService';
+import { ConnectionService, IConnectionList } from './../../services/connectionService';
 import { Router } from 'aurelia-router';
 import {AuthService} from 'aurelia-authentication';
 import {autoinject, computedFrom} from 'aurelia-framework';
@@ -12,7 +12,7 @@ import { SearchService } from '../../services/searchService';
 export class AppHome {
     public tags: ITag[] = [];
     users: IUser[] = [];
-    connections: any[] = [];
+    connections: IConnectionList;
 
     constructor(private authService: AuthService, private router: Router, private searchService: SearchService, private connectionService: ConnectionService) {
         

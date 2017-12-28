@@ -7,6 +7,10 @@ export class UserList {
 
     }
 
+    async bind() {
+        console.log(this.users);
+    }
+
     get hasResults() {
         return this.users.length > 0;
     }

@@ -8,14 +8,9 @@
                 <!-- <tag-list tags.bind="tags">
                     <span slot="headline">Expertise</span>
                 </tag-list> -->
-                <article>
-                    <h2>Connections</h2>
-                    <ul>
-                        <li repeat.for="connection of connections">
-                            ${connection.requestingFirstName} ${connection.requestingLastName}:${connection.state}
-                        </li>
-                    </ul>
-                </article>
+                <connection-list connections.bind="connections">
+
+                </connection-list>
             </div>
         </div>
     </div>

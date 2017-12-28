@@ -43,7 +43,7 @@ namespace Covalence.Controllers
             return Ok(connectionListContract);
         }
 
-        [HttpPost("connection/request")]
+        [HttpPost("request")]
         public async Task<IActionResult> RequestConnection([FromBody] string requestedUserId)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -55,7 +55,7 @@ namespace Covalence.Controllers
             return Ok();
         }
 
-        [HttpPost("connection/approve")]
+        [HttpPost("approve")]
         public async Task<IActionResult> ApproveConnection([FromBody] string requestingUserId)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -67,7 +67,7 @@ namespace Covalence.Controllers
             return Ok();
         }
 
-        [HttpPost("connection/reject")]
+        [HttpPost("reject")]
         public async Task<IActionResult> RejectConnection([FromBody] string requestingUserId)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -79,7 +79,7 @@ namespace Covalence.Controllers
             return Ok();
         }
 
-        [HttpPost("connection/block")]
+        [HttpPost("block")]
         public async Task<IActionResult> BlockConnection([FromBody] string requestingUserId)
         {
             var user = await _userManager.GetUserAsync(User);
