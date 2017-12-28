@@ -130,7 +130,7 @@ namespace Covalence.Data
 
             await connectionService.RequestConnection(meiUser, testUser);
             await connectionService.RequestConnection(testUser, mccreeUser);
-            await connectionService.AcceptConnection(meiUser, testUser);
+            await connectionService.AcceptConnection(meiUser.Id, testUser.Id);
             await connectionService.RequestConnection(genjiUser, testUser);
 
             await context.SaveChangesAsync();

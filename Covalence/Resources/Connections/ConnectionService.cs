@@ -9,7 +9,8 @@ namespace Covalence
 {
     public interface IConnectionService {
         Task RequestConnection(ApplicationUser RequestingUser, ApplicationUser RequestedUser);
-        Task AcceptConnection(ApplicationUser RequestingUser, ApplicationUser RequestedUser);
+        Task AcceptConnection(string RequestingUserId, string RequestedUserId);
+        Task RejectConnection(string requestingUserId, string requestedUserId);
     }
 
     public class ConnectionService : IConnectionService {
@@ -34,14 +35,17 @@ namespace Covalence
             await _context.SaveChangesAsync();
         }
 
-        public async Task AcceptConnection(ApplicationUser requestingUser, ApplicationUser requestedUser) {
-            var connection = await _context.Connections.FindAsync(requestingUser.Id, requestedUser.Id);
+        public async Task AcceptConnection(string requestingUserId, string requestedUserId) {
+            var connection = await _context.Connections.FindAsync(requestingUserId, requestedUserId);
             connection.State = ConnectionState.Connected;
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task RejectConnection() {
+        public async Task RejectConnection(string requestingUserId, string requestedUserId) {
+            var connection = await _context.Connections.FindAsync(requestingUserId, requestedUserId);
+            _context.Connections.Remove(connection);
+
             await _context.SaveChangesAsync();
         }
     }
