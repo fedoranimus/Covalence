@@ -39,8 +39,9 @@ namespace Covalence.Controllers
             }
 
             var users = await _context.Users.Where(u => u.Id != currentUser.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).ToListAsync();
+            var connections = await _context.Connections.Where(x => x.RequestedUserId == currentUser.Id || x.RequestingUserId == currentUser.Id).Include(x => x.RequestedUser).Include(x => x.RequestingUser).ToListAsync();
 
-            var contract = Converters.ConvertRemoteUserListToContract(users);
+            var contract = Converters.ConvertRemoteUserListToContract(currentUser, users, connections);
             return Ok(contract);
         }
 
@@ -79,7 +80,9 @@ namespace Covalence.Controllers
                                         .Select(x => x.Key)
                                         .ToList();
 
-            var contract = Converters.ConvertRemoteUserListToContract(sortedUsers);
+            var connections = await _context.Connections.Where(x => x.RequestedUserId == currentUser.Id || x.RequestingUserId == currentUser.Id).Include(x => x.RequestedUser).Include(x => x.RequestingUser).ToListAsync();
+
+            var contract = Converters.ConvertRemoteUserListToContract(currentUser, sortedUsers, connections);
             return Ok(contract);
         }
     }

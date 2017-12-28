@@ -1,19 +1,19 @@
 <template>
     <article with.bind="connections">
-        <h1>Connections</h1>
-        <h2>Connected Users</h2>
+        <h3 class="title is-3">Connections</h1>
+        <h5 class="subtitle is-5">Connected Users</h2>
         <ul>
             <li repeat.for="connection of activeConnections">
                 ${connection.displayName}
             </li>
         </ul>
-        <h2>Connection Requests</h2>
+        <h2 class="subtitle is-5">Connection Requests</h2>
         <ul>
             <li repeat.for="connection of requestedConnections">
                 ${connection.displayName}
             </li>
         </ul>
-        <h2>Pending Connections</h2>
+        <h2 class="subtitle is-5">Pending Connections</h2>
         <ul>
             <li repeat.for="connection of pendingConnections">
                 ${connection.displayName}

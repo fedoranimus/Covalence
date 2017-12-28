@@ -30,24 +30,66 @@ namespace Covalence.Contracts
             };
         }
 
-        public static RemoteUserContract ConvertRemoteUserToContract(ApplicationUser user)
+        public static RemoteUserContract ConvertRemoteUserToContract(ApplicationUser currentUser, ApplicationUser remoteUser, ICollection<Connection> connections)
         {
+            var connectionStatus = Converters.ConvertRemoteConnectionStatus(currentUser.Id, connections, remoteUser.Id);
+
             return new RemoteUserContract(){
-                Id = user.Id,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Bio = user.Bio,
-                Tags = user.Tags
-                    .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList()
+                Id = remoteUser.Id,
+                FirstName = remoteUser.FirstName,
+                LastName = remoteUser.LastName,
+                Bio = remoteUser.Bio,
+                Tags = remoteUser.Tags
+                    .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList(),
+                ConnectionStatus = connectionStatus,
+                Email = connectionStatus == RemoteConnectionStatus.Connected ? remoteUser.Email : null
             };
+        }
+
+        public static RemoteConnectionStatus ConvertRemoteConnectionStatus(string currentUserId, ICollection<Connection> connections, string userId) {
+            var status = RemoteConnectionStatus.Available;
+
+            var existingConnection = connections.Where(c => (c.RequestedUserId == currentUserId && c.RequestingUserId == userId) || (c.RequestingUserId == currentUserId && c.RequestedUserId == userId)).FirstOrDefault();
+            if(existingConnection != null)
+            {
+                if(existingConnection.State == ConnectionState.Connected)
+                {
+                    status = RemoteConnectionStatus.Connected;
+                }
+                else 
+                {
+                    if(existingConnection.RequestingUserId == currentUserId)
+                    {
+                        status = RemoteConnectionStatus.Requested;
+                    }
+                    else 
+                    {
+                        status = RemoteConnectionStatus.Pending;
+                    }
+                }
+            }
+
+            return status;
+        }
+
+        private static List<ConnectionContract> FindPendingConnections(ICollection<Connection> connections, string userId) {
+            return connections.Where(c => c.RequestedUserId == userId && c.State == ConnectionState.Pending).Select(connection => ConvertConnectionToContract(connection, false)).ToList();
+        }
+
+        private static List<ConnectionContract> FindRequestedConnections(ICollection<Connection> connections, string userId) {
+            return connections.Where(c => c.RequestingUserId == userId && c.State == ConnectionState.Pending).Select(connection => ConvertConnectionToContract(connection, true)).ToList();
+        }
+
+        private static List<ConnectionContract> FindActiveConnections(ICollection<Connection> connections, string userId) {
+            return connections.Where(c => (c.RequestedUserId == userId || c.RequestingUserId == userId) && c.State == ConnectionState.Connected).Select(connection => ConvertConnectionToContract(connection, connection.RequestingUserId == userId)).ToList();
         }
 
         public static ConnectionListContract ConvertConnectionListToContract(ICollection<Connection> connections, string userId) {
 
             return new ConnectionListContract() {
-                PendingConnections = connections.Where(c => c.RequestedUserId == userId && c.State == ConnectionState.Pending).Select(connection => ConvertConnectionToContract(connection, false)).ToList(),
-                RequestedConnections = connections.Where(c => c.RequestingUserId == userId && c.State == ConnectionState.Pending).Select(connection => ConvertConnectionToContract(connection, true)).ToList(),
-                ActiveConnections = connections.Where(c => (c.RequestedUserId == userId || c.RequestingUserId == userId) && c.State == ConnectionState.Connected).Select(connection => ConvertConnectionToContract(connection, connection.RequestingUserId == userId)).ToList(),
+                PendingConnections = FindPendingConnections(connections, userId),
+                RequestedConnections = FindRequestedConnections(connections, userId),
+                ActiveConnections = FindActiveConnections(connections, userId)
             };  
         }
 
@@ -74,9 +116,9 @@ namespace Covalence.Contracts
             return displayName;
         }
 
-        public static List<RemoteUserContract> ConvertRemoteUserListToContract(List<ApplicationUser> users)
+        public static List<RemoteUserContract> ConvertRemoteUserListToContract(ApplicationUser currentUser, List<ApplicationUser> users, ICollection<Connection> connections)
         {
-            return users.Select(user => ConvertRemoteUserToContract(user)).ToList();
+            return users.Select(remoteUser => ConvertRemoteUserToContract(currentUser, remoteUser, connections)).ToList();
         }
     }
 }

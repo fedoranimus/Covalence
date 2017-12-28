@@ -15,3 +15,11 @@ export class UserList {
         return this.users.length > 0;
     }
 }
+
+export enum connectionStatus {
+    requested,
+    pending,
+    connected,
+    blocked,
+    available
+}

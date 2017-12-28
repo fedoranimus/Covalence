@@ -26,6 +26,18 @@
                         </span>
                     </div>
                 </div>
+                <div class="level-right">
+                    <div show.bind="user.connectionStatus == 4" class="level-item">
+                        <a class="button is-primary">Request Connection</a>
+                    </div>
+                    <div show.bind="user.connectionStatus == 0" class="level-item">
+                        <a class="button is-success">Confirm Connection</a>
+                        <a class="button is-danger">Reject Connection</a>
+                    </div>
+                    <div show.bind="user.connectionStatus == 1" class="level-item">
+                        Awaiting confirmation from ${user.firstName}
+                    </div>
+                </div>
             </div>
         </div>
         <hr>
