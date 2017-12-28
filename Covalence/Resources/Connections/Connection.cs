@@ -3,18 +3,18 @@ namespace Covalence
 
     public enum ConnectionState
     {
-        Requested,
-        Approved,
-        Blocked
+        Pending,
+        Connected
     }
     public class Connection
     {
         public Connection()
         {
-            State = ConnectionState.Requested;
+            State = ConnectionState.Pending;
         }
-        public int ConnectionId { get; set; }
+        public string RequestingUserId { get; set; }
         public ApplicationUser RequestingUser { get; set; }
+        public string RequestedUserId { get; set; }
         public ApplicationUser RequestedUser { get; set; }
         public ConnectionState State { get; set; }
     }

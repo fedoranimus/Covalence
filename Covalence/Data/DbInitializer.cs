@@ -7,7 +7,7 @@ namespace Covalence.Data
 {
     public static class DbInitializer
     {
-        public static async Task InitializeAsync(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ITagService tagService)
+        public static async Task InitializeAsync(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ITagService tagService, IConnectionService connectionService)
         {
             context.Database.Migrate();
 
@@ -25,6 +25,21 @@ namespace Covalence.Data
             await context.Tags.AddAsync(chemistryTag);
 
             await context.SaveChangesAsync();
+
+            var testUser = new ApplicationUser() {
+                Email = "fixture@test.com",
+                UserName = "fixture@test.com",
+                FirstName = "Fixture",
+                LastName = "Test",
+                Bio = "This is my test user",
+                Location = "03062",
+                EmailConfirmed = true,
+                NeedsOnboarding = false
+            };
+
+            await userManager.CreateAsync(testUser, "123Abc!");
+
+            await tagService.AddTag(biologyTag, testUser);
 
             var mccreeUser = new ApplicationUser() {
                     Email = "mccree@overwatch.com",
@@ -110,6 +125,13 @@ namespace Covalence.Data
             await userManager.CreateAsync(meiUser, "123Abc!");
 
             await tagService.AddTag(biologyTag, meiUser);
+
+            await context.SaveChangesAsync();
+
+            await connectionService.RequestConnection(meiUser, testUser);
+            await connectionService.RequestConnection(testUser, mccreeUser);
+            await connectionService.AcceptConnection(meiUser, testUser);
+            await connectionService.RequestConnection(genjiUser, testUser);
 
             await context.SaveChangesAsync();
         }

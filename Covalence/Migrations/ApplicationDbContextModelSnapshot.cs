@@ -81,6 +81,25 @@ namespace Covalence.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Covalence.Connection", b =>
+                {
+                    b.Property<string>("RequestingUserId");
+
+                    b.Property<string>("RequestedUserId");
+
+                    b.Property<string>("ApplicationUserId");
+
+                    b.Property<int>("State");
+
+                    b.HasKey("RequestingUserId", "RequestedUserId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("RequestedUserId");
+
+                    b.ToTable("Connections");
+                });
+
             modelBuilder.Entity("Covalence.Tag", b =>
                 {
                     b.Property<string>("Name")
@@ -325,6 +344,23 @@ namespace Covalence.Migrations
                         .IsUnique();
 
                     b.ToTable("OpenIddictTokens");
+                });
+
+            modelBuilder.Entity("Covalence.Connection", b =>
+                {
+                    b.HasOne("Covalence.ApplicationUser")
+                        .WithMany("Connections")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("Covalence.ApplicationUser", "RequestedUser")
+                        .WithMany()
+                        .HasForeignKey("RequestedUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Covalence.ApplicationUser", "RequestingUser")
+                        .WithMany()
+                        .HasForeignKey("RequestingUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Covalence.UserTag", b =>

@@ -30,11 +30,23 @@ namespace Covalence
                 .HasOne(ut => ut.Tag)
                 .WithMany(t => t.Users)
                 .HasForeignKey(ut => ut.Name);
+
+            modelBuilder.Entity<Connection>()
+                .HasKey(c => new { c.RequestingUserId, c.RequestedUserId });
+
+            modelBuilder.Entity<Connection>()
+                .HasOne(c => c.RequestingUser)
+                .WithMany()
+                .HasForeignKey(c => c.RequestingUserId).OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Connection>()
+                .HasOne(c => c.RequestedUser)
+                .WithMany()
+                .HasForeignKey(c => c.RequestedUserId);
         }
 
         public DbSet<Tag> Tags { get; set; }
         public DbSet<UserTag> UserTags { get; set; }
-        
-        //public DbSet<Connection> Connections { get; set; }
+        public DbSet<Connection> Connections { get; set; }
     }
 }

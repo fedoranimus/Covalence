@@ -113,6 +113,7 @@ namespace Covalence
                     .AddOAuthValidation();
 
             services.AddScoped<ITagService, TagService>();
+            services.AddScoped<IConnectionService, ConnectionService>();
             
             services.AddScoped<UserManager<ApplicationUser>, UserManager<ApplicationUser>>();
         }

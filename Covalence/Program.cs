@@ -22,7 +22,8 @@ namespace Covalence
                     var context = services.GetRequiredService<ApplicationDbContext>();
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                     var tagService = services.GetRequiredService<ITagService>();
-                    await DbInitializer.InitializeAsync(context, userManager, tagService);
+                    var connectionService = services.GetRequiredService<IConnectionService>();
+                    await DbInitializer.InitializeAsync(context, userManager, tagService, connectionService);
                 }
                 catch(Exception ex) 
                 {

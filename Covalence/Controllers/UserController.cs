@@ -42,6 +42,7 @@ namespace Covalence.Controllers
             var populatedUser = _context.Users.Where(x => x.Id == user.Id)
                 .Include(x => x.Tags)
                     .ThenInclude(ut => ut.Tag)
+                .Include(x => x.Connections)
                 .FirstOrDefault();
 
             var userContract = Converters.ConvertUserToContract(populatedUser);
@@ -64,7 +65,7 @@ namespace Covalence.Controllers
 
             if(ModelState.IsValid)
             {
-                user = await _context.Users.Where(u => u.Id == user.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
+                user = await _context.Users.Where(u => u.Id == user.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).Include(x => x.Connections).FirstOrDefaultAsync();
                 var userTags = model.Tags
                     .Select(async t => 
                         new UserTag() { User = user, UserId = user.Id, Tag = await _tagService.GetTag(t), Name = t.ToUpperInvariant()
@@ -99,7 +100,7 @@ namespace Covalence.Controllers
 
             if(tags != null)
             {
-                user = await _context.Users.Where(u => u.Id == user.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
+                user = await _context.Users.Where(u => u.Id == user.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).Include(x => x.Connections).FirstOrDefaultAsync();
                 var tagsToRemove = user.Tags.Select(t => t.Name.ToLowerInvariant()).Except(tags).ToList(); // Get list of current tags not in the new tag list
                 var tagsToAdd = tags.Except(user.Tags.Select(t => t.Name.ToLowerInvariant())).ToList(); // Get list of new tags which aren't in the current tag list
                 user = await _tagService.RemoveTags(tagsToRemove, user); //can I clear this maybe?
@@ -114,8 +115,8 @@ namespace Covalence.Controllers
             return BadRequest("Invalid Tag List");
         }
 
-        [HttpPost("request/connection/{requestedUserId}")]
-        public async Task<IActionResult> RequestConnection(string requestedUserId)
+        [HttpPost("connection/request")]
+        public async Task<IActionResult> RequestConnection([FromBody] string requestedUserId)
         {
             var user = await _userManager.GetUserAsync(User);
             if(user == null)
@@ -126,8 +127,8 @@ namespace Covalence.Controllers
             return Ok();
         }
 
-        [HttpPost("approve/connection/{requestedUserId}")]
-        public async Task<IActionResult> ApproveConnection(string requestedUserId)
+        [HttpPost("connection/approve")]
+        public async Task<IActionResult> ApproveConnection([FromBody] string requestingUserId)
         {
             var user = await _userManager.GetUserAsync(User);
             if(user == null)
@@ -138,8 +139,8 @@ namespace Covalence.Controllers
             return Ok();
         }
 
-        [HttpPost("reject/connection/{requestedUserId}")]
-        public async Task<IActionResult> RejectConnection(string requestedUserId)
+        [HttpPost("connection/reject")]
+        public async Task<IActionResult> RejectConnection([FromBody] string requestingUserId)
         {
             var user = await _userManager.GetUserAsync(User);
             if(user == null)
@@ -150,8 +151,8 @@ namespace Covalence.Controllers
             return Ok();
         }
 
-        [HttpPost("block/connection/{requestedUserId}")]
-        public async Task<IActionResult> BlockConnection(string requestedUserId)
+        [HttpPost("connection/block")]
+        public async Task<IActionResult> BlockConnection([FromBody] string requestingUserId)
         {
             var user = await _userManager.GetUserAsync(User);
             if(user == null)

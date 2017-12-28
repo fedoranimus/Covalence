@@ -26,7 +26,8 @@ namespace Covalence.Contracts
                 EmailConfirmed = user.EmailConfirmed,
                 Tags = user.Tags
                     .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList(),
-                NeedsOnboarding = user.NeedsOnboarding
+                NeedsOnboarding = user.NeedsOnboarding,
+                Connections = Converters.ConvertConnectionListToContract(user.Connections)
             };
         }
 
@@ -39,6 +40,22 @@ namespace Covalence.Contracts
                 Bio = user.Bio,
                 Tags = user.Tags
                     .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList()
+            };
+        }
+
+        public static List<ConnectionContract> ConvertConnectionListToContract(ICollection<Connection> connections) {
+            return connections.Select(connection => ConvertConnectionToContract(connection)).ToList();     
+        }
+
+        public static ConnectionContract ConvertConnectionToContract(Connection connection) {
+            return new ConnectionContract() {
+                RequestingUserId = connection.RequestingUserId,
+                RequestedUserId = connection.RequestedUserId,
+                RequestedFirstName = connection.RequestedUser.FirstName,
+                RequestedLastName = connection.RequestedUser.LastName,
+                RequestingFirstName = connection.RequestingUser.FirstName,
+                RequestingLastName = connection.RequestingUser.LastName,
+                State = connection.State
             };
         }
 
