@@ -42,20 +42,36 @@ namespace Covalence.Contracts
             };
         }
 
-        public static List<ConnectionContract> ConvertConnectionListToContract(ICollection<Connection> connections) {
-            return connections.Select(connection => ConvertConnectionToContract(connection)).ToList();     
+        public static ConnectionListContract ConvertConnectionListToContract(ICollection<Connection> connections, string userId) {
+
+            return new ConnectionListContract() {
+                PendingConnections = connections.Where(c => c.RequestedUserId == userId && c.State == ConnectionState.Pending).Select(connection => ConvertConnectionToContract(connection, false)).ToList(),
+                RequestedConnections = connections.Where(c => c.RequestingUserId == userId && c.State == ConnectionState.Pending).Select(connection => ConvertConnectionToContract(connection, true)).ToList(),
+                ActiveConnections = connections.Where(c => (c.RequestedUserId == userId || c.RequestingUserId == userId) && c.State == ConnectionState.Connected).Select(connection => ConvertConnectionToContract(connection, connection.RequestingUserId == userId)).ToList(),
+            };  
         }
 
-        public static ConnectionContract ConvertConnectionToContract(Connection connection) {
+        public static ConnectionContract ConvertConnectionToContract(Connection connection, bool isRequestingUser) {
             return new ConnectionContract() {
                 RequestingUserId = connection.RequestingUserId,
                 RequestedUserId = connection.RequestedUserId,
-                RequestedFirstName = connection.RequestedUser.FirstName,
-                RequestedLastName = connection.RequestedUser.LastName,
-                RequestingFirstName = connection.RequestingUser.FirstName,
-                RequestingLastName = connection.RequestingUser.LastName,
-                State = connection.State
+                DisplayName = ConvertConnectionDisplayName(connection, isRequestingUser)
             };
+        }
+
+        private static string ConvertConnectionDisplayName(Connection connection, bool isRequestingUser) {
+            var displayName = "";
+
+            if(isRequestingUser) 
+            {
+                displayName = $"{connection.RequestedUser.FirstName} {connection.RequestedUser.LastName}";
+            }
+            else 
+            {
+                displayName = $"{connection.RequestingUser.FirstName} {connection.RequestingUser.LastName}";
+            }
+
+            return displayName;
         }
 
         public static List<RemoteUserContract> ConvertRemoteUserListToContract(List<ApplicationUser> users)

@@ -38,7 +38,7 @@ namespace Covalence.Controllers
             }
 
             var connections = await _context.Connections.Where(x => x.RequestedUserId == user.Id || x.RequestingUserId == user.Id).Include(x => x.RequestedUser).Include(x => x.RequestingUser).ToListAsync();
-            var connectionListContract = Converters.ConvertConnectionListToContract(connections);
+            var connectionListContract = Converters.ConvertConnectionListToContract(connections, user.Id);
 
             return Ok(connectionListContract);
         }
