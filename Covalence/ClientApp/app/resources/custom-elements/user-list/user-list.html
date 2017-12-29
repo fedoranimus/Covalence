@@ -7,16 +7,12 @@
             <div class="content">
                 <div class="level">
                     <div class="level-left">
-                        <p><strong>${user.firstName} ${user.lastName}</strong> <!--<small>by ${post.author.firstName} ${post.author.lastName}</small>--></p>
+                        <p><strong>${user.firstName} ${user.lastName}</strong></p>
                     </div>
-                    <!-- <div class="level-right">
-                        <small>${post.dateModified}</small>
-                    </div> -->
                 </div> 
                 <div class="level">
                     <span>${user.bio}</span>
                 </div>
-                <!-- <div innerhtml.bind="post.content | markdown | sanitizeHTML"></div> -->
             </div>
             <div class="level">
                 <div class="level-left">
@@ -36,6 +32,9 @@
                     </div>
                     <div show.bind="user.connectionStatus == 1" class="level-item">
                         Awaiting confirmation from ${user.firstName}
+                    </div>
+                    <div show.bind="user.connectionStatus == 2" class="level-item">
+                        Connected
                     </div>
                 </div>
             </div>
