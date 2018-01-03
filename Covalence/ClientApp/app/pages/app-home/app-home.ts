@@ -1,3 +1,4 @@
+import { PagedList } from './../../services/searchService';
 import { ConnectionService, IConnectionList } from './../../services/connectionService';
 import { Router } from 'aurelia-router';
 import {AuthService} from 'aurelia-authentication';
@@ -11,7 +12,7 @@ import { SearchService } from '../../services/searchService';
 @autoinject
 export class AppHome {
     public tags: ITag[] = [];
-    users: IUser[] = [];
+    users: PagedList<IUser>;
     connections: IConnectionList;
 
     constructor(private authService: AuthService, private router: Router, private searchService: SearchService, private connectionService: ConnectionService) {

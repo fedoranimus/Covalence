@@ -1,44 +1,57 @@
-<template bindable="users">
+<template>
     <article if.bind="hasResults">
         No users available
     </article>
-    <article else class="media" repeat.for="user of users">
-        <div class="media-content">
-            <div class="content">
+    <div else>
+        <article class="media" repeat.for="user of users.items">
+            <div class="media-content">
+                <div class="content">
+                    <div class="level">
+                        <div class="level-left">
+                            <p><strong>${user.firstName} ${user.lastName}</strong></p>
+                        </div>
+                    </div> 
+                    <div class="level">
+                        <span>${user.bio}</span>
+                    </div>
+                </div>
                 <div class="level">
                     <div class="level-left">
-                        <p><strong>${user.firstName} ${user.lastName}</strong></p>
+                        <div class="level-item" repeat.for="tag of user.tags">
+                            <span class="tag">
+                                ${tag.name}
+                            </span>
+                        </div>
                     </div>
-                </div> 
-                <div class="level">
-                    <span>${user.bio}</span>
-                </div>
-            </div>
-            <div class="level">
-                <div class="level-left">
-                    <div class="level-item" repeat.for="tag of user.tags">
-                        <span class="tag">
-                            ${tag.name}
-                        </span>
-                    </div>
-                </div>
-                <div class="level-right">
-                    <div show.bind="user.connectionStatus == 4" class="level-item">
-                        <a class="button is-primary">Request Connection</a>
-                    </div>
-                    <div show.bind="user.connectionStatus == 0" class="level-item">
-                        <a class="button is-success">Confirm Connection</a>
-                        <a class="button is-danger">Reject Connection</a>
-                    </div>
-                    <div show.bind="user.connectionStatus == 1" class="level-item">
-                        Awaiting confirmation from ${user.firstName}
-                    </div>
-                    <div show.bind="user.connectionStatus == 2" class="level-item">
-                        Connected
+                    <div class="level-right">
+                        <div show.bind="user.connectionStatus == 4" class="level-item">
+                            <a class="button is-primary" click.delegate="requestConnection(user.id)">Request Connection</a>
+                        </div>
+                        <div show.bind="user.connectionStatus == 0" class="level-item">
+                            <a class="button is-success" click.delegate="confirmConnection(user.id)">Confirm Connection</a>
+                            <a class="button is-danger" click.delegate="rejectConnection(user.id)">Reject Connection</a>
+                        </div>
+                        <div show.bind="user.connectionStatus == 1" class="level-item">
+                            Awaiting confirmation from ${user.firstName}
+                            <a class="button is-warning" click.delegate="cancelConnectionRequest(user.id)">Cancel Request</a>
+                        </div>
+                        <div show.bind="user.connectionStatus == 2" class="level-item">
+                            Connected
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <hr>
-    </article>
+            <hr>
+        </article>
+        <nav class="pagination is-rounded" role="navigation" aria-label="pagination">
+            <button class="button pagination-previous" disabled.bind="!hasPreviousPage" click.delegate="previousPage()">Previous</button>
+            <button class="button pagination-next" disabled.bind="!hasNextPage" click.delegate="nextPage()">Next page</button>
+            <ul class="pagination-list">
+                <li repeat.for="i of users.totalPages"
+                    ><a class="pagination-link ${i+1 == users.pageNumber ? 'is-current' : ''}" click.delegate="navigateToPage(i+1)">${i+1}</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
 </template>

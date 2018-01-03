@@ -1,3 +1,4 @@
+import { IConnectionList } from './connectionService';
 import {inject} from 'aurelia-framework';
 import {Config} from 'aurelia-api';
 
@@ -25,6 +26,10 @@ export class ConnectionService {
 
     public blockConnection(requestingUserId: string): Promise<IConnectionList> {
         return this.config.getEndpoint('api').post("block", requestingUserId);
+    }
+
+    public cancelConnection(requestedUserId: string): Promise<IConnectionList> {
+        return this.config.getEndpoint('api').post("cancel", requestedUserId);
     }
 }
 

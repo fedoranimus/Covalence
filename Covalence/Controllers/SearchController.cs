@@ -28,8 +28,8 @@ namespace Covalence.Controllers
             _context = context;
         }
 
-        [HttpGet("list")]
-        public async Task<IActionResult> GetAll() {
+        [HttpPost("list")]
+        public async Task<IActionResult> GetAll([FromBody] int? page) {
             var currentUser = await _userManager.GetUserAsync(User);
 
             if(currentUser == null)
@@ -42,7 +42,13 @@ namespace Covalence.Controllers
             var connections = await _context.Connections.Where(x => x.RequestedUserId == currentUser.Id || x.RequestingUserId == currentUser.Id).Include(x => x.RequestedUser).Include(x => x.RequestingUser).ToListAsync();
 
             var contract = Converters.ConvertRemoteUserListToContract(currentUser, users, connections);
-            return Ok(contract);
+
+            var pageSize = 3; // TODO
+            var paginatedList = await PaginatedList<RemoteUserContract>.CreateAsync(contract, page ?? 1, pageSize);
+
+            var pagedContract = Converters.ConvertPagingListToContract(paginatedList);
+
+            return Ok(pagedContract);
         }
 
         [HttpPost]

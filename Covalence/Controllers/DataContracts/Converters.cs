@@ -120,5 +120,16 @@ namespace Covalence.Contracts
         {
             return users.Select(remoteUser => ConvertRemoteUserToContract(currentUser, remoteUser, connections)).ToList();
         }
+
+        public static PagingContract<T> ConvertPagingListToContract<T>(PaginatedList<T> items)
+        {
+            return new PagingContract<T>() {
+                Items = items.ToList(),
+                PageNumber = items.PageIndex,
+                TotalPages = items.TotalPages,
+                HasPreviousPage = items.HasPreviousPage,
+                HasNextPage = items.HasNextPage
+            };
+        }
     }
 }

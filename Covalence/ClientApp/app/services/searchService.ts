@@ -9,11 +9,19 @@ export class SearchService {
 
     }
 
-    public getResults(query: any): Promise<IResult[]> {
+    public getResults(query: any): Promise<PagedList<IUser>> {
         return this.config.getEndpoint('api').post('search', query);
     }
 
-    public getAllUsers(): Promise<IUser[]> {
-        return this.config.getEndpoint('api').find('search/list');
+    public getAllUsers(page?: number): Promise<PagedList<IUser>> {
+        return this.config.getEndpoint('api').post('search/list', page);
     }
+}
+
+export interface PagedList<T> {
+    items: T[];
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+    pageNumber: number;
+    totalPages: number;
 }
