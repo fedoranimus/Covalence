@@ -41,17 +41,17 @@ export class UserList {
 
     @computedFrom('users.totalPages')
     get middlePage() {
-        return Math.floor(this.users.totalPages / 2);
+        return Math.ceil(this.users.totalPages / 2);
     }
 
     @computedFrom('users.totalPages')
     get middlePageMinusOne() {
-        return Math.floor(this.users.totalPages / 2) - 1;
+        return Math.ceil(this.users.totalPages / 2) - 1;
     }
 
     @computedFrom('users.totalPages')
     get middlePagePlusOne() {
-        return Math.floor(this.users.totalPages / 2) + 1;
+        return Math.ceil(this.users.totalPages / 2) + 1;
     }
 
     async nextPage() {

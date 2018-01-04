@@ -43,7 +43,7 @@ namespace Covalence.Controllers
 
             var contract = Converters.ConvertRemoteUserListToContract(currentUser, users, connections);
 
-            var pageSize = 3; // TODO
+            var pageSize = 1; // TODO
             var paginatedList = await PaginatedList<RemoteUserContract>.CreateAsync(contract, page ?? 1, pageSize);
 
             var pagedContract = Converters.ConvertPagingListToContract(paginatedList);
