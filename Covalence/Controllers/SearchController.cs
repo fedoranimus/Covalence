@@ -43,7 +43,7 @@ namespace Covalence.Controllers
 
             var contract = Converters.ConvertRemoteUserListToContract(currentUser, users, connections);
 
-            var pageSize = 1; // TODO
+            var pageSize = 3; // TODO - get parameter from UI
             var paginatedList = await PaginatedList<RemoteUserContract>.CreateAsync(contract, page ?? 1, pageSize);
 
             var pagedContract = Converters.ConvertPagingListToContract(paginatedList);
@@ -89,7 +89,13 @@ namespace Covalence.Controllers
             var connections = await _context.Connections.Where(x => x.RequestedUserId == currentUser.Id || x.RequestingUserId == currentUser.Id).Include(x => x.RequestedUser).Include(x => x.RequestingUser).ToListAsync();
 
             var contract = Converters.ConvertRemoteUserListToContract(currentUser, sortedUsers, connections);
-            return Ok(contract);
+
+            var pageSize = 3; // TODO - get parameter from UI
+            var paginatedList = await PaginatedList<RemoteUserContract>.CreateAsync(contract, model.Page ?? 1, pageSize);
+
+            var pagedContract = Converters.ConvertPagingListToContract(paginatedList);
+
+            return Ok(pagedContract);
         }
     }
 }

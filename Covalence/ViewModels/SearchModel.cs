@@ -7,6 +7,7 @@ namespace Covalence.ViewModels
     {
         [Display(Name = "Tags")]
         public List<string> Tags { get; set; }
+        public int? Page { get; set; }
         //TODO: Add Location
     }
 }

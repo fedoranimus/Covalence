@@ -51,7 +51,8 @@
             <button class="button pagination-previous" disabled.bind="!hasPreviousPage" click.delegate="previousPage()">Previous Page</button>
             <button class="button pagination-next" disabled.bind="!hasNextPage" click.delegate="nextPage()">Next page</button>
             <ul class="pagination-list">
-                <li>
+                Page ${users.pageNumber} of ${users.totalPages}
+                <!-- <li>
                     <a class="pagination-link ${users.pageNumber === 1 ? 'is-current' : ''}" click.delegate="navigateToPage(1)">1</a>
                 </li>
                 <li if.bind="users.totalPages >= 7"><span class="pagination-ellipsis">&hellip;</span></li>
@@ -67,7 +68,7 @@
                 <li if.bind="users.totalPages >= 7"><span class="pagination-ellipsis">&hellip;</span></li>
                 <li>
                     <a class="pagination-link ${users.pageNumber === users.totalPages ? 'is-current' : ''}" click.delegate="navigateToPage(users.totalPages)">${users.totalPages}</a>
-                </li>
+                </li> -->
             </ul>
         </nav>
     </div>
