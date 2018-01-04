@@ -1,8 +1,12 @@
 <template>
-    <article if.bind="hasResults">
-        No users available
-    </article>
-    <div else>
+    <div if.bind="!hasResults" class="level">
+        <div class="level-item">
+            <p class="subtitle">
+                No users available
+            </p>
+        </div>
+    </div>
+    <div else class="au-animate">
         <article class="media" repeat.for="user of users.items">
             <div class="media-content">
                 <div class="content">
@@ -44,14 +48,27 @@
             <hr>
         </article>
         <nav class="pagination is-rounded" role="navigation" aria-label="pagination">
-            <button class="button pagination-previous" disabled.bind="!hasPreviousPage" click.delegate="previousPage()">Previous</button>
+            <button class="button pagination-previous" disabled.bind="!hasPreviousPage" click.delegate="previousPage()">Previous Page</button>
             <button class="button pagination-next" disabled.bind="!hasNextPage" click.delegate="nextPage()">Next page</button>
             <ul class="pagination-list">
-                <li repeat.for="i of users.totalPages"
-                    ><a class="pagination-link ${i+1 == users.pageNumber ? 'is-current' : ''}" click.delegate="navigateToPage(i+1)">${i+1}</a>
+                <li>
+                    <a class="pagination-link ${users.pageNumber === 1 ? 'is-current' : ''}" click.delegate="navigateToPage(1)">1</a>
+                </li>
+                <li if.bind="users.totalPages > 7"><span class="pagination-ellipsis">&hellip;</span></li>
+                <li if.bind="users.totalPages > 5">
+                    <a class="pagination-link ${users.pageNumber === middlePageMinusOne ? 'is-current' : ''}" click.delegate="navigateToPage(middlePageMinusOne)">${middlePageMinusOne}</a>
+                </li>
+                <li if.bind="users.totalPages > 5">
+                    <a class="pagination-link ${users.pageNumber === middlePage ? 'is-current' : ''}" click.delegate="navigateToPage(middlePage)">${middlePage}</a>
+                </li>
+                <li if.bind="users.totalPages > 5">
+                    <a class="pagination-link ${users.pageNumber === middlePagePlusOne ? 'is-current' : ''}" click.delegate="navigateToPage(middlePagePlusOne)">${middlePagePlusOne}</a>
+                </li>
+                <li if.bind="users.totalPages > 7"><span class="pagination-ellipsis">&hellip;</span></li>
+                <li>
+                    <a class="pagination-link ${users.pageNumber === users.totalPages ? 'is-current' : ''}" click.delegate="navigateToPage(users.totalPages)">${users.totalPages}</a>
                 </li>
             </ul>
         </nav>
     </div>
-
 </template>

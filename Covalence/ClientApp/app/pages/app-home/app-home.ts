@@ -12,7 +12,6 @@ import { SearchService } from '../../services/searchService';
 @autoinject
 export class AppHome {
     public tags: ITag[] = [];
-    users: PagedList<IUser>;
     connections: IConnectionList;
 
     constructor(private authService: AuthService, private router: Router, private searchService: SearchService, private connectionService: ConnectionService) {
@@ -27,19 +26,6 @@ export class AppHome {
                 this.connections = await this.connectionService.getConnections();
                 this.tags = user.tags;
                 console.debug("Authenticated", user, this.connections);
-
-                this.getResults();
-            } catch(e) {
-                console.error(e);
-            }
-        }
-    }
-
-    private async getResults() {
-        if(this.authenticated) {
-            try {
-                this.users = await this.searchService.getAllUsers();
-                console.debug("AppHome", this.users);
             } catch(e) {
                 console.error(e);
             }

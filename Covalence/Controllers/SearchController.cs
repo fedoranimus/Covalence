@@ -28,8 +28,8 @@ namespace Covalence.Controllers
             _context = context;
         }
 
-        [HttpPost("list")]
-        public async Task<IActionResult> GetAll([FromBody] int? page) {
+        [HttpPost("list/{page?}")]
+        public async Task<IActionResult> GetAll(int? page) {
             var currentUser = await _userManager.GetUserAsync(User);
 
             if(currentUser == null)

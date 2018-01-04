@@ -11,6 +11,10 @@ module.exports = (env) => {
         resolve: {
             extensions: ['.ts', '.js'],
             modules: ['ClientApp', 'node_modules'],
+            alias: {
+                services: path.resolve(__dirname, 'ClientApp/app/services'),
+                infrastructure: path.resolve(__dirname, 'ClientApp/app/infrastructure')
+            }
         },
         output: {
             path: path.resolve(bundleOutputDir),
