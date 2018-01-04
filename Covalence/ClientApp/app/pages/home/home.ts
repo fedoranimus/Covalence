@@ -1,5 +1,5 @@
 import {autoinject, computedFrom, bindable} from 'aurelia-framework';
-import {TagService} from '../../services/tagService';
+import {TagService} from 'services/tagService';
 import {Router} from 'aurelia-router';
 import {AuthService} from 'aurelia-authentication';
 

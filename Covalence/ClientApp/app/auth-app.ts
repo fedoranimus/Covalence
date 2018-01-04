@@ -1,5 +1,5 @@
-import { IUser } from './infrastructure/user';
-import { UserService } from './services/userService';
+import { IUser } from 'infrastructure/user';
+import { UserService } from 'services/userService';
 import { autoinject, useView, Aurelia, PLATFORM } from 'aurelia-framework';
 import { Router, RouterConfiguration, NavigationInstruction, Next, Redirect, RedirectToRoute } from 'aurelia-router';
 import { AuthenticateStep, AuthService } from 'aurelia-authentication';

@@ -2,7 +2,7 @@ import { PagedList, SearchService } from 'services/searchService';
 import { computedFrom } from 'aurelia-binding';
 import { ConnectionService } from 'services/connectionService';
 import { bindable, autoinject } from "aurelia-framework";
-import { IUser } from "../../../infrastructure/user";
+import { IUser } from "infrastructure/user";
 
 @autoinject
 export class UserList {

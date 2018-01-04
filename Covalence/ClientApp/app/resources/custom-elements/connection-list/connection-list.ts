@@ -1,5 +1,5 @@
 import { bindable } from 'aurelia-framework';
-import { IConnectionList } from './../../../services/connectionService';
+import { IConnectionList } from 'services/connectionService';
 export class ConnectionList {
 
     @bindable connections: IConnectionList;

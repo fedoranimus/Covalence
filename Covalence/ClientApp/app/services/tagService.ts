@@ -1,6 +1,6 @@
 import {inject} from 'aurelia-framework';
 import {Config} from 'aurelia-api';
-import {ITag} from '../infrastructure/tag';
+import {ITag} from 'infrastructure/tag';
 
 @inject(Config)
 export class TagService {

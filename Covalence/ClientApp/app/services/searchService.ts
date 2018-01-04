@@ -1,7 +1,7 @@
 import { inject, autoinject } from 'aurelia-framework';
 import { Config } from 'aurelia-api';
-import { Result, IResult } from '../infrastructure/result';
-import { IUser } from '../infrastructure/user';
+import { Result, IResult } from 'infrastructure/result';
+import { IUser } from 'infrastructure/user';
 
 @autoinject
 export class SearchService {

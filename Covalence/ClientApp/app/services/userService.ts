@@ -1,6 +1,6 @@
 import {autoinject} from 'aurelia-framework';
 import {Config} from 'aurelia-api';
-import {ITag} from '../infrastructure/tag';
+import {ITag} from 'infrastructure/tag';
 import {IUser, IUserViewModel} from '../infrastructure/user';
 import { AuthService } from 'aurelia-authentication';
 

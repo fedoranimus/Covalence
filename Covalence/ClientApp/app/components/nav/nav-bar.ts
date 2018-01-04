@@ -1,8 +1,8 @@
 import {computedFrom} from 'aurelia-binding';
 import { bindable, autoinject, BindingEngine, PLATFORM, Aurelia } from 'aurelia-framework';
 import {AuthService} from 'aurelia-authentication';
-import { UserService } from '../../services/userService';
-import { IUser } from '../../infrastructure/user';
+import { UserService } from 'services/userService';
+import { IUser } from 'infrastructure/user';
 
 
 @autoinject

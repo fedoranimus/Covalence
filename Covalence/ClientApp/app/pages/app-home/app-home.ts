@@ -1,13 +1,13 @@
-import { PagedList } from './../../services/searchService';
-import { ConnectionService, IConnectionList } from './../../services/connectionService';
+import { PagedList } from 'services/searchService';
+import { ConnectionService, IConnectionList } from 'services/connectionService';
 import { Router } from 'aurelia-router';
 import {AuthService} from 'aurelia-authentication';
 import {autoinject, computedFrom} from 'aurelia-framework';
-import { PostService } from '../../services/postService';
-import { ITag } from '../../infrastructure/tag';
-import { IPost } from '../../infrastructure/post'; 
-import { IUser } from '../../infrastructure/user';
-import { SearchService } from '../../services/searchService';
+import { PostService } from 'services/postService';
+import { ITag } from 'infrastructure/tag';
+import { IPost } from 'infrastructure/post'; 
+import { IUser } from 'infrastructure/user';
+import { SearchService } from 'services/searchService';
 
 @autoinject
 export class AppHome {

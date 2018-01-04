@@ -1,8 +1,8 @@
 import { autoinject, bindable, computedFrom } from 'aurelia-framework';
 import { AuthService } from 'aurelia-authentication';
 import { ValidationControllerFactory, ValidationController, Validator, validateTrigger, ValidationRules, ValidateResult } from 'aurelia-validation';
-import { IUser} from '../../infrastructure/user';
-import { UserService } from '../../services/userService';
+import { IUser} from 'infrastructure/user';
+import { UserService } from 'services/userService';
 
 
 @autoinject

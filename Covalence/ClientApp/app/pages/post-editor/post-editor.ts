@@ -1,9 +1,9 @@
 import { bindable, autoinject } from 'aurelia-framework';
-import { PostService } from '../../services/postService';
-import { PostType } from '../../infrastructure/post';
+import { PostService } from 'services/postService';
+import { PostType } from 'infrastructure/post';
 import { Router } from 'aurelia-router';
-import { ITag } from "../../infrastructure/tag";
-import { TagService } from "../../services/tagService";
+import { ITag } from "infrastructure/tag";
+import { TagService } from "services/tagService";
 
 @autoinject
 export class Post {

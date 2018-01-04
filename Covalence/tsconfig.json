@@ -10,7 +10,8 @@
     "types": [ "node" ],
     "baseUrl": "./ClientApp/app/",
     "paths": {
-      "services": ["services"]
+      "services": ["services"],
+      "infrastructure": ["infrastructure"]
     }
   },
   "exclude": [ "bin", "node_modules" ],

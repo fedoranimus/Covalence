@@ -1,4 +1,4 @@
-import { IPost, PostType } from '../infrastructure/post';
+import { IPost, PostType } from 'infrastructure/post';
 import { autoinject } from 'aurelia-framework';
 import { Config } from 'aurelia-api';
 

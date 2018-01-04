@@ -1,8 +1,8 @@
 import {computedFrom} from 'aurelia-binding';
 import { autoinject, bindable } from 'aurelia-framework';
-import { TagService } from '../../../services/tagService';
-import { UserService } from '../../../services/userService';
-import { ITag } from '../../../infrastructure/tag';
+import { TagService } from 'services/tagService';
+import { UserService } from 'services/userService';
+import { ITag } from 'infrastructure/tag';
 
 @autoinject
 export class TagList {

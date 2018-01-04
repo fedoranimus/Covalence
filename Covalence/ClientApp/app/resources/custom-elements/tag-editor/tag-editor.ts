@@ -1,8 +1,8 @@
 import { computedFrom } from 'aurelia-binding';
 import { autoinject, bindable, customElement } from 'aurelia-framework';
-import { ITag } from '../../../infrastructure/tag';
+import { ITag } from 'infrastructure/tag';
 import { DOM } from 'aurelia-pal';
-import { TagService } from "../../../services/tagService";
+import { TagService } from "services/tagService";
 
 @autoinject
 @customElement('tag-editor')

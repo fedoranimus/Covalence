@@ -1,7 +1,7 @@
 import { AuthService } from 'aurelia-authentication';
 import { inject, computedFrom, autoinject, PLATFORM, Aurelia } from 'aurelia-framework';
-import { IUser } from '../../infrastructure/user';
-import { UserService } from '../../services/userService';
+import { IUser } from 'infrastructure/user';
+import { UserService } from 'services/userService';
 import { Router, RouterConfiguration } from 'aurelia-router';
 import { ErrorHandler } from '../../utils/errorHandler';
 import { ValidationController, ValidationControllerFactory, Validator, ValidationRules, validateTrigger } from 'aurelia-validation';
