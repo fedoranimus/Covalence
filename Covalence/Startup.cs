@@ -59,6 +59,7 @@ namespace Covalence
             services.AddTransient<IEmailSender, EmailSender>();
 
             // Add framework services.
+            services.AddMemoryCache();
             services.AddMvc();
                 
             services.Configure<AuthMessageSenderOptions>(Configuration);

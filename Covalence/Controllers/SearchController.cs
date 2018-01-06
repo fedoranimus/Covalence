@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Covalence.ViewModels;
+using Microsoft.Extensions.Caching.Memory;
+using System;
 
 namespace Covalence.Controllers
 {
@@ -20,12 +22,14 @@ namespace Covalence.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITagService _tagService;
         private readonly ApplicationDbContext _context;
+        private readonly IMemoryCache _cache;
 
-        public SearchController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, ITagService tagService, ILogger<UserController> logger) {
+        public SearchController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, ITagService tagService, ILogger<UserController> logger, IMemoryCache memoryCache) {
             _userManager = userManager;
             _tagService = tagService;
             _logger = logger;
             _context = context;
+            _cache = memoryCache;
         }
 
         [HttpPost("list/{page?}")]
@@ -38,8 +42,11 @@ namespace Covalence.Controllers
                 return BadRequest();
             }
 
-            var users = await _context.Users.Where(u => u.Id != currentUser.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).ToListAsync();
-            var connections = await _context.Connections.Where(x => x.RequestedUserId == currentUser.Id || x.RequestingUserId == currentUser.Id).Include(x => x.RequestedUser).Include(x => x.RequestingUser).ToListAsync();
+            var users = await CacheTryGetUsersAsync();            
+            users = users.Where(u => u.Id != currentUser.Id).ToList();
+            
+            var connections = await CacheTryGetConnectionsAsync();
+            connections = connections.Where(x => x.RequestedUserId == currentUser.Id || x.RequestingUserId == currentUser.Id).ToList();
 
             var contract = Converters.ConvertRemoteUserListToContract(currentUser, users, connections);
 
@@ -66,10 +73,9 @@ namespace Covalence.Controllers
                 return BadRequest();
             }
 
-            var users = await _context.Users.Where(u => u.Id != currentUser.Id)
-                                            .Include(x => x.Tags)
-                                            .ThenInclude(ut => ut.Tag)
-                                            .ToListAsync();
+            var users = await CacheTryGetUsersAsync();
+
+            users = users.Where(u => u.Id != currentUser.Id).ToList();
 
             var tagCounts = new Dictionary<ApplicationUser, int>();
 
@@ -86,7 +92,8 @@ namespace Covalence.Controllers
                                         .Select(x => x.Key)
                                         .ToList();
 
-            var connections = await _context.Connections.Where(x => x.RequestedUserId == currentUser.Id || x.RequestingUserId == currentUser.Id).Include(x => x.RequestedUser).Include(x => x.RequestingUser).ToListAsync();
+            var connections = await CacheTryGetConnectionsAsync();
+            connections = connections.Where(x => x.RequestedUserId == currentUser.Id || x.RequestingUserId == currentUser.Id).ToList();
 
             var contract = Converters.ConvertRemoteUserListToContract(currentUser, sortedUsers, connections);
 
@@ -96,6 +103,38 @@ namespace Covalence.Controllers
             var pagedContract = Converters.ConvertPagingListToContract(paginatedList);
 
             return Ok(pagedContract);
+        }
+
+        private async Task<List<ApplicationUser>> CacheTryGetUsersAsync() {
+            List<ApplicationUser> users;
+            
+            if(!_cache.TryGetValue(CacheKeys.Users, out users))
+            {
+                users = await _context.Users.Include(x => x.Tags).ThenInclude(ut => ut.Tag).ToListAsync();
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(5));
+
+                _cache.Set(CacheKeys.Users, users, cacheEntryOptions);
+            }
+
+            return users;
+        }
+
+        private async Task<List<Connection>> CacheTryGetConnectionsAsync() {
+            List<Connection> connections;
+
+            if(!_cache.TryGetValue(CacheKeys.Connections, out connections))
+            {
+                connections = await _context.Connections.Include(x => x.RequestedUser).Include(x => x.RequestingUser).ToListAsync();
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(5));
+
+                _cache.Set(CacheKeys.Connections, connections, cacheEntryOptions);
+            }
+
+            return connections;
         }
     }
 }
