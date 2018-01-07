@@ -13,7 +13,8 @@ module.exports = (env) => {
             modules: ['ClientApp', 'node_modules'],
             alias: {
                 services: path.resolve(__dirname, 'ClientApp/app/services'),
-                infrastructure: path.resolve(__dirname, 'ClientApp/app/infrastructure')
+                infrastructure: path.resolve(__dirname, 'ClientApp/app/infrastructure'),
+                store: path.resolve(__dirname, 'ClientApp/app/store')
             }
         },
         output: {

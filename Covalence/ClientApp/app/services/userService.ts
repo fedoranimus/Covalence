@@ -3,39 +3,17 @@ import {Config} from 'aurelia-api';
 import {ITag} from 'infrastructure/tag';
 import {IUser, IUserViewModel} from '../infrastructure/user';
 import { AuthService } from 'aurelia-authentication';
+import { State } from 'store/state';
+import { Store } from 'aurelia-store';
 
 @autoinject
 export class UserService {
-    private _userStore: IUser|null = null;
+    private currentUser: IUser | null;
 
-    constructor(private config: Config, private authService: AuthService) {
-        if(authService.isAuthenticated()) {
-            let user = JSON.parse(localStorage.getItem('user'));
-            if(!user) {
-                authService.getMe().then(currentUser => {
-                    localStorage.setItem('user', JSON.stringify(currentUser));
-                    this._userStore = currentUser;
-                }); 
-            } else {
-                this._userStore = user;
-            }
-        }     
-    }
-
-    get currentUser() {
-        if(this._userStore == null)
-            this._userStore = JSON.parse(localStorage.getItem('user'));
-            
-        return this._userStore;
-    }
-
-    set currentUser(user: IUser) {
-        if(!user)
-            localStorage.removeItem('user')
-        else 
-            localStorage.setItem('user', JSON.stringify(user));
-        
-        this._userStore = user;
+    constructor(private config: Config, private authService: AuthService, private store: Store<State>) {
+        store.state.subscribe(state => {
+            this.currentUser = state.user;
+        });
     }
 
     public getUser(userId: string): Promise<IUser> {
@@ -53,7 +31,7 @@ export class UserService {
     }
 
     private async updateCurrentUserTags(user: Promise<IUser>) {
-        this.currentUser = await user;
+
     }
 
     public forgotPassword(email: string) {

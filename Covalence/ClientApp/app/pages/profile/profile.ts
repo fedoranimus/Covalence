@@ -3,6 +3,8 @@ import { AuthService } from 'aurelia-authentication';
 import { ValidationControllerFactory, ValidationController, Validator, validateTrigger, ValidationRules, ValidateResult } from 'aurelia-validation';
 import { IUser} from 'infrastructure/user';
 import { UserService } from 'services/userService';
+import { State } from 'store/state';
+import { Store } from 'aurelia-store';
 
 
 @autoinject
@@ -14,15 +16,16 @@ export class Profile {
 
     canSave: boolean = false;
 
-    constructor(private auth: AuthService, private userService: UserService, private validator: Validator, controllerFactory: ValidationControllerFactory) {
+    constructor(private auth: AuthService, private userService: UserService, private validator: Validator, controllerFactory: ValidationControllerFactory, private store: Store<State>) {
         this.controller = controllerFactory.createForCurrentScope();
         this.controller.validateTrigger = validateTrigger.changeOrBlur;
         this.controller.subscribe(event => this.validateForm());
+        store.state.subscribe(state => {
+            this.profile = state.user;
+        });
     }
 
     activate() {
-        this.profile = this.userService.currentUser;
-
         this.setupValidationRules();
     }
 

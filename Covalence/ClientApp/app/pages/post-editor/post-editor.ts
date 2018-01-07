@@ -4,6 +4,8 @@ import { PostType } from 'infrastructure/post';
 import { Router } from 'aurelia-router';
 import { ITag } from "infrastructure/tag";
 import { TagService } from "services/tagService";
+import { Store } from 'aurelia-store';
+import { State } from 'store/state';
 
 @autoinject
 export class Post {
@@ -17,8 +19,10 @@ export class Post {
     @bindable suggestedTags: ITag[] = [];
 
     errorState = null;
-    constructor(private postService: PostService, private router: Router, private tagService: TagService) {
-
+    constructor(private postService: PostService, private router: Router, private tagService: TagService, private store: Store<State>) {
+        store.state.subscribe(state => {
+            
+        });
     }
 
     activate(params) {

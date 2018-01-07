@@ -3,14 +3,32 @@ import { UserService } from 'services/userService';
 import { autoinject, useView, Aurelia, PLATFORM } from 'aurelia-framework';
 import { Router, RouterConfiguration, NavigationInstruction, Next, Redirect, RedirectToRoute } from 'aurelia-router';
 import { AuthenticateStep, AuthService } from 'aurelia-authentication';
+import { Store } from 'aurelia-store';
+import { State } from 'store/state';
+import { loadConnections, acceptConnection, updateConnection } from 'store/connectionActions';
+import { getAll, search, navigateToPage } from 'store/searchActions';
+import { getCurrentUser } from 'store/userActions';
 
 @useView('./app.html')
 @autoinject
 export class AuthApp {
     router: Router;
     
-    constructor(private authService: AuthService) {
+    constructor(private authService: AuthService, private store: Store<State>) {
+        this.registerActions();
+    }
 
+    async bind() {
+        // TODO - refresh logged in user
+    }
+
+    private registerActions() {
+        this.store.registerAction(loadConnections.name, loadConnections);
+        this.store.registerAction(updateConnection.name, updateConnection);
+        this.store.registerAction(getAll.name, getAll);
+        this.store.registerAction(search.name, search);
+        this.store.registerAction(navigateToPage.name, navigateToPage);
+        this.store.registerAction(getCurrentUser.name, getCurrentUser);
     }
 
     configureRouter(config: RouterConfiguration, router: Router) {
@@ -30,17 +48,18 @@ export class AuthApp {
 
 @autoinject
 export class CheckOnboarding {
-
-    constructor(private userService: UserService) {
-
+    private currentUser: IUser | null = null;
+    constructor(private store:Store<State>) {
+        store.state.subscribe(state => {
+            this.currentUser = state.user;
+        });
     }
 
     run(navigationInstruction: NavigationInstruction, next: Next): Promise<any> {
-        const user = this.userService.currentUser;
-        if(!user || navigationInstruction.config.route === 'onboard')
+        if(!this.currentUser || navigationInstruction.config.route === 'onboard')
             return next();
 
-        if(user.needsOnboarding)
+        if(this.currentUser.needsOnboarding)
             return next.cancel(new RedirectToRoute('onboard'));  
         else 
             return next();

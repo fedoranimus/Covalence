@@ -113,6 +113,8 @@ namespace Covalence
             services.AddAuthentication()
                     .AddOAuthValidation();
 
+            services.AddScoped<ICache, Cache>();
+
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<IConnectionService, ConnectionService>();
             

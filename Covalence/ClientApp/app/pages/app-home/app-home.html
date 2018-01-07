@@ -2,10 +2,10 @@
     <div class="container">
         <div class="columns">
             <div class="column is-two-thirds">
-                <user-list></user-list>
+                <user-list results.bind="state.results"></user-list>
             </div>
             <div class="column">
-                <connection-list connections.bind="connections"></connection-list>
+                <connection-list connections.bind="state.connections"></connection-list>
             </div>
         </div>
     </div>

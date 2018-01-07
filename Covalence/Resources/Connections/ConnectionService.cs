@@ -8,9 +8,10 @@ using System;
 namespace Covalence
 {
     public interface IConnectionService {
-        Task RequestConnection(ApplicationUser RequestingUser, ApplicationUser RequestedUser);
-        Task AcceptConnection(string RequestingUserId, string RequestedUserId);
-        Task RejectConnection(string requestingUserId, string requestedUserId);
+        Task RequestConnectionAsync(ApplicationUser RequestingUser, ApplicationUser RequestedUser);
+        Task AcceptConnectionAsync(string RequestingUserId, string RequestedUserId);
+        Task RejectConnectionAsync(string requestingUserId, string requestedUserId);
+        Task<List<Connection>> GetConnectionsForUserAsync(string userId);
     }
 
     public class ConnectionService : IConnectionService {
@@ -22,7 +23,7 @@ namespace Covalence
             _logger = loggerFactory.CreateLogger<ConnectionService>();
         }
 
-        public async Task RequestConnection(ApplicationUser requestingUser, ApplicationUser requestedUser) {
+        public async Task RequestConnectionAsync(ApplicationUser requestingUser, ApplicationUser requestedUser) { //TODO - Ensure the connection doesn't exist yet
             var connection = new Connection() {
                 RequestedUser = requestedUser,
                 RequestedUserId = requestedUser.Id,
@@ -35,18 +36,23 @@ namespace Covalence
             await _context.SaveChangesAsync();
         }
 
-        public async Task AcceptConnection(string requestingUserId, string requestedUserId) {
+        public async Task AcceptConnectionAsync(string requestingUserId, string requestedUserId) { // TODO - Ensure connection exists
             var connection = await _context.Connections.FindAsync(requestingUserId, requestedUserId);
             connection.State = ConnectionState.Connected;
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task RejectConnection(string requestingUserId, string requestedUserId) {
+        public async Task RejectConnectionAsync(string requestingUserId, string requestedUserId) { // TODO - Ensure connection exists
             var connection = await _context.Connections.FindAsync(requestingUserId, requestedUserId);
             _context.Connections.Remove(connection);
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<Connection>> GetConnectionsForUserAsync(string userId) {
+            var connections = await _context.Connections.Where(x => x.RequestedUserId == userId || x.RequestingUserId == userId).Include(x => x.RequestedUser).Include(x => x.RequestingUser).ToListAsync();
+            return connections;
         }
     }
 }

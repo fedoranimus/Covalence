@@ -34,10 +34,12 @@ module.exports = ({ prod } = {}) => {
                 'aurelia-api',
                 'aurelia-authentication',
                 'aurelia-validation',
+                'aurelia-store',
                 'bulma/css/bulma.css',
                 "font-awesome/css/font-awesome.css",
                 'markdown-it',
-                'markdown-it-katex'
+                'markdown-it-katex',
+                'rxjs'
             ],
         },
         output: {

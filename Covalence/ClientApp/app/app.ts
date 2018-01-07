@@ -1,13 +1,20 @@
 import {autoinject, Aurelia, PLATFORM} from 'aurelia-framework';
 import {Router, RouterConfiguration} from 'aurelia-router';
 import {AuthenticateStep, AuthService} from 'aurelia-authentication';
+import { Store } from 'aurelia-store';
+import { State } from 'store/state';
+import { getCurrentUser } from 'store/userActions';
 
 @autoinject
 export class App {
   router: Router;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private store: Store<State>) {
+    this.registerActions();
+  }
 
+  private registerActions() {
+    this.store.registerAction(getCurrentUser.name, getCurrentUser);
   }
 
   configureRouter(config: RouterConfiguration, router: Router) {

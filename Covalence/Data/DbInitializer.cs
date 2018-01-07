@@ -142,10 +142,10 @@ namespace Covalence.Data
 
             await context.SaveChangesAsync();
 
-            await connectionService.RequestConnection(meiUser, testUser);
-            await connectionService.RequestConnection(testUser, mccreeUser);
-            await connectionService.AcceptConnection(meiUser.Id, testUser.Id);
-            await connectionService.RequestConnection(genjiUser, testUser);
+            await connectionService.RequestConnectionAsync(meiUser, testUser);
+            await connectionService.RequestConnectionAsync(testUser, mccreeUser);
+            await connectionService.AcceptConnectionAsync(meiUser.Id, testUser.Id);
+            await connectionService.RequestConnectionAsync(genjiUser, testUser);
 
             await context.SaveChangesAsync();
         }

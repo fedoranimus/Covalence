@@ -3,6 +3,7 @@ import { Aurelia, PLATFORM } from 'aurelia-framework'
 import authConfig from './app/authConfig';
 import { AuthService } from 'aurelia-authentication';
 import 'bulma/css/bulma.css';
+import { initialState } from 'store/state';
 declare const IS_DEV_BUILD: boolean; // The value is supplied by Webpack during the build
 
 export function configure(aurelia: Aurelia) {
@@ -27,7 +28,8 @@ export function configure(aurelia: Aurelia) {
     .plugin(PLATFORM.moduleName('aurelia-authentication'), baseConfig => {
       baseConfig.configure(authConfig);
     })
-    .plugin(PLATFORM.moduleName('aurelia-validation'));
+    .plugin(PLATFORM.moduleName('aurelia-validation'))
+    .plugin(PLATFORM.moduleName('aurelia-store'), { initialState });
     // .plugin('aurelia-google-maps', config => {
     //   config.options({
     //     apiKey: 'AIzaSyCEeOKnNEsBO4T4Nm-54p_l4hOaGAx7U_c',

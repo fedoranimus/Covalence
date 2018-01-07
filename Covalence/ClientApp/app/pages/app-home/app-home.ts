@@ -8,32 +8,44 @@ import { ITag } from 'infrastructure/tag';
 import { IPost } from 'infrastructure/post'; 
 import { IUser } from 'infrastructure/user';
 import { SearchService } from 'services/searchService';
+import { Store } from 'aurelia-store';
+import { State } from 'store/state';
+import { getCurrentUser } from 'store/userActions';
 
 @autoinject
 export class AppHome {
-    public tags: ITag[] = [];
-    connections: IConnectionList;
+    private state: State;
+    // TODO - create subscription array 
 
-    constructor(private authService: AuthService, private router: Router, private searchService: SearchService, private connectionService: ConnectionService) {
-        
+    constructor(private authService: AuthService, private router: Router, private searchService: SearchService, private connectionService: ConnectionService, private store: Store<State>) {
+        store.state.subscribe(state => {
+            this.state = state;
+            console.log("app-home", state);
+        });
     }
 
-    async bind() {
-        if(this.authenticated) { //check if user is logged in
-            try {
-                let user = await this.authService.getMe();
-
-                this.connections = await this.connectionService.getConnections();
-                this.tags = user.tags;
-                console.debug("Authenticated", user, this.connections);
-            } catch(e) {
-                console.error(e);
-            }
+    async created() {
+        if(this.authenticated) {
+            this.store.dispatch(getCurrentUser, () => this.authService.getMe());
         }
     }
+
+    // async bind() {
+    //     if(this.authenticated) { //check if user is logged in
+    //         try {
+    //             let user = await this.authService.getMe();
+    //         } catch(e) {
+    //             console.error(e);
+    //         }
+    //     }
+    // }
 
     @computedFrom('authService.authenticated')
     get authenticated() {
         return this.authService.authenticated;
+    }
+
+    deactivate() {
+        //this.subscriptions.foreach(sub => sub.unsubscribe()):
     }
 }

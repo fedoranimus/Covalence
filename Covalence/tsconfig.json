@@ -11,7 +11,8 @@
     "baseUrl": "./ClientApp/app/",
     "paths": {
       "services": ["services"],
-      "infrastructure": ["infrastructure"]
+      "infrastructure": ["infrastructure"],
+      "store": ["store"]
     }
   },
   "exclude": [ "bin", "node_modules" ],

@@ -3,18 +3,19 @@ import { bindable, autoinject, BindingEngine, PLATFORM, Aurelia } from 'aurelia-
 import {AuthService} from 'aurelia-authentication';
 import { UserService } from 'services/userService';
 import { IUser } from 'infrastructure/user';
+import { State } from 'store/state';
+import { Store } from 'aurelia-store';
 
 
 @autoinject
 export class NavBar {
     @bindable router = null;
-    //subscription: any = {};
-    private profile: IUser = null;
+    private state: State;
 
-    constructor(private auth: AuthService, private bindingEngine: BindingEngine, private userService: UserService, private app: Aurelia) {
-        if(this.isAuthenticated) {
-            this.profile = this.userService.currentUser;
-        }
+    constructor(private auth: AuthService, private bindingEngine: BindingEngine, private userService: UserService, private app: Aurelia, private store: Store<State>) {
+        store.state.subscribe(state => {
+            this.state = state;
+        });
         //this._isAuthenticated = this.auth.isAuthenticated();
         // this.subscription = this.bindingEngine.propertyObserver(this, 'isAuthenticated')
         //     .subscribe((newValue, oldValue) => {
@@ -26,26 +27,18 @@ export class NavBar {
         //     });
     }
 
-    bind() {
-        
-    }
 
-    attached() {
-
-    }
-
-
-    @computedFrom('profile.firstName')
+    @computedFrom('state.user.firstName', 'state.user.lastName')
     get hasDisplayName() {
-        if(this.auth.authenticated && this.profile && this.profile.firstName && this.profile.lastName)
+        if(this.auth.authenticated && this.state.user && this.state.user.firstName && this.state.user.lastName)
             return true;
         
         return false;
     }
 
-    @computedFrom('profile.emailConfirmed')
+    @computedFrom('state.user.emailConfirmed')
     get emailConfirmed() {
-        if(this.auth.authenticated && this.profile && !this.profile.emailConfirmed)
+        if(this.auth.authenticated && this.state.user && !this.state.user.emailConfirmed)
             return false;
 
         return true;
@@ -57,7 +50,6 @@ export class NavBar {
     }
 
     logout() {
-        this.userService.currentUser = null;
         this.auth.logout();
 
         this.router.navigate('/', { replace: true, trigger: false });
@@ -68,6 +60,7 @@ export class NavBar {
     }
 
     deactivate() {
+        
         //this.subscription.dispose();
     }
 

@@ -5,6 +5,9 @@ import { UserService } from 'services/userService';
 import { Router, RouterConfiguration } from 'aurelia-router';
 import { ErrorHandler } from '../../utils/errorHandler';
 import { ValidationController, ValidationControllerFactory, Validator, ValidationRules, validateTrigger } from 'aurelia-validation';
+import { Store } from 'aurelia-store';
+import { State } from 'store/state';
+import { getCurrentUser } from 'store/userActions';
 
 
 @autoinject
@@ -25,7 +28,8 @@ export class Login {
                 private app: Aurelia, 
                 private router: Router, 
                 private validator: Validator, 
-                private controllerFactory: ValidationControllerFactory) 
+                private controllerFactory: ValidationControllerFactory,
+                private store: Store<State>) 
     {
         this.controller = controllerFactory.createForCurrentScope(validator);
         this.controller.validateTrigger = validateTrigger.changeOrBlur;
@@ -59,8 +63,9 @@ export class Login {
         try {
             const token = await this.authService.login(credentials);
             if(token) {
-                const user = await this.authService.getMe();
-                this.userService.currentUser = user;
+                // const user = await this.authService.getMe();
+                // this.userService.currentUser = user;
+                this.store.dispatch(getCurrentUser, () => this.authService.getMe());
 
                 this.router.navigate('/', { replace: true, trigger: false });
                     

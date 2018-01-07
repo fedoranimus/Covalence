@@ -7,7 +7,7 @@
         </div>
     </div>
     <div else class="au-animate">
-        <article class="media" repeat.for="user of users.items">
+        <article class="media" repeat.for="user of results.items">
             <div class="media-content">
                 <div class="content">
                     <div class="level">
@@ -31,11 +31,11 @@
                         <div show.bind="user.connectionStatus == 4" class="level-item">
                             <a class="button is-primary" click.delegate="requestConnection(user.id)">Request Connection</a>
                         </div>
-                        <div show.bind="user.connectionStatus == 0" class="level-item">
+                        <div show.bind="user.connectionStatus == 1" class="level-item">
                             <a class="button is-success" click.delegate="confirmConnection(user.id)">Confirm Connection</a>
                             <a class="button is-danger" click.delegate="rejectConnection(user.id)">Reject Connection</a>
                         </div>
-                        <div show.bind="user.connectionStatus == 1" class="level-item">
+                        <div show.bind="user.connectionStatus == 0" class="level-item">
                             Awaiting confirmation from ${user.firstName}
                             <a class="button is-warning" click.delegate="cancelConnectionRequest(user.id)">Cancel Request</a>
                         </div>
@@ -51,7 +51,7 @@
             <button class="button pagination-previous" disabled.bind="!hasPreviousPage" click.delegate="previousPage()">Previous Page</button>
             <button class="button pagination-next" disabled.bind="!hasNextPage" click.delegate="nextPage()">Next page</button>
             <ul class="pagination-list">
-                Page ${users.pageNumber} of ${users.totalPages}
+                Page ${results.pageNumber} of ${results.totalPages}
                 <!-- <li>
                     <a class="pagination-link ${users.pageNumber === 1 ? 'is-current' : ''}" click.delegate="navigateToPage(1)">1</a>
                 </li>
