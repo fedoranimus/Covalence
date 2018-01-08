@@ -3,6 +3,9 @@ import { TagService } from './../../../services/tagService';
 import { bindable, autoinject } from "aurelia-framework";
 import { Validator, ValidationController, ValidationControllerFactory, ValidationRules, validateTrigger } from 'aurelia-validation';
 import { Router } from 'aurelia-router';
+import { State } from 'store/state';
+import { Store } from 'aurelia-store';
+import { completeOnboarding } from 'store/userActions';
 
 @autoinject
 export class Onboarding {
@@ -22,7 +25,8 @@ export class Onboarding {
                 private controllerFactory: ValidationControllerFactory, 
                 private tagService: TagService, 
                 private userService: UserService, 
-                private router: Router) {
+                private router: Router,
+                private store: Store<State>) {
         this.controller = controllerFactory.createForCurrentScope(validator);
         this.controller.validateTrigger = validateTrigger.changeOrBlur;
         this.controller.subscribe(event => this.validate());
@@ -65,7 +69,8 @@ export class Onboarding {
 
     public async onboard() {
         this.isLoading = true;
-        await this.userService.onboardUser(this.model);
+        const model = this.model;
+        this.store.dispatch(completeOnboarding, model, (model) => this.userService.onboardUser(model));
         this.isLoading = false;
         this.router.navigate('/');
     }

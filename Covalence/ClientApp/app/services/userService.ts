@@ -38,8 +38,8 @@ export class UserService {
         this.config.getEndpoint('api').post('account/forgotpassword', { email: email });
     }
 
-    public async onboardUser(viewModel: IUserViewModel): Promise<void> {
+    public async onboardUser(viewModel: IUserViewModel): Promise<IUser> {
         viewModel.needsOnboarding = false;
-        this.currentUser = await this.config.getEndpoint('api').updateOne('user', this.currentUser.id, null, viewModel);
+        return await this.config.getEndpoint('api').updateOne('user', this.currentUser.id, null, viewModel);
     }
 }

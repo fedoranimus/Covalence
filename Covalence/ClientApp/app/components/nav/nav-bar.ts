@@ -52,6 +52,8 @@ export class NavBar {
     logout() {
         this.auth.logout();
 
+        // TODO - Unregister actions
+
         this.router.navigate('/', { replace: true, trigger: false });
         this.router.reset();
         //this.router.deactivate();
