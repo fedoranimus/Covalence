@@ -65,6 +65,19 @@ export class TagEditorCustomElement {
         }
     }
 
+    handleEnter(e: KeyboardEvent) {
+        if(e.keyCode === 13) {
+            this.fromSelection = false; // TODO - Do I need this anymore?
+            e.preventDefault();
+            this.store.dispatch(addSearchParam, this.tagQuery);
+            this.tagQuery = '';
+            this.suggestedTags = [];
+            return false;
+        }
+
+        return true;
+    }
+
     selectTag(tag: ITag) {
         this.fromSelection = true;
         this.store.dispatch(addSearchParam, tag.name);
