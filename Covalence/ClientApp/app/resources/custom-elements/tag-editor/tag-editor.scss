@@ -1,9 +1,34 @@
 @import '../../../colors';
 
+.tag-editor .menu {
+    position: relative;
+    z-index: 100;
+}
+
 .tag-editor .menu-list {
+    position: relative;
     border-radius: .25rem;
     padding: .5rem 0;
     margin: .125rem 0 0;
     min-width: 10rem;
     border: 1px solid $light-border-color;
+    z-index: 100;
+}
+
+.tag-editor .input:focus-within {
+    border: thin solid #00d1b2;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+}
+
+.tag-editor .tag-item {
+    margin-right: 0.75rem;
+}
+
+.tag-editor input {
+    border: none;
+}
+
+.tag-editor input:focus {
+    outline: none;
 }

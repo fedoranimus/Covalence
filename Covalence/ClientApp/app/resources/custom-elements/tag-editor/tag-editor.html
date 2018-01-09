@@ -1,19 +1,18 @@
 <template class="tag-editor">
     <require from="./tag-editor.scss"></require>
-    <div class="field has-addons">
-        <p class="control is-expanded">
-            <input class="input" value.bind="tagQuery & debounce:500" type="text" placeholder.bind="placeholder">
-        </p>
-        <p class="control">
-            <button class="button is-info" click.delegate="onAdd()">
-                Add
-            </button>
-        </p>
-    </div>
+        <div class="input field is-grouped is-grouped-multiline" tabindex="0">
+            <div class="tag-item" repeat.for="tag of tags">
+                <div class="tags has-addons">
+                    <span class="tag">${tag}</span>
+                    <a class="tag is-delete" click.delegate="removeSearchQuery(tag)"></a>
+                </div>
+            </div>
+            <input class="is-fullwidth is-expanded" value.bind="tagQuery & debounce:500" type="text" placeholder.bind="placeholder">
+        </div>
     <aside class="menu" show.bind="hasSuggestions">
         <ul class="menu-list">
             <li tabindex=${$index+1} repeat.for="suggestedTag of suggestedTags" click.delegate="selectTag(suggestedTag)" class="suggested-tag">
-                <a>${suggestedTag.name}</a>
+                <a>${suggestedTag.name} (${suggestedTag.userCount})</a>
             </li>
         </ul>
     </aside>

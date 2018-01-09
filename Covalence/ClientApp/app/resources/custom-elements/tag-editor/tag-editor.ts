@@ -3,6 +3,9 @@ import { autoinject, bindable, customElement } from 'aurelia-framework';
 import { ITag } from 'infrastructure/tag';
 import { DOM } from 'aurelia-pal';
 import { TagService } from "services/tagService";
+import { State } from 'store/state';
+import { Store } from 'aurelia-store';
+import { addSearchParam, removeSearchParam, clearSearchParams } from 'store/searchActions';
 
 @autoinject
 @customElement('tag-editor')
@@ -15,8 +18,12 @@ export class TagEditorCustomElement {
     errorState: string|null = null;
     private fromSelection = false;
 
-    constructor(private element: Element, private tagService: TagService) {
+    constructor(private element: Element, private tagService: TagService, private store: Store<State>) {
 
+    }
+
+    bind() {
+        this.store.dispatch(clearSearchParams);
     }
 
     onAdd() {
@@ -52,7 +59,7 @@ export class TagEditorCustomElement {
             this.errorState = null;
             const potentialTags = await this.tagService.queryTag(query);
             if(potentialTags)
-                this.suggestedTags = potentialTags.filter( t => this.tags.findIndex( x => x.name == t.name) === -1);
+                this.suggestedTags = potentialTags.filter(t => this.tags.findIndex(x => x.name == t.name) === -1);
         } else {
             this.errorState = "Invalid Query; Spaces are not allowed";
         }
@@ -60,7 +67,12 @@ export class TagEditorCustomElement {
 
     selectTag(tag: ITag) {
         this.fromSelection = true;
-        this.tagQuery = tag.name;
+        this.store.dispatch(addSearchParam, tag.name);
+        this.tagQuery = '';
         this.suggestedTags = [];
+    }
+
+    removeSearchQuery(tag: string) {
+        this.store.dispatch(removeSearchParam, tag);
     }
 }

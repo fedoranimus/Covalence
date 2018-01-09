@@ -71,26 +71,28 @@ namespace Covalence.Controllers
                 return BadRequest();
             }
 
-            var users = await _context.Users.Where(u => u.Id != currentUser.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).ToListAsync();  
+            var users = await _context.Users.Where(u => u.Id != currentUser.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).AsNoTracking().ToListAsync();  
 
-            var tagCounts = new Dictionary<ApplicationUser, int>();
+            if(model.Tags.Count > 0) {
+                var tagCounts = new Dictionary<ApplicationUser, int>();
 
-            foreach(var user in users) 
-            {
-                var tagCount = user.Tags.Select(tag => tag.Name)
-                                        .Intersect(model.Tags)
-                                        .Count();
-                if(tagCount > 0)
-                    tagCounts.Add(user, tagCount);
+                foreach(var user in users) 
+                {
+                    var tagCount = user.Tags.Select(tag => tag.Name)
+                                            .Intersect(model.Tags, StringComparer.OrdinalIgnoreCase)
+                                            .Count();
+                    if(tagCount > 0)
+                        tagCounts.Add(user, tagCount);
+                }
+
+                users = tagCounts.OrderBy(x => x.Value)
+                                .Select(x => x.Key)
+                                .ToList();
             }
-
-            var sortedUsers = tagCounts.OrderBy(x => x.Value)
-                                        .Select(x => x.Key)
-                                        .ToList();
 
             var connections = await _context.Connections.Where(x => x.RequestedUserId == currentUser.Id || x.RequestingUserId == currentUser.Id).Include(x => x.RequestedUser).Include(x => x.RequestingUser).ToListAsync();
 
-            var contract = Converters.ConvertRemoteUserListToContract(currentUser, sortedUsers, connections);
+            var contract = Converters.ConvertRemoteUserListToContract(currentUser, users, connections);
 
             var pageSize = 3; // TODO - get parameter from UI
             var paginatedList = await PaginatedList<RemoteUserContract>.CreateAsync(contract, model.Page ?? 1, pageSize);

@@ -3,6 +3,7 @@ import { Aurelia, PLATFORM } from 'aurelia-framework'
 import authConfig from './app/authConfig';
 import { AuthService } from 'aurelia-authentication';
 import 'bulma/css/bulma.css';
+import 'bulma-tooltip/bulma-tooltip.min.css';
 import { initialState } from 'store/state';
 declare const IS_DEV_BUILD: boolean; // The value is supplied by Webpack during the build
 

@@ -9,13 +9,8 @@ export class SearchService {
 
     }
 
-    public getResults(query: any, page?: number): Promise<PagedList<IUser>> {
-        return this.config.getEndpoint('api').post('search', { query: query, page: page } );
-    }
-
-    public getAllUsers(page?: number): Promise<PagedList<IUser>> {
-        const url = `search/list/${page ? page : ''}`;
-        return this.config.getEndpoint('api').post(url);
+    public getResults(tags: string[] = [], page?: number): Promise<PagedList<IUser>> {
+        return this.config.getEndpoint('api').post('search', { tags: tags, page: page } );
     }
 }
 

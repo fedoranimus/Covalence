@@ -5,19 +5,22 @@ import { bindable, autoinject } from "aurelia-framework";
 import { IUser } from "infrastructure/user";
 import { Store } from 'aurelia-store';
 import { State } from 'store/state';
-import { acceptConnection, updateConnection } from 'store/connectionActions';
-import { getAll, navigateToPage } from 'store/searchActions';
+import { updateConnection } from 'store/connectionActions';
+import { navigateToPage, search, clearSearchParams } from 'store/searchActions';
 
 @autoinject
 export class UserList {
     @bindable results: PagedList<IUser>;
+    @bindable searchQuery: string[];
 
     constructor(private connectionService: ConnectionService, private searchService: SearchService, private store: Store<State>) {
 
     }
 
     created() {
-        this.store.dispatch(getAll, () => this.searchService.getAllUsers());
+        const searchQuery = [];
+        this.store.dispatch(clearSearchParams);
+        this.store.dispatch(search, searchQuery, null, (searchQuery) => this.searchService.getResults(searchQuery));
     }
 
     // async bind() {
@@ -62,31 +65,22 @@ export class UserList {
         return Math.ceil(this.results.totalPages / 2) + 1;
     }
 
-    async nextPage() {
-        try {
-            const nextPage = ++this.results.pageNumber;
-            this.store.dispatch(navigateToPage, nextPage, (nextPage) => this.searchService.getAllUsers(nextPage));
-        } catch (e) {
-            console.error(e);
-        }
+    nextPage() {
+        const nextPage = ++this.results.pageNumber;
+        const searchQuery = this.searchQuery;
+        this.store.dispatch(search, searchQuery, nextPage, (searchQuery, nextPage) => this.searchService.getResults(searchQuery, nextPage));
     }
 
-    async previousPage() {
-        try {
-            const previousPage = --this.results.pageNumber;
-            this.store.dispatch(navigateToPage, previousPage, (previousPage) => this.searchService.getAllUsers(previousPage));
-        } catch(e) {
-            console.error(e);
-        }
+    previousPage() {
+        const previousPage = --this.results.pageNumber;
+        const searchQuery = this.searchQuery;
+        this.store.dispatch(search, searchQuery, previousPage, (searchQuery, previousPage) => this.searchService.getResults(searchQuery, previousPage));
         
     }
 
-    async navigateToPage(pageNumber: number) {
-        try {
-            this.store.dispatch(navigateToPage, pageNumber, (pageNumber) => this.searchService.getAllUsers(pageNumber));
-        } catch(e) {
-            console.error(e);
-        }
+    navigateToPage(pageNumber: number) {
+        const searchQuery = this.searchQuery;
+        this.store.dispatch(search, searchQuery, pageNumber, (searchQuery, pageNumber) => this.searchService.getResults(searchQuery, pageNumber));
     }
 
     async requestConnection(userId: string) {

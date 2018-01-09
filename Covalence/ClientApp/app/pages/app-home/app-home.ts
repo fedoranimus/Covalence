@@ -1,8 +1,8 @@
 import { PagedList } from 'services/searchService';
 import { ConnectionService, IConnectionList } from 'services/connectionService';
 import { Router } from 'aurelia-router';
-import {AuthService} from 'aurelia-authentication';
-import {autoinject, computedFrom} from 'aurelia-framework';
+import { AuthService } from 'aurelia-authentication';
+import { autoinject, computedFrom } from 'aurelia-framework';
 import { PostService } from 'services/postService';
 import { ITag } from 'infrastructure/tag';
 import { IPost } from 'infrastructure/post'; 
@@ -11,6 +11,7 @@ import { SearchService } from 'services/searchService';
 import { Store } from 'aurelia-store';
 import { State } from 'store/state';
 import { getCurrentUser } from 'store/userActions';
+import { search } from 'store/searchActions';
 
 @autoinject
 export class AppHome {
@@ -28,6 +29,11 @@ export class AppHome {
         if(this.authenticated) {
             this.store.dispatch(getCurrentUser, () => this.authService.getMe());
         }
+    }
+
+    async search() {
+        const searchQuery = this.state.searchQuery;
+        this.store.dispatch(search, searchQuery, null, (searchQuery) => this.searchService.getResults(searchQuery, null));
     }
 
     // async bind() {

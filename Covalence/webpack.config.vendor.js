@@ -12,9 +12,9 @@ module.exports = ({ prod } = {}) => {
             extensions: ['.js']
         },
         module: {
-            loaders: [
+            rules: [
                 { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, loader: 'url-loader?limit=100000' },
-                { test: /\.css$/, loader: extractCSS.extract([isDevBuild ? 'css-loader' : 'css-loader?minimize']) }
+                { test: /\.css$/, use: extractCSS.extract([isDevBuild ? 'css-loader' : 'css-loader?minimize']) }
             ]
         },
         entry: {
@@ -36,7 +36,8 @@ module.exports = ({ prod } = {}) => {
                 'aurelia-validation',
                 'aurelia-store',
                 'bulma/css/bulma.css',
-                "font-awesome/css/font-awesome.css",
+                'bulma-tooltip/bulma-tooltip.min.css',
+                'font-awesome/css/font-awesome.css',
                 'markdown-it',
                 'markdown-it-katex',
                 'rxjs'

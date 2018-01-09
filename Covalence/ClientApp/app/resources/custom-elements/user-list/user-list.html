@@ -6,7 +6,7 @@
             </p>
         </div>
     </div>
-    <div else class="au-animate">
+    <div else>
         <article class="media" repeat.for="user of results.items">
             <div class="media-content">
                 <div class="content">
@@ -29,7 +29,7 @@
                     </div>
                     <div class="level-right">
                         <div show.bind="user.connectionStatus == 4" class="level-item">
-                            <a class="button is-primary" click.delegate="requestConnection(user.id)">Request Connection</a>
+                            <a class="button is-primary tooltip is-tooltip-multiline" data-tooltip="Connecting will allow you and ${user.firstName} to see each other's email address" click.delegate="requestConnection(user.id)">Request Connection</a>
                         </div>
                         <div show.bind="user.connectionStatus == 1" class="level-item">
                             <a class="button is-success" click.delegate="confirmConnection(user.id)">Confirm Connection</a>

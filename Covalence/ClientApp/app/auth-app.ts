@@ -5,8 +5,8 @@ import { Router, RouterConfiguration, NavigationInstruction, Next, Redirect, Red
 import { AuthenticateStep, AuthService } from 'aurelia-authentication';
 import { Store } from 'aurelia-store';
 import { State } from 'store/state';
-import { loadConnections, acceptConnection, updateConnection } from 'store/connectionActions';
-import { getAll, search, navigateToPage } from 'store/searchActions';
+import { loadConnections, updateConnection } from 'store/connectionActions';
+import { search, navigateToPage, addSearchParam, removeSearchParam, clearSearchParams } from 'store/searchActions';
 import { getCurrentUser, completeOnboarding } from 'store/userActions';
 
 @useView('./app.html')
@@ -25,11 +25,13 @@ export class AuthApp {
     private registerActions() {
         this.store.registerAction(loadConnections.name, loadConnections);
         this.store.registerAction(updateConnection.name, updateConnection);
-        this.store.registerAction(getAll.name, getAll);
         this.store.registerAction(search.name, search);
         this.store.registerAction(navigateToPage.name, navigateToPage);
         this.store.registerAction(getCurrentUser.name, getCurrentUser);
         this.store.registerAction(completeOnboarding.name, completeOnboarding);
+        this.store.registerAction(addSearchParam.name, addSearchParam);
+        this.store.registerAction(removeSearchParam.name, removeSearchParam);
+        this.store.registerAction(clearSearchParams.name, clearSearchParams);
     }
 
     configureRouter(config: RouterConfiguration, router: Router) {
