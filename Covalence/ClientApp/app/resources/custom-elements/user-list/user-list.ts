@@ -23,15 +23,6 @@ export class UserList {
         this.store.dispatch(search, searchQuery, null, (searchQuery) => this.searchService.getResults(searchQuery));
     }
 
-    // async bind() {
-    //     try {
-    //         this.users = await this.searchService.getAllUsers();
-    //         console.log('UserList', this.users);
-    //     } catch (e) {
-    //         console.error(e);
-    //     }
-    // }
-
     @computedFrom('results.items.length')
     get hasResults() {
         if(!this.results) return false;
