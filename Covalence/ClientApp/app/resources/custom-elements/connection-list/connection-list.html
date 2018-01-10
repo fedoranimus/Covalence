@@ -1,23 +1,34 @@
-<template>
-    <article with.bind="connections">
-        <h3 class="title is-3">Connections</h1>
-        <h5 class="subtitle is-5 is-marginless">Connected Users</h2>
-        <ul>
-            <li repeat.for="connection of activeConnections">
-                ${connection.displayName}
-            </li>
-        </ul>
-        <h2 class="subtitle is-5 is-marginless">Connection Requests</h2>
-        <ul>
-            <li repeat.for="connection of requestedConnections">
-                ${connection.displayName}
-            </li>
-        </ul>
-        <h2 class="subtitle is-5 is-marginless">Pending Connections</h2>
-        <ul>
-            <li repeat.for="connection of pendingConnections">
-                ${connection.displayName}
-            </li>
-        </ul>
-    </article>
+<template style="width: 100%">
+    <nav class="panel">
+        <p class="panel-heading">
+            Connections
+        </p>
+        <p class="panel-tabs">
+            <a click.delegate="filter(null)" class="${activeFilter === null ? 'is-active' : ''}">all</a>
+            <a click.delegate="filter(2)" class="${activeFilter === 2 ? 'is-active' : ''}">connected</a>
+            <a click.delegate="filter(1)" class="${activeFilter === 1 ? 'is-active' : ''}">pending</a>
+            <a click.delegate="filter(0)" class="${activeFilter === 0 ? 'is-active' : ''}">requested</a>
+        </p>
+        <span class="panel-block" repeat.for="connection of connections | filter:activeFilter:filterFunc">
+            <div class="level" style="width:100%;">
+                <div class="level-left">
+                    <span class="panel-icon level-item">
+                        <i class="fa fa-book"></i>
+                    </span>
+                    <span class="level-item">${connection.displayName} <i if.bind="connection.connectionStatus === 2">(${connection.email})</i></span>
+                </div>
+                <div class="level-right">
+                    <button if.bind="connection.connectionStatus === 1" class="button is-primary is-small level-item">
+                        Confirm
+                    </button>
+                    <button if.bind="connection.connectionStatus === 1" class="button is-danger is-small level-item">
+                        Reject
+                    </button>
+                    <button if.bind="connection.connectionStatus === 0" class="button is-warning is-small level-item">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </a>
+    </nav>
 </template>

@@ -1,5 +1,5 @@
 import { PagedList } from 'services/searchService';
-import { ConnectionService, IConnectionList } from 'services/connectionService';
+import { ConnectionService } from 'services/connectionService';
 import { Router } from 'aurelia-router';
 import { AuthService } from 'aurelia-authentication';
 import { autoinject, computedFrom } from 'aurelia-framework';

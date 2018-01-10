@@ -1,5 +1,5 @@
 import { State } from 'store/state';
-import { ConnectionStatus, IConnectionList } from 'services/connectionService';
+import { ConnectionStatus, IConnection } from 'services/connectionService';
 
 export async function loadConnections(state: State, getConnectionList: Function) {
     const connections = await getConnectionList();
@@ -7,7 +7,7 @@ export async function loadConnections(state: State, getConnectionList: Function)
     return { ...state, ...{ connections } };
 }
 
-export async function updateConnection(state: State, userId: string, newConnectionStatus: ConnectionStatus, connectionApi: (userId: string) => IConnectionList) {
+export async function updateConnection(state: State, userId: string, newConnectionStatus: ConnectionStatus, connectionApi: (userId: string) => IConnection[]) {
     const connections = await connectionApi(userId);
 
     const user = state.results.items.find(u => u.id == userId);

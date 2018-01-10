@@ -6,11 +6,7 @@ namespace Covalence.Contracts
         public string RequestingUserId { get; set; }
         public string RequestedUserId { get; set; }
         public string DisplayName { get; set; }
-    }
-
-    public class ConnectionListContract {
-        public List<ConnectionContract> RequestedConnections { get; set; }
-        public List<ConnectionContract> ActiveConnections { get; set; }
-        public List<ConnectionContract> PendingConnections { get; set; }
+        public string Email { get; set; }
+        public RemoteConnectionStatus ConnectionStatus { get; set; }
     }
 }

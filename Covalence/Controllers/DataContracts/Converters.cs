@@ -72,32 +72,56 @@ namespace Covalence.Contracts
             return status;
         }
 
-        private static List<ConnectionContract> FindPendingConnections(ICollection<Connection> connections, string userId) {
-            return connections.Where(c => c.RequestedUserId == userId && c.State == ConnectionState.Pending).Select(connection => ConvertConnectionToContract(connection, false)).ToList();
+        public static RemoteConnectionStatus ConvertRemoteConnectionStatus(string currentUserId, Connection connection) {
+            var status = RemoteConnectionStatus.Available;
+
+            if(connection.State == ConnectionState.Connected)
+                {
+                    status = RemoteConnectionStatus.Connected;
+                }
+                else 
+                {
+                    if(connection.RequestingUserId == currentUserId)
+                    {
+                        status = RemoteConnectionStatus.Requested;
+                    }
+                    else 
+                    {
+                        status = RemoteConnectionStatus.Pending;
+                    }
+                }
+
+            return status;
         }
 
-        private static List<ConnectionContract> FindRequestedConnections(ICollection<Connection> connections, string userId) {
-            return connections.Where(c => c.RequestingUserId == userId && c.State == ConnectionState.Pending).Select(connection => ConvertConnectionToContract(connection, true)).ToList();
+        // private static List<ConnectionContract> FindPendingConnections(ICollection<Connection> connections, string userId) {
+        //     return connections.Where(c => c.RequestedUserId == userId && c.State == ConnectionState.Pending).Select(connection => ConvertConnectionToContract(connection, userId, false)).ToList();
+        // }
+
+        // private static List<ConnectionContract> FindRequestedConnections(ICollection<Connection> connections, string userId) {
+        //     return connections.Where(c => c.RequestingUserId == userId && c.State == ConnectionState.Pending).Select(connection => ConvertConnectionToContract(connection, userId, true)).ToList();
+        // }
+
+        // private static List<ConnectionContract> FindActiveConnections(ICollection<Connection> connections, string userId) {
+        //     return connections.Where(c => (c.RequestedUserId == userId || c.RequestingUserId == userId) && c.State == ConnectionState.Connected).Select(connection => ConvertConnectionToContract(connection, userId, connection.RequestingUserId == userId)).ToList();
+        // }
+
+        public static List<ConnectionContract> ConvertConnectionListToContract(ICollection<Connection> connections, string userId) {
+            var connectionList = connections.Select(connection => ConvertConnectionToContract(connection, userId)).ToList();
+    
+            return connectionList;
         }
 
-        private static List<ConnectionContract> FindActiveConnections(ICollection<Connection> connections, string userId) {
-            return connections.Where(c => (c.RequestedUserId == userId || c.RequestingUserId == userId) && c.State == ConnectionState.Connected).Select(connection => ConvertConnectionToContract(connection, connection.RequestingUserId == userId)).ToList();
-        }
-
-        public static ConnectionListContract ConvertConnectionListToContract(ICollection<Connection> connections, string userId) {
-
-            return new ConnectionListContract() {
-                PendingConnections = FindPendingConnections(connections, userId),
-                RequestedConnections = FindRequestedConnections(connections, userId),
-                ActiveConnections = FindActiveConnections(connections, userId)
-            };  
-        }
-
-        public static ConnectionContract ConvertConnectionToContract(Connection connection, bool isRequestingUser) {
+        public static ConnectionContract ConvertConnectionToContract(Connection connection, string userId) {
+            var isRequestingUser = connection.RequestingUserId == userId;
+            var emailAddress = isRequestingUser ? connection.RequestedUser.Email : connection.RequestingUser.Email;
+            
             return new ConnectionContract() {
                 RequestingUserId = connection.RequestingUserId,
                 RequestedUserId = connection.RequestedUserId,
-                DisplayName = ConvertConnectionDisplayName(connection, isRequestingUser)
+                DisplayName = ConvertConnectionDisplayName(connection, isRequestingUser),
+                Email = connection.State == ConnectionState.Connected ? emailAddress : null,
+                ConnectionStatus = ConvertRemoteConnectionStatus(userId, connection)
             };
         }
 

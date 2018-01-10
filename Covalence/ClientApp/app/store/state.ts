@@ -1,5 +1,5 @@
 import { IUser, IRemoteUser } from 'infrastructure/user';
-import { IConnectionList } from 'services/connectionService';
+import { IConnection } from 'services/connectionService';
 import { PagedList } from 'services/searchService';
 
 export const initialState = {
@@ -12,6 +12,6 @@ export const initialState = {
 export interface State {
     searchQuery: string[];
     user: IUser;
-    connections: IConnectionList;
+    connections: IConnection[];
     results: PagedList<IRemoteUser>;
 }

@@ -7,69 +7,65 @@
         </div>
     </div>
     <div else>
-        <article class="media" repeat.for="user of results.items">
-            <div class="media-content">
-                <div class="content">
+        <section class="section">
+            <article class="media" repeat.for="user of results.items">
+                <div class="media-content">
+                    <div class="content">
+                        <div class="level">
+                            <div class="level-left">
+                                <p><strong>${user.firstName} ${user.lastName}</strong></p>
+                            </div>
+                        </div> 
+                        <div class="level">
+                            <span>${user.bio}</span>
+                        </div>
+                    </div>
                     <div class="level">
                         <div class="level-left">
-                            <p><strong>${user.firstName} ${user.lastName}</strong></p>
+                            <div class="level-item" repeat.for="tag of user.tags">
+                                <span class="tag">
+                                    ${tag.name}
+                                </span>
+                            </div>
                         </div>
-                    </div> 
-                    <div class="level">
-                        <span>${user.bio}</span>
-                    </div>
-                </div>
-                <div class="level">
-                    <div class="level-left">
-                        <div class="level-item" repeat.for="tag of user.tags">
-                            <span class="tag">
-                                ${tag.name}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="level-right">
-                        <div show.bind="user.connectionStatus == 4" class="level-item">
-                            <a class="button is-primary tooltip is-tooltip-multiline" data-tooltip="Connecting will allow you and ${user.firstName} to see each other's email address" click.delegate="requestConnection(user.id)">Request Connection</a>
-                        </div>
-                        <div show.bind="user.connectionStatus == 1" class="level-item">
-                            <a class="button is-success" click.delegate="confirmConnection(user.id)">Confirm Connection</a>
-                            <a class="button is-danger" click.delegate="rejectConnection(user.id)">Reject Connection</a>
-                        </div>
-                        <div show.bind="user.connectionStatus == 0" class="level-item">
-                            Awaiting confirmation from ${user.firstName}
-                            <a class="button is-warning" click.delegate="cancelConnectionRequest(user.id)">Cancel Request</a>
-                        </div>
-                        <div show.bind="user.connectionStatus == 2" class="level-item">
-                            Connected
+                        <div class="level-right">
+                            <a show.bind="user.connectionStatus == 4" class="button is-primary tooltip is-tooltip-multiline level-item" data-tooltip="Connecting will allow you and ${user.firstName} to see each other's email address" click.delegate="requestConnection(user.id)">Request Connection</a>
+                            <a show.bind="user.connectionStatus == 1" class="button is-success level-item" click.delegate="confirmConnection(user.id)">Confirm Connection</a>
+                            <a show.bind="user.connectionStatus == 1" class="button is-danger level-item" click.delegate="rejectConnection(user.id)">Reject Connection</a>
+                            <span show.bind="user.connectionStatus == 0" class="level-item">Awaiting confirmation from ${user.firstName}</span>
+                            <a show.bind="user.connectionStatus == 0" class="button is-warning level-item" click.delegate="cancelConnectionRequest(user.id)">Cancel Request</a>
+                            <span show.bind="user.connectionStatus == 2" class="level-item">Connected</span>
                         </div>
                     </div>
                 </div>
-            </div>
-            <hr>
-        </article>
-        <nav class="pagination is-rounded" role="navigation" aria-label="pagination">
-            <button class="button pagination-previous" disabled.bind="!hasPreviousPage" click.delegate="previousPage()">Previous Page</button>
-            <button class="button pagination-next" disabled.bind="!hasNextPage" click.delegate="nextPage()">Next page</button>
-            <ul class="pagination-list">
-                Page ${results.pageNumber} of ${results.totalPages}
-                <!-- <li>
-                    <a class="pagination-link ${users.pageNumber === 1 ? 'is-current' : ''}" click.delegate="navigateToPage(1)">1</a>
-                </li>
-                <li if.bind="users.totalPages >= 7"><span class="pagination-ellipsis">&hellip;</span></li>
-                <li if.bind="users.totalPages > 5">
-                    <a class="pagination-link ${users.pageNumber === middlePageMinusOne ? 'is-current' : ''}" click.delegate="navigateToPage(middlePageMinusOne)">${middlePageMinusOne}</a>
-                </li>
-                <li if.bind="users.totalPages > 5">
-                    <a class="pagination-link ${users.pageNumber === middlePage ? 'is-current' : ''}" click.delegate="navigateToPage(middlePage)">${middlePage}</a>
-                </li>
-                <li if.bind="users.totalPages > 5">
-                    <a class="pagination-link ${users.pageNumber === middlePagePlusOne ? 'is-current' : ''}" click.delegate="navigateToPage(middlePagePlusOne)">${middlePagePlusOne}</a>
-                </li>
-                <li if.bind="users.totalPages >= 7"><span class="pagination-ellipsis">&hellip;</span></li>
-                <li>
-                    <a class="pagination-link ${users.pageNumber === users.totalPages ? 'is-current' : ''}" click.delegate="navigateToPage(users.totalPages)">${users.totalPages}</a>
-                </li> -->
-            </ul>
-        </nav>
+                <hr>
+            </article>
+        </section>
+        <section>
+            <nav class="pagination is-rounded" role="navigation" aria-label="pagination">
+                <button class="button pagination-previous" disabled.bind="!hasPreviousPage" click.delegate="previousPage()">Previous Page</button>
+                <button class="button pagination-next" disabled.bind="!hasNextPage" click.delegate="nextPage()">Next page</button>
+                <ul class="pagination-list">
+                    Page ${results.pageNumber} of ${results.totalPages}
+                    <!-- <li>
+                        <a class="pagination-link ${users.pageNumber === 1 ? 'is-current' : ''}" click.delegate="navigateToPage(1)">1</a>
+                    </li>
+                    <li if.bind="users.totalPages >= 7"><span class="pagination-ellipsis">&hellip;</span></li>
+                    <li if.bind="users.totalPages > 5">
+                        <a class="pagination-link ${users.pageNumber === middlePageMinusOne ? 'is-current' : ''}" click.delegate="navigateToPage(middlePageMinusOne)">${middlePageMinusOne}</a>
+                    </li>
+                    <li if.bind="users.totalPages > 5">
+                        <a class="pagination-link ${users.pageNumber === middlePage ? 'is-current' : ''}" click.delegate="navigateToPage(middlePage)">${middlePage}</a>
+                    </li>
+                    <li if.bind="users.totalPages > 5">
+                        <a class="pagination-link ${users.pageNumber === middlePagePlusOne ? 'is-current' : ''}" click.delegate="navigateToPage(middlePagePlusOne)">${middlePagePlusOne}</a>
+                    </li>
+                    <li if.bind="users.totalPages >= 7"><span class="pagination-ellipsis">&hellip;</span></li>
+                    <li>
+                        <a class="pagination-link ${users.pageNumber === users.totalPages ? 'is-current' : ''}" click.delegate="navigateToPage(users.totalPages)">${users.totalPages}</a>
+                    </li> -->
+                </ul>
+            </nav>
+        </section>
     </div>
 </template>
