@@ -18,13 +18,13 @@
                     <span class="level-item">${connection.displayName} <i if.bind="connection.connectionStatus === 2">(${connection.email})</i></span>
                 </div>
                 <div class="level-right">
-                    <button if.bind="connection.connectionStatus === 1" class="button is-success is-small level-item">
+                    <button if.bind="connection.connectionStatus === 1" class="button is-success is-small level-item" click.delegate="confirmConnection(connection.requestingUserId)">
                         Confirm
                     </button>
-                    <button if.bind="connection.connectionStatus === 1" class="button is-danger is-small level-item">
+                    <button if.bind="connection.connectionStatus === 1" class="button is-danger is-small level-item" click.delegate="rejectConnection(connection.requestingUserId)">
                         Reject
                     </button>
-                    <button if.bind="connection.connectionStatus === 0" class="button is-warning is-small level-item">
+                    <button if.bind="connection.connectionStatus === 0" class="button is-warning is-small level-item" click.delegate="cancelConnectionRequest(connection.requestedUserId)">
                         Cancel
                     </button>
                 </div>

@@ -80,7 +80,6 @@ export class UserList {
         } catch(e) {
             console.error(e);
         }
-        
     }
 
     async confirmConnection(userId: string) {
