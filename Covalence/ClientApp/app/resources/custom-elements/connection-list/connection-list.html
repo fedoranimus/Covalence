@@ -9,7 +9,7 @@
             <a click.delegate="filter(1)" class="${activeFilter === 1 ? 'is-active' : ''}">pending</a>
             <a click.delegate="filter(0)" class="${activeFilter === 0 ? 'is-active' : ''}">requested</a>
         </p>
-        <span class="panel-block" repeat.for="connection of connections | filter:activeFilter:filterFunc">
+        <span class="panel-block" repeat.for="connection of connections | filter:activeFilter:filterFunc" if.bind="connections.length > 0">
             <div class="level" style="width:100%;">
                 <div class="level-left">
                     <span class="panel-icon level-item">
@@ -29,6 +29,11 @@
                     </button>
                 </div>
             </div>
-        </a>
+        </span>
+        <div else class="panel-block level" style="width: 100%;">
+            <div class="level-item">
+                No connections or requests available
+            </div>
+        </div>
     </nav>
 </template>
