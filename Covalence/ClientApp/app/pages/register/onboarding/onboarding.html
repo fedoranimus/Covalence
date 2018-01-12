@@ -37,11 +37,6 @@
             <div class="field" validation-errors.bind="tagsErrors">
                 <span>Tags</span>
                 <div class="field">
-                    <div show.bind="model.tags.length > 0" class="tags" repeat.for="tag of model.tags">
-                        <span class="tag">${tag}
-                            <button click.delegate="onRemoveTag(tag)" class="delete is-small"></button>
-                        </span>
-                    </div>
                     <div show.bind="model.tags.length == 0">
                         Please add at least 1 tag using the input below.
                     </div>

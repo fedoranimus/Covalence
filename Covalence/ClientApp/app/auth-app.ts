@@ -18,8 +18,10 @@ export class AuthApp {
         this.registerActions();
     }
 
-    async bind() {
-        // TODO - refresh logged in user
+    async created() {
+        if(this.authService.authenticated) {
+            await this.store.dispatch(getCurrentUser, () => this.authService.getMe());
+        }
     }
 
     private registerActions() {
@@ -51,18 +53,15 @@ export class AuthApp {
 
 @autoinject
 export class CheckOnboarding {
-    private currentUser: IUser | null = null;
-    constructor(private store:Store<State>) {
-        store.state.subscribe(state => {
-            this.currentUser = state.user;
-        });
+    constructor(private authService: AuthService) {
     }
 
-    run(navigationInstruction: NavigationInstruction, next: Next): Promise<any> {
-        if(!this.currentUser || navigationInstruction.config.route === 'onboard')
+    async run(navigationInstruction: NavigationInstruction, next: Next): Promise<any> {
+        const currentUser = await this.authService.getMe();
+        if(!currentUser || navigationInstruction.config.route === 'onboard')
             return next();
 
-        if(this.currentUser.needsOnboarding)
+        if(currentUser.needsOnboarding)
             return next.cancel(new RedirectToRoute('onboard'));  
         else 
             return next();

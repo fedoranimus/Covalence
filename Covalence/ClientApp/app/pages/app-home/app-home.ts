@@ -21,30 +21,13 @@ export class AppHome {
     constructor(private authService: AuthService, private router: Router, private searchService: SearchService, private connectionService: ConnectionService, private store: Store<State>) {
         store.state.subscribe(state => {
             this.state = state;
-            console.log("app-home", state);
         });
-    }
-
-    async created() {
-        if(this.authenticated) {
-            this.store.dispatch(getCurrentUser, () => this.authService.getMe());
-        }
     }
 
     async search() {
         const searchQuery = this.state.searchQuery;
         this.store.dispatch(search, searchQuery, null, (searchQuery) => this.searchService.getResults(searchQuery, null));
     }
-
-    // async bind() {
-    //     if(this.authenticated) { //check if user is logged in
-    //         try {
-    //             let user = await this.authService.getMe();
-    //         } catch(e) {
-    //             console.error(e);
-    //         }
-    //     }
-    // }
 
     @computedFrom('authService.authenticated')
     get authenticated() {
