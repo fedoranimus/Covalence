@@ -140,6 +140,13 @@ namespace Covalence.Data
 
             await tagService.AddTag(biologyTag, anaUser);
 
+            var unconfirmedUser = new ApplicationUser() {
+                Email = "unconfirmed@test.com",
+                UserName = "unconfirmed@test.com"
+            };
+
+            await userManager.CreateAsync(unconfirmedUser, "123Abc!");
+
             await context.SaveChangesAsync();
 
             await connectionService.RequestConnectionAsync(meiUser, testUser);
