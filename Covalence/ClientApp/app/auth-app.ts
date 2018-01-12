@@ -57,13 +57,18 @@ export class CheckOnboarding {
     }
 
     async run(navigationInstruction: NavigationInstruction, next: Next): Promise<any> {
-        const currentUser = await this.authService.getMe();
-        if(!currentUser || navigationInstruction.config.route === 'onboard')
-            return next();
+        if(this.authService.authenticated) {
+            const currentUser = await this.authService.getMe();
+            if(!currentUser || navigationInstruction.config.route === 'onboard')
+                return next();
 
-        if(currentUser.needsOnboarding)
-            return next.cancel(new RedirectToRoute('onboard'));  
-        else 
+            if(currentUser.needsOnboarding)
+                return next.cancel(new RedirectToRoute('onboard'));  
+            else 
+                return next();
+        } else {
             return next();
+        }
+        
     }
 }
