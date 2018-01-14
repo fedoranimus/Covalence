@@ -65,6 +65,8 @@ export class Onboarding {
     onRemoveTag(tagName: string) {
         const index = this.model.tags.findIndex(x => x == tagName);
         this.model.tags.splice(index, 1);
+
+        this.validate();
     }
 
     public async onboard() {

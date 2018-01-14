@@ -7,7 +7,7 @@
                     <a class="tag is-delete" click.delegate="removeSearchQuery(tag)"></a>
                 </div>
             </div>
-            <input class="is-fullwidth is-expanded" value.bind="tagQuery & debounce:500" type="text" keydown.delegate="handleEnter($event)" placeholder.bind="placeholder">
+            <input class="is-fullwidth is-expanded" value.bind="tagQuery" type="text" keydown.delegate="handleEnter($event)" placeholder.bind="placeholder">
         </div>
     <aside class="menu" show.bind="hasSuggestions">
         <ul class="menu-list">

@@ -18,23 +18,24 @@ export class TagEditorCustomElement {
     errorState: string|null = null;
     private fromSelection = false;
 
-    constructor(private element: Element, private tagService: TagService, private store: Store<State>) {
+    constructor(private element: Element, private tagService: TagService) {
 
     }
 
-    bind() {
-        this.store.dispatch(clearSearchParams);
-    }
-
-    onAdd() {
+    onAdd(tagName: string) {
         if(this.tagQuery && this.tagQuery !== "") {
-            const tagName = this.tagQuery;
             const event = DOM.createCustomEvent('add', { bubbles: true, cancelable: true, detail: tagName });
             this.element.dispatchEvent(event);
             this.tagQuery = "";
+            this.suggestedTags = [];
         }
 
         return false;
+    }
+
+    onRemove(tagName: string) {
+        const event = DOM.createCustomEvent('remove', { bubbles: true, cancelable: true, detail: tagName });
+        this.element.dispatchEvent(event);
     }
     
     @computedFrom('suggestedTags')
@@ -67,25 +68,15 @@ export class TagEditorCustomElement {
 
     handleEnter(e: KeyboardEvent) {
         if(e.keyCode === 13) {
-            this.fromSelection = false; // TODO - Do I need this anymore?
             e.preventDefault();
-            this.store.dispatch(addSearchParam, this.tagQuery);
-            this.tagQuery = '';
-            this.suggestedTags = [];
-            return false;
+            const tagName = this.tagQuery;
+            return this.onAdd(tagName);
         }
 
         return true;
     }
 
     selectTag(tag: ITag) {
-        this.fromSelection = true;
-        this.store.dispatch(addSearchParam, tag.name);
-        this.tagQuery = '';
-        this.suggestedTags = [];
-    }
-
-    removeSearchQuery(tag: string) {
-        this.store.dispatch(removeSearchParam, tag);
+        return this.onAdd(tag.name);
     }
 }

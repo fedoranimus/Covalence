@@ -41,7 +41,7 @@
                         Please add at least 1 tag using the input below.
                     </div>
                 </div>
-                <tag-editor existing-tags.bind="model.tags" add.delegate="onAddTag($event.detail)"></tag-editor>
+                <tag-editor existing-tags.bind="model.tags" add.delegate="onAddTag($event.detail)" remove.delegate="onRemoveTag($event.detail)"></tag-editor>
                 <p class="help is-danger" repeat.for="errorInfo of tagsErrors">${errorInfo.error.message}</p>
             </div>
 
