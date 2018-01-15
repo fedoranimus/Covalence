@@ -5,6 +5,7 @@ let baseConfig = {
     signupUrl: 'api/account/register',
     profileUrl: 'api/user',
     loginOnSignup: true,
+    logoutOnInvalidtoken: true,
     defaultHeadersForTokenRequests: { 'Content-Type': "application/x-www-form-urlencoded" }
 }
 

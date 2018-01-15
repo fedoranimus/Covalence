@@ -10,9 +10,12 @@ export async function getCurrentUser(state: State, getMeApi: () => IUser) {
         const user = await getMeApi();
         return { ...state, ...{ user }};
     } catch (e) {
-        console.error(e);
         return state;
     }
+}
+
+export function clearUser(state: State) {
+    return { ...state, ...{ user: null }};
 }
 
 export async function completeOnboarding(state: State, viewModel: IUserViewModel, onboardUserApi: (viewModel: IUserViewModel) => IUser) {
@@ -20,7 +23,6 @@ export async function completeOnboarding(state: State, viewModel: IUserViewModel
         const user = await onboardUserApi(viewModel);
         return { ...state, ...{ user }};
     } catch (e) {
-        console.error(e);
         return state;
     }
 }

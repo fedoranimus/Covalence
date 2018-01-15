@@ -7,15 +7,18 @@ import { Store } from 'aurelia-store';
 import { State } from 'store/state';
 import { loadConnections, updateConnection } from 'store/connectionActions';
 import { search, navigateToPage, addSearchParam, removeSearchParam, clearSearchParams } from 'store/searchActions';
-import { getCurrentUser, completeOnboarding } from 'store/userActions';
+import { getCurrentUser, completeOnboarding, clearUser } from 'store/userActions';
 
 @useView('./app.html')
 @autoinject
 export class AuthApp {
-    router: Router;
+    private state: State;
     
-    constructor(private authService: AuthService, private store: Store<State>) {
+    constructor(private authService: AuthService, private store: Store<State>, private app: Aurelia, private router: Router) {
         this.registerActions();
+        this.store.state.subscribe(state => {
+            this.state = state;
+        });
     }
 
     async created() {
@@ -34,6 +37,7 @@ export class AuthApp {
         this.store.registerAction(addSearchParam.name, addSearchParam);
         this.store.registerAction(removeSearchParam.name, removeSearchParam);
         this.store.registerAction(clearSearchParams.name, clearSearchParams);
+        this.store.registerAction(clearUser.name, clearUser);
     }
 
     configureRouter(config: RouterConfiguration, router: Router) {

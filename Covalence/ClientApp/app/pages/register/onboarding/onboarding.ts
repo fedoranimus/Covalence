@@ -72,7 +72,7 @@ export class Onboarding {
     public async onboard() {
         this.isLoading = true;
         const model = this.model;
-        this.store.dispatch(completeOnboarding, model, (model) => this.userService.onboardUser(model));
+        await this.store.dispatch(completeOnboarding, model, (model) => this.userService.onboardUser(model));
         this.isLoading = false;
         this.router.navigate('/');
     }

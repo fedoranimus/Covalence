@@ -4,7 +4,7 @@
             <div class="tag-item" repeat.for="tag of tags">
                 <div class="tags has-addons">
                     <span class="tag">${tag}</span>
-                    <a class="tag is-delete" click.delegate="removeSearchQuery(tag)"></a>
+                    <a class="tag is-delete" click.delegate="onRemove(tag)"></a>
                 </div>
             </div>
             <input class="is-fullwidth is-expanded" value.bind="tagQuery" type="text" keydown.delegate="handleEnter($event)" placeholder.bind="placeholder">

@@ -43,11 +43,20 @@ export function configure(aurelia: Aurelia) {
     aurelia.use.developmentLogging();
   }
 
-  aurelia.start().then(() => {
+  aurelia.start().then(async () => {
     const auth = aurelia.container.get(AuthService);
-    if(auth.isAuthenticated())
-      aurelia.setRoot(PLATFORM.moduleName('app/auth-app'));
-    else
-      aurelia.setRoot(PLATFORM.moduleName('app/app'));
+    let user = null;
+    try {
+      user = await auth.getMe(); // I really hate this check to ensure the token is correct
+    } finally {
+      if(!user && auth.isAuthenticated()) {
+        auth.logout();
+      }
+
+      if(auth.isAuthenticated())
+        aurelia.setRoot(PLATFORM.moduleName('app/auth-app'));
+      else
+        aurelia.setRoot(PLATFORM.moduleName('app/app'));
+    }
   });
 }

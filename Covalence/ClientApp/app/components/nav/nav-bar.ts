@@ -5,7 +5,7 @@ import { UserService } from 'services/userService';
 import { IUser } from 'infrastructure/user';
 import { State } from 'store/state';
 import { Store } from 'aurelia-store';
-
+import { clearUser } from 'store/userActions';
 
 @autoinject
 export class NavBar {
@@ -16,6 +16,8 @@ export class NavBar {
         store.state.subscribe(state => {
             this.state = state;
         });
+
+        
         //this._isAuthenticated = this.auth.isAuthenticated();
         // this.subscription = this.bindingEngine.propertyObserver(this, 'isAuthenticated')
         //     .subscribe((newValue, oldValue) => {
@@ -26,7 +28,6 @@ export class NavBar {
         //         }
         //     });
     }
-
 
     @computedFrom('state.user.firstName', 'state.user.lastName')
     get hasDisplayName() {
@@ -44,12 +45,13 @@ export class NavBar {
         return true;
     }
 
-    @computedFrom('authService.authenticated')
+    @computedFrom('auth.authenticated')
     get isAuthenticated() {
         return this.auth.authenticated;
     }
 
     logout() {
+        this.store.dispatch(clearUser);
         this.auth.logout();
 
         // TODO - Unregister actions

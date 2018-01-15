@@ -4,8 +4,7 @@ export function configure(config: FrameworkConfiguration) {
   config.globalResources(
     [
       PLATFORM.moduleName('./custom-elements/tag-editor/tag-editor'),
-      PLATFORM.moduleName('./custom-elements/tag-list/tag-list'),
-      PLATFORM.moduleName('./custom-elements/result-list/result-list'),
+      PLATFORM.moduleName('./custom-elements/search-bar/search-bar'),
       PLATFORM.moduleName('./custom-elements/user-list/user-list'),
       PLATFORM.moduleName('./custom-elements/connection-list/connection-list'),
       PLATFORM.moduleName('./value-converters/markdown-value-converter'),
