@@ -43,7 +43,7 @@
         </li>
       </ul>-->
   </nav>
-  <article if.bind="isAuthenticated" show.bind="!emailConfirmed" class="banner level">
-    <span class="level-item">Please verify your email, by checking "${state.user.email}", to become a full member of Covalence</span>
-  </article>
+  <banner if.bind="isAuthenticated" show.bind="!emailConfirmed">
+    Please verify your email, by checking "${state.user.email}", to become a full member of Covalence
+  </banner>
 </template>

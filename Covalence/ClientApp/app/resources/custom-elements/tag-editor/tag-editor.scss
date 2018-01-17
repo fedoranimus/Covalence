@@ -1,7 +1,7 @@
 @import '../../../colors';
 
 .tag-editor .menu {
-    position: relative;
+    position: absolute;
     z-index: 100;
 }
 
@@ -27,6 +27,9 @@
 
 .tag-editor input {
     border: none;
+    flex: 2;
+    min-width: 3rem;
+    max-width: 100%;
 }
 
 .tag-editor input:focus {

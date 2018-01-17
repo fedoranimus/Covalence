@@ -13,7 +13,7 @@ export class TagEditorCustomElement {
     @bindable({ attribute: "debug" }) debug = true;
     @bindable({ attribute: "existing-tags" }) tags: ITag[] = [];
     @bindable tagQuery = '';
-    @bindable placeholder = "Search for a tag";
+    @bindable placeholder = "Start typing to add a tag...";
     suggestedTags: ITag[] = [];
     errorState: string|null = null;
     private fromSelection = false;
@@ -40,7 +40,7 @@ export class TagEditorCustomElement {
     
     @computedFrom('suggestedTags')
     get hasSuggestions() {
-        return this.suggestedTags.length > 0;
+        return this.tagQuery !== '';
     }
 
     async tagQueryChanged(query: string) {
@@ -76,7 +76,10 @@ export class TagEditorCustomElement {
         return true;
     }
 
-    selectTag(tag: ITag) {
+    selectTag(tag: ITag | string) {
+        if(typeof tag === 'string')
+            return this.onAdd(tag);
+
         return this.onAdd(tag.name);
     }
 }

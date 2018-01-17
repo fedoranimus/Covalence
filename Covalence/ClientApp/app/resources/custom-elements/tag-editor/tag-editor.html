@@ -11,6 +11,7 @@
         </div>
     <aside class="menu" show.bind="hasSuggestions">
         <ul class="menu-list">
+            <li if.bind="suggestedTags.length === 0" class="suggested-tag" click.delegate="selectTag(tagQuery)"><a>Press enter to add "${tagQuery}"</a></li>
             <li tabindex=${$index+1} repeat.for="suggestedTag of suggestedTags" click.delegate="selectTag(suggestedTag)" class="suggested-tag">
                 <a>${suggestedTag.name} (${suggestedTag.userCount})</a>
             </li>

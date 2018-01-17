@@ -1,0 +1,17 @@
+@import '../../../colors';
+
+.banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 1rem;
+    position: relative;
+    background-color: $primary-color;
+    color: $light-text-color;
+}
+
+.banner-text {
+    line-height: 1.25;
+    position: relative;
+}
