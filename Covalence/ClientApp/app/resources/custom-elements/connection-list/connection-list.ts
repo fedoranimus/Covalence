@@ -15,6 +15,10 @@ export class ConnectionList {
 
     }
 
+    get hasConnections() {
+        return this.connections.length > 0;
+    }
+
     created() {
         this.store.dispatch(loadConnections, () => this.connectionService.getConnections());
     }    
