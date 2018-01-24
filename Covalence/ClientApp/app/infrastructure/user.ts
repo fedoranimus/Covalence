@@ -7,6 +7,7 @@ export interface IUser {
     firstName: string;
     lastName: string;
     tags: ITag[];
+    bio: string;
     location: string;
     displayName: string;
     isMentor: boolean;

@@ -71,7 +71,7 @@ namespace Covalence.Controllers
                 return BadRequest();
             }
 
-            var users = await _context.Users.Where(u => u.Id != currentUser.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).AsNoTracking().ToListAsync();  
+            var users = await _context.Users.Where(u => u.Id != currentUser.Id && u.NeedsOnboarding == false).Include(x => x.Tags).ThenInclude(ut => ut.Tag).AsNoTracking().ToListAsync();  
 
             if(model.Tags.Count > 0) {
                 var tagCounts = new Dictionary<ApplicationUser, int>();

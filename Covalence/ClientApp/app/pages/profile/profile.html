@@ -1,39 +1,52 @@
 <template>
-    <require from="./profile.scss"></require>
     <div class="container">
-        <form>
-        <div class="field" validation-errors.bind="firstNameErrors">
-            <label class="label">First Name</label>
-            <div class="control">
-                <input class="input" class.bind="firstNameErrors.length ? 'is-danger' : ''" type="text" value.bind="profile.firstName & validate" placeholder="First Name">
+        <form method="post" name="onboardForm" submit.delegate="save()">
+            <div class="field" validation-errors.bind="firstNameErrors">
+                <label class="label">First Name</label>
+                <div class="control">
+                    <input class="input" type="text" placeholder="Enter your first name..." value.bind="model.firstName & validate">
+                    <p class="help is-danger" repeat.for="errorInfo of firstNameErrors">${errorInfo.error.message}</p>
+                </div>
             </div>
-            <p class="help is-danger" repeat.for="errorInfo of firstNameErrors">${errorInfo.error.message}</p>
-        </div>
+            <div class="field" validation-errors.bind="lastNameErrors">
+                <label class="label">Last Name</label>
+                <div class="control">
+                    <input class="input" type="text" placeholder="Enter your last name..." value.bind="model.lastName & validate">
+                    <p class="help is-danger" repeat.for="errorInfo of lastNameErrors">${errorInfo.error.message}</p>
+                </div>
+            </div>
+            <div class="field" validation-errors.bind="locationErrors">
+                <label class="label">Zip Code</label>
+                <div class="control">
+                    <input class="input" type="text" placeholder="Enter your zip code..." value.bind="model.location & validate">
+                    <p class="help is-danger" repeat.for="errorInfo of locationErrors">${errorInfo.error.message}</p>
+                </div>
+            </div>
 
-        <div class="field" validation-errors.bind="lastNameErrors">
-            <label class="label">Last Name</label>
-            <div class="control">
-                <input class="input" class.bind="lastNameErrors.length ? 'is-danger' : ''" type="text" value.bind="profile.lastName & validate" placeholder="Last Name">
-            </div>
-            <p class="help is-danger" repeat.for="errorInfo of lastNameErrors">${errorInfo.error.message}</p>
-        </div>
-
-        <div class="field" validation-errors.bind="emailErrors">
-            <label class="label">Email</label>
-            <div class="control">
-                <input class="input" class.bind="emailErrors.length ? 'is-danger' : ''" type="email" value.bind="profile.email & validate" placeholder="Email Address">
+            <div class="field" validation-errors.bind="bioErrors">
+                <label class="label">Bio</label>
+                <div class="control">
+                    <textarea class="textarea" placeholder="Tell me a little about yourself...Other users will use this information to decide whether or not to connect with you..." value.bind="model.bio & validate"></textarea>
+                    <p class="help is-danger" repeat.for="errorInfo of bioErrors">${errorInfo.error.message}</p>
+                </div>
             </div>
 
-            <p class="help is-danger" repeat.for="errorInfo of emailErrors">${errorInfo.error.message}</p>
-        </div>
-        <div class="field is-grouped">
-            <div class="control">
-                <button class="button is-primary" disabled.bind="!canSave">Submit</button>
+            <div class="field" validation-errors.bind="tagsErrors">
+                <span>Tags</span>
+                <div class="field">
+                    <div show.bind="model.tags.length == 0">
+                        Please add at least 1 tag using the input below.
+                    </div>
+                </div>
+                <tag-editor existing-tags.bind="model.tags" add.delegate="onAddTag($event.detail)" remove.delegate="onRemoveTag($event.detail)"></tag-editor>
+                <p class="help is-danger" repeat.for="errorInfo of tagsErrors">${errorInfo.error.message}</p>
             </div>
-            <div class="control">
-                <button class="button is-link">Cancel</button>
+
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary is-pulled-right ${ isLoading ? 'is-loading':''}" type="submit" disabled.bind="!canSave">Save</button>
+                </div>
             </div>
-        </div>
         </form>
     </div>
 </template>

@@ -66,18 +66,19 @@ namespace Covalence.Controllers
             if(ModelState.IsValid)
             {
                 user = await _context.Users.Where(u => u.Id == user.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
-                var userTags = model.Tags
-                    .Select(async t => 
-                        new UserTag() { User = user, UserId = user.Id, Tag = await _tagService.GetTag(t), Name = t.ToUpperInvariant()
-                    }).ToList();
+                // var userTags = model.Tags
+                //     .Select(async t => 
+                //         new UserTag() { User = user, UserId = user.Id, Tag = await _tagService.GetTag(t), Name = t.ToUpperInvariant()
+                //     }).ToList();
                     
                 user.FirstName = model.FirstName == null ? user.FirstName : model.FirstName;
                 user.LastName = model.LastName == null ? user.LastName : model.LastName;
                 user.IsMentor = (bool)(model.IsMentor == null ? user.IsMentor : model.IsMentor);
                 user.Email = model.Email == null ? user.Email : model.Email;
                 user.UserName = user.Email;
-                user.Tags = model.Tags == null ? user.Tags : await Task.WhenAll(userTags); //TODO: This is not efficient
-                user.NeedsOnboarding = (bool)(model.NeedsOnboarding == null ? user.NeedsOnboarding : model.NeedsOnboarding);
+                //user.Tags = model.Tags == null ? user.Tags : await Task.WhenAll(userTags); //TODO: This is not efficient
+                user = await UpdateUserTags(user, model.Tags);
+                //user.NeedsOnboarding = (bool)(model.NeedsOnboarding == null ? user.NeedsOnboarding : model.NeedsOnboarding);
 
                 await _userManager.UpdateAsync(user);
                 var contract = Converters.ConvertUserToContract(user);
@@ -87,32 +88,45 @@ namespace Covalence.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpPut("tags/{userId}")]
-        public async Task<IActionResult> UpdateUserTags(string userId, [FromBody] List<string> tags)
-        {
-            var user = await _userManager.GetUserAsync(User);
-
-            if(user == null && user.Id == userId)
-            {
-                _logger.LogError("User not found");
-                return BadRequest();
-            }
-
+        private async Task<ApplicationUser> UpdateUserTags(ApplicationUser user, List<string> tags) {
             if(tags != null)
             {
-                user = await _context.Users.Where(u => u.Id == user.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
+                //user = await _context.Users.Where(u => u.Id == user.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
                 var tagsToRemove = user.Tags.Select(t => t.Name.ToLowerInvariant()).Except(tags).ToList(); // Get list of current tags not in the new tag list
                 var tagsToAdd = tags.Except(user.Tags.Select(t => t.Name.ToLowerInvariant())).ToList(); // Get list of new tags which aren't in the current tag list
                 user = await _tagService.RemoveTags(tagsToRemove, user); //can I clear this maybe?
                 user = await _tagService.AddTags(tagsToAdd, user);
-
-                await _userManager.UpdateAsync(user);
-                var contract = Converters.ConvertUserToContract(user);
-
-                return Ok(contract);
             }
 
-            return BadRequest("Invalid Tag List");
+            return user;
         }
+
+        // [HttpPut("tags/{userId}")]
+        // public async Task<IActionResult> UpdateUserTags(string userId, [FromBody] List<string> tags)
+        // {
+        //     var user = await _userManager.GetUserAsync(User);
+
+        //     if(user == null && user.Id == userId)
+        //     {
+        //         _logger.LogError("User not found");
+        //         return BadRequest();
+        //     }
+
+        //     if(tags != null)
+        //     {
+        //         user = await _context.Users.Where(u => u.Id == user.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
+        //         var tagsToRemove = user.Tags.Select(t => t.Name.ToLowerInvariant()).Except(tags).ToList(); // Get list of current tags not in the new tag list
+        //         var tagsToAdd = tags.Except(user.Tags.Select(t => t.Name.ToLowerInvariant())).ToList(); // Get list of new tags which aren't in the current tag list
+        //         user = await _tagService.RemoveTags(tagsToRemove, user); //can I clear this maybe?
+        //         user = await _tagService.AddTags(tagsToAdd, user);
+
+        //         await _userManager.UpdateAsync(user);
+        //         var contract = Converters.ConvertUserToContract(user);
+
+        //         return Ok(contract);
+        //     }
+
+        //     return BadRequest("Invalid Tag List");
+        // }
     }
 }

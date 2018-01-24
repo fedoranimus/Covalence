@@ -1,70 +1,98 @@
-import { autoinject, bindable, computedFrom } from 'aurelia-framework';
+import { autoinject, bindable, computedFrom, lazy } from 'aurelia-framework';
 import { AuthService } from 'aurelia-authentication';
 import { ValidationControllerFactory, ValidationController, Validator, validateTrigger, ValidationRules, ValidateResult } from 'aurelia-validation';
 import { IUser} from 'infrastructure/user';
 import { UserService } from 'services/userService';
 import { State } from 'store/state';
 import { Store } from 'aurelia-store';
+import { TagService } from 'services/tagService';
+import { Router } from 'aurelia-router';
+import { updateUser } from 'store/userActions';
 
 
 @autoinject
 export class Profile {
-    @bindable profile: IUser;
-    @bindable isEditable: boolean = false;
-
-    controller: ValidationController = null;
+    model: ProfileModel = {
+        firstName: "",
+        lastName: "",
+        location: "",
+        bio: "",
+        tags: []
+    }
 
     canSave: boolean = false;
+    isLoading: boolean = false;
+    private controller: ValidationController;
 
-    constructor(private auth: AuthService, private userService: UserService, private validator: Validator, controllerFactory: ValidationControllerFactory, private store: Store<State>) {
-        this.controller = controllerFactory.createForCurrentScope();
-        this.controller.validateTrigger = validateTrigger.changeOrBlur;
-        this.controller.subscribe(event => this.validateForm());
-        store.state.subscribe(state => {
-            this.profile = state.user;
+    constructor(private validator: Validator, 
+                private controllerFactory: ValidationControllerFactory, 
+                private tagService: TagService, 
+                private userService: UserService, 
+                private router: Router,
+                private store: Store<State>) {
+        this.store.state.subscribe(state => {
+            if(state.user) {
+                this.model.firstName = state.user.firstName;
+                this.model.lastName = state.user.lastName;
+                this.model.location = state.user.location;
+                this.model.bio = state.user.bio;
+                this.model.tags = state.user.tags.map(t => t.name);
+            }
         });
+        this.controller = controllerFactory.createForCurrentScope(validator);
+        this.controller.validateTrigger = validateTrigger.changeOrBlur;
+        this.controller.subscribe(event => this.validate());
     }
 
     activate() {
-        this.setupValidationRules();
+        this.setupValidation();
     }
 
-    @computedFrom('this.profile.firstName', 'this.profile.lastName')
-    get displayName() {
-        return `${this.profile.firstName} ${this.profile.lastName}`;
-    }
-
-    private setupValidationRules() {
-        ValidationRules
-            .ensure('firstName').required().minLength(1).withMessage("Please enter a first name")
-            .ensure('lastName').required().minLength(1).withMessage("Please enter a last name")
-            .ensure('email').required().email().withMessage("Please enter a valid email address")
-            .on(this.profile);
-    }
-
-    private validateForm() {
-        this.validator.validateObject(this.profile)
+    private validate() {
+        this.validator.validateObject(this.model)
             .then(results => this.canSave = results.every(result => result.valid));
     }
 
-    set displayName(displayName: string) {
-        this.separateNames(displayName);
+    private setupValidation() {
+        ValidationRules
+            .ensure('firstName').required()
+            .ensure('lastName').required()
+            .ensure('location').required().maxLength(5).minLength(5)
+            .ensure('bio').required()
+            .ensure('tags').required().minItems(1)
+            .on(this.model);
     }
 
-    async updateDetails() {
-        if(!this.canSave) {
-            return;
-        }
+    async onAddTag(tagName: string) {
+        const index = this.model.tags.findIndex(x => x == tagName);
+        
+        if(index === -1) {
+            const tag = await this.tagService.getTag(tagName);
+            this.model.tags.push(tag.name);
+        }      
 
-        await this.auth.updateMe(this.profile);
+        this.validate();
     }
 
-    private separateNames(displayName: string) {
-        const names = displayName.split(" ");
-        if(names.length > 2) {
-            //set error
-        } else {
-            
-        }
+    onRemoveTag(tagName: string) {
+        const index = this.model.tags.findIndex(x => x == tagName);
+        this.model.tags.splice(index, 1);
+
+        this.validate();
     }
+
+    public async save() {
+        this.isLoading = true;
+        const model = this.model;
+        await this.store.dispatch(updateUser, model, (model) => this.userService.updateUser(model));
+        this.isLoading = false;
+    }
+}
+
+export interface ProfileModel {
+    firstName: string;
+    lastName: string;
+    location: string;
+    bio: string;
+    tags: string[];
 }

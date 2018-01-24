@@ -7,7 +7,7 @@ import { Store } from 'aurelia-store';
 import { State } from 'store/state';
 import { loadConnections, updateConnection } from 'store/connectionActions';
 import { search, navigateToPage, addSearchParam, removeSearchParam, clearSearchParams } from 'store/searchActions';
-import { getCurrentUser, completeOnboarding, clearUser } from 'store/userActions';
+import { getCurrentUser, completeOnboarding, clearUser, updateUser } from 'store/userActions';
 
 @useView('./app.html')
 @autoinject
@@ -38,6 +38,7 @@ export class AuthApp {
         this.store.registerAction(removeSearchParam.name, removeSearchParam);
         this.store.registerAction(clearSearchParams.name, clearSearchParams);
         this.store.registerAction(clearUser.name, clearUser);
+        this.store.registerAction(updateUser.name, updateUser);
     }
 
     configureRouter(config: RouterConfiguration, router: Router) {

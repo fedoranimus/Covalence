@@ -1,8 +1,13 @@
 import { State } from 'store/state';
 import { IUser, IUserViewModel } from 'infrastructure/user';
 
-export async function updateUser(state: State, user: IUser | null) {
-    return { ...state, ...{ user } };
+export async function updateUser(state: State, viewModel: IUserViewModel, updateUserApi: (viewModel: IUserViewModel) => IUser) {
+    try {
+        const user = await updateUserApi(viewModel);
+        return { ...state, ...{ user }};
+    } catch(e) {
+        return state;
+    }
 }
 
 export async function getCurrentUser(state: State, getMeApi: () => IUser) {
