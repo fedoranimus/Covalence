@@ -35,53 +35,55 @@ namespace Covalence.Tests
             Assert.Equal("fixture@test.com", user.Email);
         }
 
-        [Fact]
-        public async Task AddTagsToUser_CorrectData_ShouldContainThreeTags() {
-            var getUser = await Client.GetAsync("/api/user");
-            var getUserContent = await getUser.Content.ReadAsStringAsync();
-            var userContent = JsonConvert.DeserializeObject<UserContract>(getUserContent);
+        // TODO: Write new user update tests
 
-            var userId = userContent.Id;
-            var uri = $"/api/user/tags/{userId}";
-            var requestContent = new string[] {"Physics", "biology", "dinology"};
-            var body = new StringContent(JsonConvert.SerializeObject(requestContent), Encoding.UTF8, "application/json");
+        // [Fact]
+        // public async Task AddTagsToUser_CorrectData_ShouldContainThreeTags() {
+        //     var getUser = await Client.GetAsync("/api/user");
+        //     var getUserContent = await getUser.Content.ReadAsStringAsync();
+        //     var userContent = JsonConvert.DeserializeObject<UserContract>(getUserContent);
+
+        //     var userId = userContent.Id;
+        //     var uri = $"/api/user/tags/{userId}";
+        //     var requestContent = new string[] {"Physics", "biology", "dinology"};
+        //     var body = new StringContent(JsonConvert.SerializeObject(requestContent), Encoding.UTF8, "application/json");
             
-            var response = await Client.PutAsync(uri, body);
+        //     var response = await Client.PutAsync(uri, body);
 
-            response.EnsureSuccessStatusCode();
+        //     response.EnsureSuccessStatusCode();
 
-            // var userResponse = await Client.GetAsync("/api/user");
-            // response.EnsureSuccessStatusCode();
+        //     // var userResponse = await Client.GetAsync("/api/user");
+        //     // response.EnsureSuccessStatusCode();
 
-            var content = await response.Content.ReadAsStringAsync();
-            var user = JsonConvert.DeserializeObject<UserContract>(content);
+        //     var content = await response.Content.ReadAsStringAsync();
+        //     var user = JsonConvert.DeserializeObject<UserContract>(content);
 
-            Assert.True(user.Tags.Count() == 3);       
-        }
+        //     Assert.True(user.Tags.Count() == 3);       
+        // }
 
-        [Fact]
-        public async Task RepeatAddTagsToUser_CorrectData_ShouldContainThreeTags() {
-            var getUser = await Client.GetAsync("/api/user");
-            var getUserContent = await getUser.Content.ReadAsStringAsync();
-            var userContent = JsonConvert.DeserializeObject<UserContract>(getUserContent);
+        // [Fact]
+        // public async Task RepeatAddTagsToUser_CorrectData_ShouldContainThreeTags() {
+        //     var getUser = await Client.GetAsync("/api/user");
+        //     var getUserContent = await getUser.Content.ReadAsStringAsync();
+        //     var userContent = JsonConvert.DeserializeObject<UserContract>(getUserContent);
 
-            var userId = userContent.Id;
-            var uri = $"/api/user/tags/{userId}";
-            var requestContent = new string[] {"Physics", "biology", "dinology"};
-            var body = new StringContent(JsonConvert.SerializeObject(requestContent), Encoding.UTF8, "application/json");
+        //     var userId = userContent.Id;
+        //     var uri = $"/api/user/tags/{userId}";
+        //     var requestContent = new string[] {"Physics", "biology", "dinology"};
+        //     var body = new StringContent(JsonConvert.SerializeObject(requestContent), Encoding.UTF8, "application/json");
             
-            var response = await Client.PutAsync(uri, body);
+        //     var response = await Client.PutAsync(uri, body);
 
-            response.EnsureSuccessStatusCode();
+        //     response.EnsureSuccessStatusCode();
 
-            // var userResponse = await Client.GetAsync("/api/user");
-            // response.EnsureSuccessStatusCode();
+        //     // var userResponse = await Client.GetAsync("/api/user");
+        //     // response.EnsureSuccessStatusCode();
 
-            var content = await response.Content.ReadAsStringAsync();
-            var user = JsonConvert.DeserializeObject<UserContract>(content);
+        //     var content = await response.Content.ReadAsStringAsync();
+        //     var user = JsonConvert.DeserializeObject<UserContract>(content);
 
-            Assert.True(user.Tags.Count() == 3);       
-        }
+        //     Assert.True(user.Tags.Count() == 3);       
+        // }
 
 
 
