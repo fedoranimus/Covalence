@@ -16,6 +16,9 @@ export class ConnectionList {
     }
 
     get hasConnections() {
+        if(this.activeFilter) {
+            return this.connections.filter(c => c.connectionStatus === this.activeFilter).length > 0;
+        }
         return this.connections.length > 0;
     }
 
