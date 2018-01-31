@@ -3,6 +3,9 @@
 Primary Repo for Covalence
 
 [![Build Status](https://travis-ci.org/fedoranimus/Covalence.svg?branch=master)](https://travis-ci.org/fedoranimus/Covalence)
+
+ ## Sample Host
+ covalence.timdturner.com
  
  ## Getting Started
  
