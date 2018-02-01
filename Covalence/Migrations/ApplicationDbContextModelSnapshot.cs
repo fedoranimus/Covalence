@@ -119,6 +119,20 @@ namespace Covalence.Migrations
                     b.ToTable("UserTags");
                 });
 
+            modelBuilder.Entity("Covalence.ZipCode", b =>
+                {
+                    b.Property<string>("Code")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("Latitude");
+
+                    b.Property<double>("Longitude");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("ZipCodes");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")

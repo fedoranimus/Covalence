@@ -21,6 +21,9 @@ namespace Covalence
             modelBuilder.Entity<UserTag>()
                 .HasKey(x => new { x.UserId, x.Name });
 
+            modelBuilder.Entity<ZipCode>()
+                .HasKey(x => new { x.Code });
+
             modelBuilder.Entity<UserTag>()
                 .HasOne(ut => ut.User)
                 .WithMany(u => u.Tags)
@@ -48,5 +51,6 @@ namespace Covalence
         public DbSet<Tag> Tags { get; set; }
         public DbSet<UserTag> UserTags { get; set; }
         public DbSet<Connection> Connections { get; set; }
+        public DbSet<ZipCode> ZipCodes { get; set; }
     }
 }

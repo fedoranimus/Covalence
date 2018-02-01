@@ -5,6 +5,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 
 namespace Covalence
@@ -23,7 +24,8 @@ namespace Covalence
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                     var tagService = services.GetRequiredService<ITagService>();
                     var connectionService = services.GetRequiredService<IConnectionService>();
-                    await DbInitializer.InitializeAsync(context, userManager, tagService, connectionService);
+                    var fileProvider = services.GetRequiredService<IFileProvider>();
+                    await DbInitializer.InitializeAsync(context, userManager, tagService, connectionService, fileProvider);
                 }
                 catch(Exception ex) 
                 {

@@ -1,15 +1,22 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 namespace Covalence.Data
 {
     public static class DbInitializer
     {
-        public static async Task InitializeAsync(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ITagService tagService, IConnectionService connectionService)
+        public static async Task InitializeAsync(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ITagService tagService, IConnectionService connectionService, IFileProvider fileProvider)
         {
             context.Database.Migrate();
+
+            await InitializeZipCodesAsync(context, fileProvider);
 
             if(context.Users.Any() || context.Tags.Any())
             {
@@ -162,6 +169,30 @@ namespace Covalence.Data
             await connectionService.RequestConnectionAsync(genjiUser, testUser);
 
             await context.SaveChangesAsync();
+        }
+
+        private static async Task InitializeZipCodesAsync(ApplicationDbContext context, IFileProvider fileProvider) {
+            if(context.ZipCodes.Any()) {
+                return;
+            }
+
+            var file = fileProvider.GetFileInfo("./Data/zipcodes.xml");
+
+            if(file.Exists)
+            {
+                using (var reader = new StreamReader(file.PhysicalPath))
+                {
+                    var serializer = new XmlSerializer(typeof(ZipCodes));
+                    var codeList = serializer.Deserialize(reader) as ZipCodes;
+                    // Put the list in the db
+                    context.ZipCodes.AddRange(codeList.Codes);
+                    await context.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                throw new FileLoadException("Cannot find zipcodes.xml");
+            }
         }
     }
 }

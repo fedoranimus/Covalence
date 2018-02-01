@@ -25,6 +25,7 @@ using Covalence.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.FileProviders;
 
 namespace Covalence
 {
@@ -61,6 +62,9 @@ namespace Covalence
             // Add framework services.
             services.AddMemoryCache();
             services.AddMvc();
+
+            var physicalProvider = _env.ContentRootFileProvider;
+            services.AddSingleton<IFileProvider>(physicalProvider);
                 
             services.Configure<AuthMessageSenderOptions>(Configuration);
 

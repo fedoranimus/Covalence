@@ -97,6 +97,19 @@ namespace Covalence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ZipCodes",
+                columns: table => new
+                {
+                    Code = table.Column<string>(nullable: false),
+                    Latitude = table.Column<double>(nullable: false),
+                    Longitude = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ZipCodes", x => x.Code);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -410,6 +423,9 @@ namespace Covalence.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserTags");
+
+            migrationBuilder.DropTable(
+                name: "ZipCodes");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

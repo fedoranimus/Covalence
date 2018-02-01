@@ -11,7 +11,7 @@ using System;
 namespace Covalence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171228013911_InitialMigration")]
+    [Migration("20180131002546_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -118,6 +118,20 @@ namespace Covalence.Migrations
                     b.HasIndex("Name");
 
                     b.ToTable("UserTags");
+                });
+
+            modelBuilder.Entity("Covalence.ZipCode", b =>
+                {
+                    b.Property<string>("Code")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("Latitude");
+
+                    b.Property<double>("Longitude");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("ZipCodes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
