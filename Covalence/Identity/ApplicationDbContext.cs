@@ -24,6 +24,9 @@ namespace Covalence
             modelBuilder.Entity<ZipCode>()
                 .HasKey(x => new { x.Code });
 
+            modelBuilder.Entity<Location>()
+                .HasKey(x => new { x.Latitude, x.Longitude });
+
             modelBuilder.Entity<UserTag>()
                 .HasOne(ut => ut.User)
                 .WithMany(u => u.Tags)
@@ -46,11 +49,16 @@ namespace Covalence
                 .HasOne(c => c.RequestedUser)
                 .WithMany()
                 .HasForeignKey(c => c.RequestedUserId);
+
+            modelBuilder.Entity<Location>()
+                .HasMany(l => l.Users)
+                .WithOne(u => u.Location);
         }
 
         public DbSet<Tag> Tags { get; set; }
         public DbSet<UserTag> UserTags { get; set; }
         public DbSet<Connection> Connections { get; set; }
         public DbSet<ZipCode> ZipCodes { get; set; }
+        public DbSet<Location> Locations { get; set; }
     }
 }

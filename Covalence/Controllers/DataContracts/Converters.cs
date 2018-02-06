@@ -20,7 +20,7 @@ namespace Covalence.Contracts
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Location = user.Location,
+                ZipCode = user.ZipCode,
                 Email = user.Email,
                 Bio = user.Bio,
                 EmailConfirmed = user.EmailConfirmed,
@@ -42,6 +42,7 @@ namespace Covalence.Contracts
                 Tags = remoteUser.Tags
                     .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList(),
                 ConnectionStatus = connectionStatus,
+                DistanceToUser = currentUser.Location.GetDistanceTo(remoteUser.Location),
                 Email = connectionStatus == RemoteConnectionStatus.Connected ? remoteUser.Email : null
             };
         }

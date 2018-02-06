@@ -11,7 +11,7 @@ using System;
 namespace Covalence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180131002546_InitialMigration")]
+    [Migration("20180206005623_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,7 +43,9 @@ namespace Covalence.Migrations
 
                     b.Property<string>("LastName");
 
-                    b.Property<string>("Location");
+                    b.Property<double?>("LocationLatitude");
+
+                    b.Property<double?>("LocationLongitude");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -70,6 +72,8 @@ namespace Covalence.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
+                    b.Property<string>("ZipCode");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -78,6 +82,8 @@ namespace Covalence.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasName("UserNameIndex");
+
+                    b.HasIndex("LocationLatitude", "LocationLongitude");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -95,6 +101,17 @@ namespace Covalence.Migrations
                     b.HasIndex("RequestedUserId");
 
                     b.ToTable("Connections");
+                });
+
+            modelBuilder.Entity("Covalence.Location", b =>
+                {
+                    b.Property<double>("Latitude");
+
+                    b.Property<double>("Longitude");
+
+                    b.HasKey("Latitude", "Longitude");
+
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("Covalence.Tag", b =>
@@ -256,7 +273,11 @@ namespace Covalence.Migrations
 
                     b.Property<string>("DisplayName");
 
+                    b.Property<string>("Permissions");
+
                     b.Property<string>("PostLogoutRedirectUris");
+
+                    b.Property<string>("Properties");
 
                     b.Property<string>("RedirectUris");
 
@@ -280,6 +301,8 @@ namespace Covalence.Migrations
 
                     b.Property<string>("ConcurrencyToken")
                         .IsConcurrencyToken();
+
+                    b.Property<string>("Properties");
 
                     b.Property<string>("Scopes");
 
@@ -312,6 +335,8 @@ namespace Covalence.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<string>("Properties");
+
                     b.HasKey("Id");
 
                     b.ToTable("OpenIddictScopes");
@@ -335,6 +360,8 @@ namespace Covalence.Migrations
 
                     b.Property<string>("Payload");
 
+                    b.Property<string>("Properties");
+
                     b.Property<string>("ReferenceId");
 
                     b.Property<string>("Status");
@@ -355,6 +382,13 @@ namespace Covalence.Migrations
                         .IsUnique();
 
                     b.ToTable("OpenIddictTokens");
+                });
+
+            modelBuilder.Entity("Covalence.ApplicationUser", b =>
+                {
+                    b.HasOne("Covalence.Location", "Location")
+                        .WithMany("Users")
+                        .HasForeignKey("LocationLatitude", "LocationLongitude");
                 });
 
             modelBuilder.Entity("Covalence.Connection", b =>

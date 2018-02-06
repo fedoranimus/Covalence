@@ -23,6 +23,7 @@ namespace Covalence.Contracts
         public string Bio { get; set; }
         public ICollection<TagContract> Tags { get; set; }
         public RemoteConnectionStatus ConnectionStatus { get; set; }
+        public double? DistanceToUser { get; set; }
         public string Email { get; set; }
     }
 }

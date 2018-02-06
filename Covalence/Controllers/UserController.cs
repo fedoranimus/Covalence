@@ -66,17 +66,31 @@ namespace Covalence.Controllers
             if(ModelState.IsValid)
             {
                 user = await _context.Users.Where(u => u.Id == user.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
-                // var userTags = model.Tags
-                //     .Select(async t => 
-                //         new UserTag() { User = user, UserId = user.Id, Tag = await _tagService.GetTag(t), Name = t.ToUpperInvariant()
-                //     }).ToList();
                     
                 user.FirstName = model.FirstName == null ? user.FirstName : model.FirstName;
                 user.LastName = model.LastName == null ? user.LastName : model.LastName;
                 user.IsMentor = (bool)(model.IsMentor == null ? user.IsMentor : model.IsMentor);
                 user.Email = model.Email == null ? user.Email : model.Email;
                 user.UserName = user.Email;
-                //user.Tags = model.Tags == null ? user.Tags : await Task.WhenAll(userTags); //TODO: This is not efficient
+                user.ZipCode = model.ZipCode == null ? user.ZipCode : model.ZipCode;
+
+                if(user.ZipCode == null)
+                {
+                    user.Location = model.Latitude == null || model.Longitude == null ? user.Location : new Location((double)model.Latitude, (double)model.Longitude);
+                }
+                else
+                {
+                    var zipLocation = await _context.ZipCodes.FindAsync(model.ZipCode);
+                    if(zipLocation != null)
+                        user.Location = new Location(zipLocation.Latitude, zipLocation.Longitude);
+                }
+
+                if(await _context.Locations.FindAsync(user.Location) != null) {
+                    await _context.Locations.AddAsync(user.Location);
+                }
+
+                await _context.SaveChangesAsync();
+
                 user = await UpdateUserTags(user, model.Tags);
                 user.NeedsOnboarding = (bool)(model.NeedsOnboarding == null ? user.NeedsOnboarding : model.NeedsOnboarding);
 

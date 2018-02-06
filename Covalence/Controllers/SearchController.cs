@@ -86,8 +86,13 @@ namespace Covalence.Controllers
                 }
 
                 users = tagCounts.OrderBy(x => x.Value)
-                                .Select(x => x.Key)
-                                .ToList();
+                                    .Select(x => x.Key)
+                                    .ToList();
+
+                if(!currentUser.Location.IsUnknown) {
+                    users = users.OrderBy(x => x.Location.GetDistanceTo(currentUser.Location))
+                                    .ToList();
+                }
             }
 
             var connections = await _context.Connections.Where(x => x.RequestedUserId == currentUser.Id || x.RequestingUserId == currentUser.Id).Include(x => x.RequestedUser).Include(x => x.RequestingUser).ToListAsync();
