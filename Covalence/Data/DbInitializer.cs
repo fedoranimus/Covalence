@@ -16,7 +16,7 @@ namespace Covalence.Data
         {
             context.Database.Migrate();
 
-            await InitializeZipCodesAsync(context, fileProvider);
+            //await InitializeZipCodesAsync(context, fileProvider);
 
             if(context.Users.Any() || context.Tags.Any())
             {

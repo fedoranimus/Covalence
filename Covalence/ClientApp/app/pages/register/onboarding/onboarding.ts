@@ -1,11 +1,13 @@
-import { UserService } from './../../../services/userService';
-import { TagService } from './../../../services/tagService';
-import { bindable, autoinject } from "aurelia-framework";
+import { TagService } from 'services/tagService';
+import { UserService } from 'services/userService';
+import { GoogleMapsService } from 'services/googleMapsService';
+import { bindable, autoinject, inject } from "aurelia-framework";
 import { Validator, ValidationController, ValidationControllerFactory, ValidationRules, validateTrigger } from 'aurelia-validation';
 import { Router } from 'aurelia-router';
 import { State } from 'store/state';
 import { Store } from 'aurelia-store';
 import { completeOnboarding } from 'store/userActions';
+import { Location } from 'infrastructure/user';
 
 @autoinject
 export class Onboarding {
@@ -14,9 +16,13 @@ export class Onboarding {
         lastName: "",
         zipCode: "",
         bio: "",
-        tags: []
+        tags: [],
+        latitude: null,
+        longitude: null
     }
 
+    hasLocation: boolean = false;
+    @bindable displayZipCode: boolean = true;
     canSave: boolean = false;
     isLoading: boolean = false;
     private controller: ValidationController;
@@ -26,7 +32,8 @@ export class Onboarding {
                 private tagService: TagService, 
                 private userService: UserService, 
                 private router: Router,
-                private store: Store<State>) {
+                private store: Store<State>,
+                private mapsApi: GoogleMapsService) {
         this.controller = controllerFactory.createForCurrentScope(validator);
         this.controller.validateTrigger = validateTrigger.changeOrBlur;
         this.controller.subscribe(event => this.validate());
@@ -34,6 +41,10 @@ export class Onboarding {
 
     activate() {
         this.setupValidation();
+    }
+
+    attached() {
+        this.getGeoLocation();
     }
 
     private validate() {
@@ -45,10 +56,32 @@ export class Onboarding {
         ValidationRules
             .ensure('firstName').required()
             .ensure('lastName').required()
-            .ensure('zipCode').required().maxLength(5).minLength(5)
+            .ensure('zipCode').maxLength(5).minLength(5)
             .ensure('bio').required()
             .ensure('tags').required().minItems(1)
             .on(this.model);
+    }
+
+    getGeoLocation() {
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => this.updatePosition(position));
+        }
+    }
+
+    async getZipLocation() {
+        return await this.mapsApi.getLocation(this.model.zipCode);
+    }
+
+    resetLocation() {
+        this.model.latitude = null;
+        this.model.longitude = null;
+        this.hasLocation = false;
+    }
+
+    private updatePosition(position: Position) {
+        this.hasLocation = true;
+        this.model.latitude = position.coords.latitude;
+        this.model.longitude = position.coords.longitude;
     }
 
     async onAddTag(tagName: string) {
@@ -72,6 +105,13 @@ export class Onboarding {
     public async onboard() {
         this.isLoading = true;
         const model = this.model;
+        
+        if((!model.latitude || !model.longitude) && model.zipCode) {
+            const location = await this.getZipLocation();
+            model.latitude = location.results[0].geometry.lat;
+            model.longitude = location.results[0].geometry.lng;
+        }        
+
         await this.store.dispatch(completeOnboarding, model, (model) => this.userService.onboardUser(model));
         this.isLoading = false;
         this.router.navigate('/');
@@ -84,4 +124,6 @@ interface OnboardModel {
     zipCode: string;
     bio: string;
     tags: string[];
+    latitude: number;
+    longitude: number;
 }

@@ -73,17 +73,7 @@ namespace Covalence.Controllers
                 user.Email = model.Email == null ? user.Email : model.Email;
                 user.UserName = user.Email;
                 user.ZipCode = model.ZipCode == null ? user.ZipCode : model.ZipCode;
-
-                if(user.ZipCode == null)
-                {
-                    user.Location = model.Latitude == null || model.Longitude == null ? user.Location : new Location((double)model.Latitude, (double)model.Longitude);
-                }
-                else
-                {
-                    var zipLocation = await _context.ZipCodes.FindAsync(model.ZipCode);
-                    if(zipLocation != null)
-                        user.Location = new Location(zipLocation.Latitude, zipLocation.Longitude);
-                }
+                user.Location = model.Latitude == null || model.Longitude == null ? user.Location : new Location((double)model.Latitude, (double)model.Longitude);
 
                 if(await _context.Locations.FindAsync(user.Location) != null) {
                     await _context.Locations.AddAsync(user.Location);

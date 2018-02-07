@@ -30,7 +30,14 @@ export interface IUserViewModel {
     firstName?: string;
     lastName?: string;
     tags?: string[];
-    location?: string;
+    zipCode?: string;
+    latitude?: number;
+    longitude?: number;
     isMentor?: boolean;
     needsOnboarding?: boolean;
+}
+
+export interface Location {
+    latitude: number;
+    longitude: number;
 }

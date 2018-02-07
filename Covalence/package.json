@@ -29,6 +29,7 @@
     "markdown-it-katex": "^2.0.3"
   },
   "devDependencies": {
+    "@types/googlemaps": "^3.30.5",
     "@types/markdown-it": "0.0.4",
     "@types/node": "^9.4.0",
     "aspnet-webpack": "^2.0.3",
