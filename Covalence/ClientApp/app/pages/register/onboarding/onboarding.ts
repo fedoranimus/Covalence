@@ -21,6 +21,11 @@ export class Onboarding {
         longitude: null
     }
 
+    locationMarker = [];
+    zoomLevel = 8;
+
+    autoUpdateBounds = true;
+
     hasLocation: boolean = false;
     @bindable displayZipCode: boolean = true;
     canSave: boolean = false;
@@ -62,10 +67,26 @@ export class Onboarding {
             .on(this.model);
     }
 
+    mapLoaded(map, event) {
+        console.log(map, event);
+    }
+
+    clickMap(latLng) {
+        const lat = latLng.lat();
+        const long = latLng.lng();
+
+        this.locationMarker = [{ latitude: lat, longitude: long }];
+        this.model.latitude = lat;
+        this.model.longitude = long;
+    }
+
     getGeoLocation() {
         if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => this.updatePosition(position));
         }
+
+        this.autoUpdateBounds = false;
+        this.zoomLevel = 8;
     }
 
     async getZipLocation() {
@@ -82,6 +103,8 @@ export class Onboarding {
         this.hasLocation = true;
         this.model.latitude = position.coords.latitude;
         this.model.longitude = position.coords.longitude;
+
+        this.locationMarker = [{ latitude: position.coords.latitude, longitude: position.coords.longitude }];
     }
 
     async onAddTag(tagName: string) {

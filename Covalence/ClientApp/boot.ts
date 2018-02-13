@@ -30,14 +30,14 @@ export function configure(aurelia: Aurelia) {
       baseConfig.configure(authConfig);
     })
     .plugin(PLATFORM.moduleName('aurelia-validation'))
-    .plugin(PLATFORM.moduleName('aurelia-store'), { initialState });
-    // .plugin('aurelia-google-maps', config => {
-    //   config.options({
-    //     apiKey: 'AIzaSyCEeOKnNEsBO4T4Nm-54p_l4hOaGAx7U_c',
-    //     apiLibraries: 'geocoding',
-    //     options: {}
-    //   });
-    // });
+    .plugin(PLATFORM.moduleName('aurelia-store'), { initialState })
+    .plugin(PLATFORM.moduleName('aurelia-google-maps'), config => {
+      config.options({
+        apiKey: 'AIzaSyDUNEXcb_7SHw-EsOU-sDciQ9kzJX7UyLQ',
+        apiLibraries: '',
+        options: {}
+      });
+    });
 
   if (IS_DEV_BUILD) {
     aurelia.use.developmentLogging();
