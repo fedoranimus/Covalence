@@ -19,26 +19,28 @@
                 </div>
             </div>
 
-            <google-map map-click.delegate="clickMap($event.detail.latLng)" zoom.bind="zoomLevel" markers.bind="locationMarker" latitude.bind="model.latitude" longitude.bind="model.longitude" map-loaded.call="mapLoaded(map, $event)"></google-map>
-
-            <div class="field has-addons" validation-errors.bind="zipCodeErrors" show.bind="displayZipCode">
-                <label class="label">Zip Code</label>
-                <div class="control">
-                    <input class="input" type="text" placeholder="Enter your zip code..." value.bind="model.zipCode & validate" disabled.bind="hasLocation">
-                    <p class="help is-danger" repeat.for="errorInfo of zipCodeErrors">${errorInfo.error.message}</p>
-                </div>
-                <div class="control" show.bind="hasLocation">
-                    <a class="button is-info" click.delegate="resetLocation()">
-                        Reset Location
-                    </a>
-                </div>
-            </div>
-
             <div class="field">
-                <div class="control">
-                    <a class="button is-info" click.delegate="getGeoLocation()">
-                        Find Location
-                    </a>
+                <div class="level">
+                    <div class="level-left">
+                        <div class="control level-item">
+                            <label class="checkbox">
+                                <input type="checkbox" checked.bind="shareLocation">
+                                Share Location
+                            </label>
+                        </div>
+                    </div>
+                    <div class="level-right">
+                        <div class="control level-item">
+                            <span>Click on the map to choose your location manually or&nbsp;</span>
+                            <a class="button is-info" click.delegate="getGeoLocation()" if.bind="shareLocation">
+                                Find Location
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control" if.bind="shareLocation">
+                    <google-map map-click.delegate="clickMap($event.detail.latLng)" auto-update-bounds.bind="autoUpdateBounds" zoom.bind="zoomLevel" markers.bind="locationMarker" latitude.bind="model.latitude" longitude.bind="model.longitude" map-loaded.call="mapLoaded(map, $event)"></google-map>
                 </div>
             </div>
 
@@ -63,7 +65,7 @@
 
             <div class="field is-pulled-left">
                 <span if.bind="hasLocation">You've provided a location.</span>
-                <span else>You haven't provided a location.</span>
+                <span else>You haven't provided a location - This will affect your search results</span>
             </div>
 
             <div class="field">

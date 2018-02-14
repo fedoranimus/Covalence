@@ -21,9 +21,6 @@ namespace Covalence
             modelBuilder.Entity<UserTag>()
                 .HasKey(x => new { x.UserId, x.Name });
 
-            modelBuilder.Entity<ZipCode>()
-                .HasKey(x => new { x.Code });
-
             modelBuilder.Entity<Location>()
                 .HasKey(x => new { x.Latitude, x.Longitude });
 
@@ -58,7 +55,6 @@ namespace Covalence
         public DbSet<Tag> Tags { get; set; }
         public DbSet<UserTag> UserTags { get; set; }
         public DbSet<Connection> Connections { get; set; }
-        public DbSet<ZipCode> ZipCodes { get; set; }
         public DbSet<Location> Locations { get; set; }
     }
 }

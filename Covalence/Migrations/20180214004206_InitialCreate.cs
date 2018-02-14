@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Covalence.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -81,19 +81,6 @@ namespace Covalence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ZipCodes",
-                columns: table => new
-                {
-                    Code = table.Column<string>(nullable: false),
-                    Latitude = table.Column<double>(nullable: false),
-                    Longitude = table.Column<double>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ZipCodes", x => x.Code);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -139,8 +126,7 @@ namespace Covalence.Migrations
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     SecurityStamp = table.Column<string>(nullable: true),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    ZipCode = table.Column<string>(nullable: true)
+                    UserName = table.Column<string>(maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -453,9 +439,6 @@ namespace Covalence.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserTags");
-
-            migrationBuilder.DropTable(
-                name: "ZipCodes");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

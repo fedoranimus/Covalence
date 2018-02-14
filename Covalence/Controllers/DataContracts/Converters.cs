@@ -20,7 +20,6 @@ namespace Covalence.Contracts
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                ZipCode = user.ZipCode,
                 Email = user.Email,
                 Bio = user.Bio,
                 EmailConfirmed = user.EmailConfirmed,

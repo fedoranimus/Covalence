@@ -14,7 +14,6 @@ export class Onboarding {
     model: OnboardModel = {
         firstName: "",
         lastName: "",
-        zipCode: "",
         bio: "",
         tags: [],
         latitude: null,
@@ -22,12 +21,12 @@ export class Onboarding {
     }
 
     locationMarker = [];
-    zoomLevel = 8;
+    zoomLevel = 15;
 
     autoUpdateBounds = true;
+    shareLocation = true;
 
     hasLocation: boolean = false;
-    @bindable displayZipCode: boolean = true;
     canSave: boolean = false;
     isLoading: boolean = false;
     private controller: ValidationController;
@@ -61,7 +60,6 @@ export class Onboarding {
         ValidationRules
             .ensure('firstName').required()
             .ensure('lastName').required()
-            .ensure('zipCode').maxLength(5).minLength(5)
             .ensure('bio').required()
             .ensure('tags').required().minItems(1)
             .on(this.model);
@@ -81,16 +79,13 @@ export class Onboarding {
     }
 
     getGeoLocation() {
+        this.autoUpdateBounds = true;
         if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => this.updatePosition(position));
         }
 
         this.autoUpdateBounds = false;
         this.zoomLevel = 8;
-    }
-
-    async getZipLocation() {
-        return await this.mapsApi.getLocation(this.model.zipCode);
     }
 
     resetLocation() {
@@ -127,14 +122,7 @@ export class Onboarding {
 
     public async onboard() {
         this.isLoading = true;
-        const model = this.model;
-        
-        if((!model.latitude || !model.longitude) && model.zipCode) {
-            const location = await this.getZipLocation();
-            model.latitude = location.results[0].geometry.lat;
-            model.longitude = location.results[0].geometry.lng;
-        }        
-
+        const model = this.model;    
         await this.store.dispatch(completeOnboarding, model, (model) => this.userService.onboardUser(model));
         this.isLoading = false;
         this.router.navigate('/');
@@ -144,7 +132,6 @@ export class Onboarding {
 interface OnboardModel {
     firstName: string;
     lastName: string;
-    zipCode: string;
     bio: string;
     tags: string[];
     latitude: number;

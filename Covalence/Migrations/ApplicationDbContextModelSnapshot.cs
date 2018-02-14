@@ -71,8 +71,6 @@ namespace Covalence.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
-                    b.Property<string>("ZipCode");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -134,20 +132,6 @@ namespace Covalence.Migrations
                     b.HasIndex("Name");
 
                     b.ToTable("UserTags");
-                });
-
-            modelBuilder.Entity("Covalence.ZipCode", b =>
-                {
-                    b.Property<string>("Code")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<double>("Latitude");
-
-                    b.Property<double>("Longitude");
-
-                    b.HasKey("Code");
-
-                    b.ToTable("ZipCodes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

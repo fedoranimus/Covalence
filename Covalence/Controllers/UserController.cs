@@ -72,7 +72,6 @@ namespace Covalence.Controllers
                 user.IsMentor = (bool)(model.IsMentor == null ? user.IsMentor : model.IsMentor);
                 user.Email = model.Email == null ? user.Email : model.Email;
                 user.UserName = user.Email;
-                user.ZipCode = model.ZipCode == null ? user.ZipCode : model.ZipCode;
                 user.Location = model.Latitude == null || model.Longitude == null ? user.Location : new Location((double)model.Latitude, (double)model.Longitude);
 
                 if(await _context.Locations.FindAsync(user.Location) != null) {
