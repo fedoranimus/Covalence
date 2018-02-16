@@ -25,7 +25,15 @@ namespace Covalence.Contracts
                 EmailConfirmed = user.EmailConfirmed,
                 Tags = user.Tags
                     .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList(),
-                NeedsOnboarding = user.NeedsOnboarding
+                NeedsOnboarding = user.NeedsOnboarding,
+                Location = user.Location == Location.Unknown || user.Location == null ? new LocationContract() : ConvertLocationToContract(user.Location)
+            };
+        }
+
+        public static LocationContract ConvertLocationToContract(Location location) {
+            return new LocationContract() {
+                Latitude = location.Latitude,
+                Longitude = location.Longitude
             };
         }
 
@@ -41,7 +49,7 @@ namespace Covalence.Contracts
                 Tags = remoteUser.Tags
                     .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList(),
                 ConnectionStatus = connectionStatus,
-                DistanceToUser = currentUser.Location.GetDistanceTo(remoteUser.Location),
+                DistanceToUser = currentUser.Location == null || remoteUser.Location == null ? double.NaN : currentUser.Location.GetDistanceTo(remoteUser.Location),
                 Email = connectionStatus == RemoteConnectionStatus.Connected ? remoteUser.Email : null
             };
         }

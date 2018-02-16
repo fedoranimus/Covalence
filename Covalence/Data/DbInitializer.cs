@@ -7,13 +7,15 @@ using System.Xml.Serialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Covalence.Data
 {
     public static class DbInitializer
     {
-        public static async Task InitializeAsync(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ITagService tagService, IConnectionService connectionService, IFileProvider fileProvider)
+        public static async Task InitializeAsync(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ITagService tagService, IConnectionService connectionService, IHostingEnvironment env)
         {
+            //if(env.IsProduction())
             context.Database.Migrate();
 
             if(context.Users.Any() || context.Tags.Any())

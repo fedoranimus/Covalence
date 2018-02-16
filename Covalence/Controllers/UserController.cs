@@ -21,12 +21,14 @@ namespace Covalence.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITagService _tagService;
         private readonly ApplicationDbContext _context;
+        private readonly ILocationService _locationService;
 
-        public UserController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, ITagService tagService, ILogger<UserController> logger) {
+        public UserController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, ITagService tagService, ILogger<UserController> logger, ILocationService locationService) {
             _userManager = userManager;
             _tagService = tagService;
             _logger = logger;
             _context = context;
+            _locationService = locationService;
         }
 
         [HttpGet]
@@ -72,11 +74,11 @@ namespace Covalence.Controllers
                 user.IsMentor = (bool)(model.IsMentor == null ? user.IsMentor : model.IsMentor);
                 user.Email = model.Email == null ? user.Email : model.Email;
                 user.UserName = user.Email;
-                user.Location = model.Latitude == null || model.Longitude == null ? user.Location : new Location((double)model.Latitude, (double)model.Longitude);
+                user.Location = model.Latitude == null || model.Longitude == null ? user.Location : await _locationService.AddLocationAsync(user, (double)model.Latitude, (double)model.Longitude);
 
-                if(await _context.Locations.FindAsync(user.Location) != null) {
-                    await _context.Locations.AddAsync(user.Location);
-                }
+                // if(await _context.Locations.FindAsync(model.Latitude, model.Longitude) == null) {
+                //     await _context.Locations.AddAsync(user.Location);
+                // }
 
                 await _context.SaveChangesAsync();
 

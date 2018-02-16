@@ -121,6 +121,7 @@ namespace Covalence
 
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<IConnectionService, ConnectionService>();
+            services.AddScoped<ILocationService, LocationService>();
             
             services.AddScoped<UserManager<ApplicationUser>, UserManager<ApplicationUser>>();
         }

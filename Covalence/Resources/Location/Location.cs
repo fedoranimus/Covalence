@@ -12,11 +12,14 @@ namespace Covalence {
 
         public ICollection<ApplicationUser> Users { get; set; }
 
-        public Location() : this(double.NaN, double.NaN) {}
+        public Location() : this(double.NaN, double.NaN) {
+            Users = new HashSet<ApplicationUser>();
+        }
 
         public Location(double latitude, double longitude) {
             this._latitude = latitude;
             this._longitude = longitude;
+            Users = new HashSet<ApplicationUser>();
         }
 
         public double Latitude
