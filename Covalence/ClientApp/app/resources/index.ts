@@ -10,6 +10,7 @@ export function configure(config: FrameworkConfiguration) {
       PLATFORM.moduleName('./custom-elements/banner/banner.html'),
       PLATFORM.moduleName('./value-converters/markdown-value-converter'),
       PLATFORM.moduleName('./value-converters/connection-state-value-converter'),
-      PLATFORM.moduleName('./value-converters/filter-value-converter')
+      PLATFORM.moduleName('./value-converters/filter-value-converter'),
+      PLATFORM.moduleName('./value-converters/distance-value-converter')
     ]);
 }

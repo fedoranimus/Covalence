@@ -13,6 +13,7 @@ export interface IUser {
     isMentor: boolean;
     needsOnboarding: boolean;
     emailConfirmed: boolean;
+    distanceToUser: number;
 }
 
 export interface IRemoteUser {

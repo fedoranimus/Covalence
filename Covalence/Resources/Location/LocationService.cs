@@ -21,16 +21,18 @@ namespace Covalence
         }
 
         public async Task<Location> AddLocationAsync(ApplicationUser user, double latitude, double longitude) {
-            Location location = new Location(latitude, longitude);
-            if(!location.Users.Contains(user))
-                location.Users.Add(user);
-            
-            if(await _context.Locations.FindAsync(latitude, longitude) == null) 
+            var location = await _context.Locations.FindAsync(latitude, longitude);
+            if(location == null) 
             {
+                location = new Location(latitude, longitude);
+                location.Users.Add(user);
                 await _context.Locations.AddAsync(location);
             }
             else 
             {
+                
+                if(!location.Users.Contains(user))
+                    location.Users.Add(user);
                 _context.Locations.Update(location);
             }
 

@@ -1,6 +1,5 @@
 import { PagedList, SearchService } from 'services/searchService';
 import { computedFrom } from 'aurelia-binding';
-import { ConnectionService, ConnectionStatus } from 'services/connectionService';
 import { bindable, autoinject } from "aurelia-framework";
 import { IUser } from "infrastructure/user";
 import { Store } from 'aurelia-store';
@@ -13,7 +12,7 @@ export class UserList {
     @bindable results: PagedList<IUser>;
     @bindable searchQuery: string[];
 
-    constructor(private connectionService: ConnectionService, private searchService: SearchService, private store: Store<State>) {
+    constructor(private searchService: SearchService, private store: Store<State>) {
 
     }
 
@@ -72,37 +71,5 @@ export class UserList {
     navigateToPage(pageNumber: number) {
         const searchQuery = this.searchQuery;
         this.store.dispatch(search, searchQuery, pageNumber, (searchQuery, pageNumber) => this.searchService.getResults(searchQuery, pageNumber));
-    }
-
-    async requestConnection(userId: string) {
-        try {
-            this.store.dispatch(updateConnection, userId, ConnectionStatus.requested, (userId) => this.connectionService.requestConnection(userId));
-        } catch(e) {
-            console.error(e);
-        }
-    }
-
-    async confirmConnection(userId: string) {
-        try {
-            this.store.dispatch(updateConnection, userId, ConnectionStatus.connected, (userId) => this.connectionService.acceptConnection(userId));
-        } catch(e) {
-            console.error(e);
-        }
-    }
-
-    async rejectConnection(userId: string) {
-        try {
-            this.store.dispatch(updateConnection, userId, ConnectionStatus.available, (userId) => this.connectionService.rejectConnection(userId));
-        } catch(e) {
-            console.error(e);
-        }
-    }
-
-    async cancelConnectionRequest(userId: string) {
-        try {
-            this.store.dispatch(updateConnection, userId, ConnectionStatus.available, (userId) => this.connectionService.cancelConnection(userId));
-        } catch(e) {
-            console.error(e);
-        }
     }
 }

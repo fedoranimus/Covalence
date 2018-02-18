@@ -24,9 +24,9 @@ namespace Covalence
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                     var tagService = services.GetRequiredService<ITagService>();
                     var connectionService = services.GetRequiredService<IConnectionService>();
-                    var fileProvider = services.GetRequiredService<IFileProvider>(); // TODO: Remove FileProvider
                     var env = services.GetRequiredService<IHostingEnvironment>();
-                    await DbInitializer.InitializeAsync(context, userManager, tagService, connectionService, env);
+                    var locationService = services.GetRequiredService<ILocationService>();
+                    await DbInitializer.InitializeAsync(context, userManager, tagService, connectionService, locationService);
                 }
                 catch(Exception ex) 
                 {

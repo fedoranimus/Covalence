@@ -64,6 +64,7 @@ namespace Covalence.Controllers
             }
 
             var currentUser = await _userManager.GetUserAsync(User);
+            await _context.Entry(currentUser).Reference(x => x.Location).LoadAsync(); // TODO: Apply this other places we need to eagerly load navigation properties
 
             if(currentUser == null)
             {
@@ -71,7 +72,12 @@ namespace Covalence.Controllers
                 return BadRequest();
             }
 
-            var users = await _context.Users.Where(u => u.Id != currentUser.Id && u.NeedsOnboarding == false).Include(x => x.Tags).ThenInclude(ut => ut.Tag).AsNoTracking().ToListAsync();  
+            var users = await _context.Users.Where(u => u.Id != currentUser.Id && u.NeedsOnboarding == false)
+                .Include(x => x.Tags)
+                    .ThenInclude(ut => ut.Tag)
+                .Include(x => x.Location)
+                .AsNoTracking()
+                .ToListAsync();  
 
             if(model.Tags.Count > 0) {
                 var tagCounts = new Dictionary<ApplicationUser, int>();
@@ -88,11 +94,16 @@ namespace Covalence.Controllers
                 users = tagCounts.OrderBy(x => x.Value)
                                     .Select(x => x.Key)
                                     .ToList();
+                
+            }
 
-                if(!currentUser.Location.IsUnknown) {
-                    users = users.OrderBy(x => x.Location.GetDistanceTo(currentUser.Location))
-                                    .ToList();
-                }
+            if(!currentUser.Location.IsUnknown || !(currentUser.Location == null)) {
+                users = users.OrderBy(x => {
+                    if(x.Location == null)
+                        return double.PositiveInfinity;
+                    else
+                        return x.Location.GetDistanceTo(currentUser.Location);
+                }).ToList();
             }
 
             var connections = await _context.Connections.Where(x => x.RequestedUserId == currentUser.Id || x.RequestingUserId == currentUser.Id).Include(x => x.RequestedUser).Include(x => x.RequestingUser).ToListAsync();

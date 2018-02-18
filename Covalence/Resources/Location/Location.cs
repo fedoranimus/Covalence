@@ -88,8 +88,12 @@ namespace Covalence {
             return Latitude.GetHashCode() ^ Longitude.GetHashCode();
         }
 
-        public double GetDistanceTo(Location other)
+        public double GetDistanceTo(Location other) // Distance in kilometers
         {
+            if(this == null || other == null) {
+                return double.PositiveInfinity;
+            }
+
             if (double.IsNaN(Latitude) || double.IsNaN(Longitude) || double.IsNaN(other.Latitude) ||
                 double.IsNaN(other.Longitude))
             {
@@ -103,7 +107,7 @@ namespace Covalence {
             var d3 = Math.Pow(Math.Sin((d2 - d1) / 2.0), 2.0) +
                      Math.Cos(d1) * Math.Cos(d2) * Math.Pow(Math.Sin(num2 / 2.0), 2.0);
 
-            return 6376500.0 * (2.0 * Math.Atan2(Math.Sqrt(d3), Math.Sqrt(1.0 - d3)));
+            return 6376.5 * (2.0 * Math.Atan2(Math.Sqrt(d3), Math.Sqrt(1.0 - d3)));
         }
 
         public override string ToString()

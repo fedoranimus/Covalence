@@ -1,0 +1,33 @@
+<template>
+    <div class="media-content">
+        <div class="content">
+            <div class="level">
+                <div class="level-left">
+                    <p><strong>${user.firstName} ${user.lastName}</strong>
+                    <i if.bind="hasDistance">${user.distanceToUser | distance} kilometers away</i></p>
+                </div>
+            </div> 
+            <div class="level">
+                <span>${user.bio}</span>
+            </div>
+        </div>
+        <div class="level">
+            <div class="level-left">
+                <div class="level-item" repeat.for="tag of user.tags">
+                    <span class="tag">
+                        ${tag.name}
+                    </span>
+                </div>
+            </div>
+            <div class="level-right">
+                <a show.bind="user.connectionStatus == 4" class="button is-primary tooltip is-tooltip-multiline level-item" data-tooltip="Connecting will allow you and ${user.firstName} to see each other's email address" click.delegate="requestConnection(user.id)">Request Connection</a>
+                <a show.bind="user.connectionStatus == 1" class="button is-success level-item" click.delegate="confirmConnection(user.id)">Confirm Connection</a>
+                <a show.bind="user.connectionStatus == 1" class="button is-danger level-item" click.delegate="rejectConnection(user.id)">Reject Connection</a>
+                <span show.bind="user.connectionStatus == 0" class="level-item">Awaiting confirmation from ${user.firstName}</span>
+                <a show.bind="user.connectionStatus == 0" class="button is-warning level-item" click.delegate="cancelConnectionRequest(user.id)">Cancel Request</a>
+                <span show.bind="user.connectionStatus == 2" class="level-item">Connected</span>
+            </div>
+        </div>
+    </div>
+    <hr>
+</template>
