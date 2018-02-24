@@ -2,16 +2,7 @@
     <div class="container">
         <div class="columns">
             <div class="column is-two-thirds" style="flex-direction: column;">
-                <div class="field has-addons is-inline-flex">
-                    <div class="control is-expanded">
-                        <search-bar search-query.bind="state.searchQuery"></search-bar>
-                    </div>
-                    <div class="control">
-                        <button class="button is-info" click.delegate="search()">
-                            Search
-                        </button>
-                    </div>
-                </div>
+                <search-bar search-query.bind="state.searchQuery"></search-bar>
                 <user-list results.bind="state.results" search-query.bind="state.searchQuery"></user-list>
             </div>
             <div class="column">
