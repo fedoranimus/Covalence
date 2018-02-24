@@ -4,6 +4,7 @@ import { ConnectionService, IConnection, ConnectionStatus } from 'services/conne
 import { Store } from 'aurelia-store';
 import { State } from 'store/state';
 import { loadConnections, updateConnection } from 'store/connectionActions';
+import { StringUtils } from 'utils/stringUtils';
 
 @autoinject
 export class ConnectionList {
@@ -34,17 +35,5 @@ export class ConnectionList {
         if((searchExpression === null || searchExpression === undefined) || !connection) return false;
 
         return connection.connectionStatus == searchExpression;
-    }
-
-    async confirmConnection(userId: string) {
-        this.store.dispatch(updateConnection, userId, ConnectionStatus.connected, (userId) => this.connectionService.acceptConnection(userId));
-    }
-
-    async rejectConnection(userId: string) {
-        this.store.dispatch(updateConnection, userId, ConnectionStatus.available, (userId) => this.connectionService.rejectConnection(userId));
-    }
-
-    async cancelConnectionRequest(userId: string) {
-        this.store.dispatch(updateConnection, userId, ConnectionStatus.available, (userId) => this.connectionService.cancelConnection(userId));
     }
 }

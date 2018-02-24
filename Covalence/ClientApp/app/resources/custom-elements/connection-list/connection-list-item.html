@@ -1,0 +1,29 @@
+<template>
+    <span class="panel-block">
+            <div class="level" style="width:100%;">
+                <div class="level-left">
+                    <span class="panel-icon level-item">
+                        <i class="fa fa-book"></i>
+                    </span>
+                    <span class="level-item truncate-text">${connection.displayName}</span>
+                </div>
+                <div class="level-right">
+                    <button if.bind="connection.connectionStatus === 2" class="button is-primary is-small level-item tooltip" data-tooltip="Click to copy: ${connection.email}" click.delegate="copyEmail(connection.email)" ref="copyBtn">
+                        Copy
+                    </button>
+                    <button if.bind="connection.connectionStatus === 2" class="button is-danger is-small level-item">
+                        Disconnect
+                    </button>
+                    <button if.bind="connection.connectionStatus === 1" class="button is-success is-small level-item" click.delegate="confirmConnection(connection.requestingUserId)">
+                        Confirm
+                    </button>
+                    <button if.bind="connection.connectionStatus === 1" class="button is-danger is-small level-item" click.delegate="rejectConnection(connection.requestingUserId)">
+                        Reject
+                    </button>
+                    <button if.bind="connection.connectionStatus === 0" class="button is-warning is-small level-item" click.delegate="cancelConnectionRequest(connection.requestedUserId)">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </span>
+</template>

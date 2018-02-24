@@ -14,7 +14,8 @@ module.exports = (env) => {
             alias: {
                 services: path.resolve(__dirname, 'ClientApp/app/services'),
                 infrastructure: path.resolve(__dirname, 'ClientApp/app/infrastructure'),
-                store: path.resolve(__dirname, 'ClientApp/app/store')
+                store: path.resolve(__dirname, 'ClientApp/app/store'),
+                utils: path.resolve(__dirname, 'ClientApp/app/utils')
             }
         },
         output: {

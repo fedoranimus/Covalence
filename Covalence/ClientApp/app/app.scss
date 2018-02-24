@@ -53,3 +53,13 @@ article.banner {
 .media-content {
     overflow: unset;
 }
+
+.truncate-text {
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis; 
+}
+
+.menu-list a {
+    background-color: white;
+}

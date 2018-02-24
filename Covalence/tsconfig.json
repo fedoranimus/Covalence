@@ -12,7 +12,8 @@
     "paths": {
       "services": ["services"],
       "infrastructure": ["infrastructure"],
-      "store": ["store"]
+      "store": ["store"],
+      "utils": ["utils"]
     }
   },
   "exclude": [ "bin", "node_modules" ],
