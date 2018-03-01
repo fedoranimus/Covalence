@@ -15,13 +15,24 @@ export class Profile {
     model: ProfileModel = {
         firstName: "",
         lastName: "",
-        location: "",
         bio: "",
-        tags: []
+        tags: [],
+        latitude: 0,
+        longitude: 0
     }
+
+    private map: any;
 
     canSave: boolean = false;
     isLoading: boolean = false;
+
+    locationMarker = [];
+    zoomLevel = 15;
+
+    autoUpdateBounds: boolean = true;
+    shareLocation: boolean = true;
+    hasLocation: boolean = false;
+
     private controller: ValidationController;
 
     constructor(private validator: Validator, 
@@ -34,7 +45,6 @@ export class Profile {
             if(state.user) {
                 this.model.firstName = state.user.firstName;
                 this.model.lastName = state.user.lastName;
-                this.model.location = state.user.location;
                 this.model.bio = state.user.bio;
                 this.model.tags = state.user.tags.map(t => t.name);
             }
@@ -57,7 +67,6 @@ export class Profile {
         ValidationRules
             .ensure('firstName').required()
             .ensure('lastName').required()
-            .ensure('location').required().maxLength(5).minLength(5)
             .ensure('bio').required()
             .ensure('tags').required().minItems(1)
             .on(this.model);
@@ -74,6 +83,53 @@ export class Profile {
         this.validate();
     }
 
+    mapLoaded(map, event) {
+        console.log(map, event);
+        this.getGeoLocation();
+
+        console.log(this.map);
+    }
+
+    clickMap(latLng) {
+        const lat = latLng.lat();
+        const long = latLng.lng();
+
+        this.locationMarker = [{ latitude: lat, longitude: long }];
+        this.model.latitude = lat;
+        this.model.longitude = long;
+    }
+
+    getGeoLocation() {
+        this.autoUpdateBounds = true;
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => this.updatePosition(position));
+        }
+
+        this.autoUpdateBounds = false;
+        this.zoomLevel = 8;
+    }
+
+    resetLocation() {
+        this.model.latitude = null;
+        this.model.longitude = null;
+        this.hasLocation = false;
+    }
+
+    markerRender(event) {
+        console.log(event);
+        this.autoUpdateBounds = true;
+        //this.autoUpdateBounds = false;
+        this.zoomLevel = 4;
+    }
+
+    private updatePosition(position: Position) {
+        this.hasLocation = true;
+        this.model.latitude = position.coords.latitude;
+        this.model.longitude = position.coords.longitude;
+
+        this.locationMarker = [{ latitude: position.coords.latitude, longitude: position.coords.longitude }];
+    }
+
     onRemoveTag(tagName: string) {
         const index = this.model.tags.findIndex(x => x == tagName);
         this.model.tags.splice(index, 1);
@@ -84,6 +140,12 @@ export class Profile {
     public async save() {
         this.isLoading = true;
         const model = this.model;
+
+        if(!this.shareLocation) {
+            model.latitude = NaN;
+            model.longitude = NaN;
+        }
+
         await this.store.dispatch(updateUser, model, (model) => this.userService.updateUser(model));
         this.isLoading = false;
     }
@@ -92,7 +154,8 @@ export class Profile {
 export interface ProfileModel {
     firstName: string;
     lastName: string;
-    location: string;
     bio: string;
     tags: string[];
+    latitude: number;
+    longitude: number;
 }

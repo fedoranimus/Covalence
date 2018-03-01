@@ -15,11 +15,29 @@
                     <p class="help is-danger" repeat.for="errorInfo of lastNameErrors">${errorInfo.error.message}</p>
                 </div>
             </div>
-            <div class="field" validation-errors.bind="locationErrors">
-                <label class="label">Zip Code</label>
-                <div class="control">
-                    <input class="input" type="text" placeholder="Enter your zip code..." value.bind="model.location & validate">
-                    <p class="help is-danger" repeat.for="errorInfo of locationErrors">${errorInfo.error.message}</p>
+
+            <div class="field">
+                <div class="level">
+                    <div class="level-left">
+                        <div class="control level-item">
+                            <label class="checkbox">
+                                <input type="checkbox" checked.bind="shareLocation">
+                                Share Location
+                            </label>
+                        </div>
+                    </div>
+                    <div class="level-right" if.bind="shareLocation">
+                        <div class="control level-item">
+                            <span>Click on the map to choose your location manually or&nbsp;</span>
+                            <a class="button is-info" click.delegate="getGeoLocation()">
+                                Find Location
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control" if.bind="shareLocation">
+                    <google-map map-click.delegate="clickMap($event.detail.latLng)" zoom="8" map-loaded.call="mapLoaded(map, $event)" latitude.bind="model.latitude" longitude.bind="model.longitude" markers.bind="locationMarker"></google-map>
                 </div>
             </div>
 
