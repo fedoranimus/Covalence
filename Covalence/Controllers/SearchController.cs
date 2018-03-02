@@ -97,7 +97,7 @@ namespace Covalence.Controllers
                 
             }
 
-            if(!currentUser.Location.IsUnknown || !(currentUser.Location == null)) {
+            if(currentUser.Location != null) {
                 users = users.OrderBy(x => {
                     if(x.Location == null)
                         return double.PositiveInfinity;

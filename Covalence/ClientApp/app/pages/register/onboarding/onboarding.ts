@@ -16,15 +16,13 @@ export class Onboarding {
         lastName: "",
         bio: "",
         tags: [],
-        latitude: null,
-        longitude: null
+        latitude: 0,
+        longitude: 0,
+        shareLocation: false
     }
 
     locationMarker = [];
     zoomLevel = 15;
-
-    autoUpdateBounds = true;
-    shareLocation = true;
 
     hasLocation: boolean = false;
     canSave: boolean = false;
@@ -79,12 +77,9 @@ export class Onboarding {
     }
 
     getGeoLocation() {
-        this.autoUpdateBounds = true;
         if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => this.updatePosition(position));
         }
-
-        this.autoUpdateBounds = false;
         this.zoomLevel = 8;
     }
 
@@ -123,6 +118,12 @@ export class Onboarding {
     public async onboard() {
         this.isLoading = true;
         const model = this.model;    
+
+        if(!model.shareLocation) {
+            model.latitude = null;
+            model.longitude = null;
+        }
+
         await this.store.dispatch(completeOnboarding, model, (model) => this.userService.onboardUser(model));
         this.isLoading = false;
         this.router.navigate('/');
@@ -136,4 +137,5 @@ interface OnboardModel {
     tags: string[];
     latitude: number;
     longitude: number;
+    shareLocation: boolean;
 }

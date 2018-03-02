@@ -42,12 +42,15 @@ namespace Covalence.Controllers
                 return BadRequest();
             }
 
-            var populatedUser = _context.Users.Where(x => x.Id == user.Id)
-                .Include(x => x.Tags)
-                    .ThenInclude(ut => ut.Tag)
-                .FirstOrDefault();
+            await _context.Entry(user).Reference(x => x.Location).LoadAsync(); // TODO: Apply this other places we need to eagerly load navigation properties
+            await _context.Entry(user).Collection(x => x.Tags).LoadAsync();
 
-            var userContract = Converters.ConvertUserToContract(populatedUser);
+            // var populatedUser = _context.Users.Where(x => x.Id == user.Id)
+            //     .Include(x => x.Tags)
+            //         .ThenInclude(ut => ut.Tag)
+            //     .FirstOrDefault();
+
+            var userContract = Converters.ConvertUserToContract(user);
 
             return Ok(userContract); 
         }
@@ -55,7 +58,7 @@ namespace Covalence.Controllers
         //TODO: Get UserById
 
         [HttpPut("{userId}")]
-        public async Task<IActionResult> UpdateUser(string userId, [FromBody] UserViewModel model) 
+        public async Task<IActionResult> UpdateUser(string userId, [FromBody] UserViewModel model) // TODO: Simplify this logic
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -67,18 +70,24 @@ namespace Covalence.Controllers
 
             if(ModelState.IsValid)
             {
-                user = await _context.Users.Where(u => u.Id == user.Id).Include(x => x.Tags).ThenInclude(ut => ut.Tag).FirstOrDefaultAsync();
+                user = await _context.Users
+                                .Where(u => u.Id == user.Id)
+                                .Include(u => u.Location)
+                                .Include(u => u.Tags)
+                                    .ThenInclude(ut => ut.Tag)
+                                .FirstOrDefaultAsync();
                     
                 user.FirstName = model.FirstName == null ? user.FirstName : model.FirstName;
                 user.LastName = model.LastName == null ? user.LastName : model.LastName;
-                user.IsMentor = (bool)(model.IsMentor == null ? user.IsMentor : model.IsMentor);
                 user.Email = model.Email == null ? user.Email : model.Email;
                 user.UserName = user.Email;
-                user.Location = model.Latitude == null || model.Longitude == null ? user.Location : await _locationService.AddLocationAsync(user, (double)model.Latitude, (double)model.Longitude);
-
-                // if(await _context.Locations.FindAsync(model.Latitude, model.Longitude) == null) {
-                //     await _context.Locations.AddAsync(user.Location);
-                // }
+                
+                if(model.ShareLocation != null) {
+                    if(model.ShareLocation == true)
+                        user.Location = model.Latitude == null || model.Longitude == null ? user.Location : await _locationService.AddUpdateLocationAsync(user, (double)model.Latitude, (double)model.Longitude);
+                    else
+                        user = await _locationService.RemoveLocationAsync(user);
+                }
 
                 await _context.SaveChangesAsync();
 

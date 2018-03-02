@@ -1,3 +1,4 @@
+import { IRemoteUser } from './../../../infrastructure/user';
 import { computedFrom } from 'aurelia-binding';
 import { bindable, autoinject } from "aurelia-framework";
 import { ConnectionService, ConnectionStatus } from "services/connectionService";
@@ -8,7 +9,7 @@ import { updateConnection } from "store/connectionActions";
 
 @autoinject
 export class UserListItem {
-    @bindable user: IUser;
+    @bindable user: IRemoteUser;
     
     constructor(private connectionService: ConnectionService, private store: Store<State>) {
 

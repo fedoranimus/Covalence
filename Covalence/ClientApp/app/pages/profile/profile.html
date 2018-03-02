@@ -21,12 +21,12 @@
                     <div class="level-left">
                         <div class="control level-item">
                             <label class="checkbox">
-                                <input type="checkbox" checked.bind="shareLocation">
+                                <input type="checkbox" checked.bind="model.shareLocation">
                                 Share Location
                             </label>
                         </div>
                     </div>
-                    <div class="level-right" if.bind="shareLocation">
+                    <div class="level-right" if.bind="model.shareLocation">
                         <div class="control level-item">
                             <span>Click on the map to choose your location manually or&nbsp;</span>
                             <a class="button is-info" click.delegate="getGeoLocation()">
@@ -36,8 +36,8 @@
                     </div>
                 </div>
 
-                <div class="control" if.bind="shareLocation">
-                    <google-map map-click.delegate="clickMap($event.detail.latLng)" zoom="8" map-loaded.call="mapLoaded(map, $event)" latitude.bind="model.latitude" longitude.bind="model.longitude" markers.bind="locationMarker"></google-map>
+                <div class="control" if.bind="model.shareLocation">
+                    <google-map map-click.delegate="clickMap($event.detail.latLng)" zoom.bind="zoomLevel" map-loaded.call="mapLoaded(map, $event)" latitude.bind="model.latitude" longitude.bind="model.longitude" markers.bind="locationMarker"></google-map>
                 </div>
             </div>
 

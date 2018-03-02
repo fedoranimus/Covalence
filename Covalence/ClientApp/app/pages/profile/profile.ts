@@ -1,7 +1,8 @@
+import { loadConnections } from 'store/connectionActions';
 import { autoinject, bindable, computedFrom, lazy } from 'aurelia-framework';
 import { AuthService } from 'aurelia-authentication';
 import { ValidationControllerFactory, ValidationController, Validator, validateTrigger, ValidationRules, ValidateResult } from 'aurelia-validation';
-import { IUser} from 'infrastructure/user';
+import { IUser, Location } from 'infrastructure/user';
 import { UserService } from 'services/userService';
 import { State } from 'store/state';
 import { Store } from 'aurelia-store';
@@ -18,19 +19,16 @@ export class Profile {
         bio: "",
         tags: [],
         latitude: 0,
-        longitude: 0
+        longitude: 0,
+        shareLocation: false
     }
-
-    private map: any;
 
     canSave: boolean = false;
     isLoading: boolean = false;
 
     locationMarker = [];
-    zoomLevel = 15;
+    zoomLevel = 8;
 
-    autoUpdateBounds: boolean = true;
-    shareLocation: boolean = true;
     hasLocation: boolean = false;
 
     private controller: ValidationController;
@@ -46,7 +44,12 @@ export class Profile {
                 this.model.firstName = state.user.firstName;
                 this.model.lastName = state.user.lastName;
                 this.model.bio = state.user.bio;
-                this.model.tags = state.user.tags.map(t => t.name);
+                this.model.tags = state.user.tags;
+                if(!isNaN(state.user.location.latitude) && !isNaN(state.user.location.longitude)) {
+                    this.model.latitude = state.user.location.latitude;
+                    this.model.longitude = state.user.location.longitude;
+                    this.model.shareLocation = true;
+                }
             }
         });
         this.controller = controllerFactory.createForCurrentScope(validator);
@@ -84,10 +87,10 @@ export class Profile {
     }
 
     mapLoaded(map, event) {
-        console.log(map, event);
-        this.getGeoLocation();
-
-        console.log(this.map);
+        if(isNaN(this.model.latitude) && isNaN(this.model.longitude))
+            this.getGeoLocation();
+        else
+            this.locationMarker = [{ latitude: this.model.latitude, longitude: this.model.longitude }];
     }
 
     clickMap(latLng) {
@@ -100,12 +103,9 @@ export class Profile {
     }
 
     getGeoLocation() {
-        this.autoUpdateBounds = true;
         if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => this.updatePosition(position));
         }
-
-        this.autoUpdateBounds = false;
         this.zoomLevel = 8;
     }
 
@@ -113,13 +113,6 @@ export class Profile {
         this.model.latitude = null;
         this.model.longitude = null;
         this.hasLocation = false;
-    }
-
-    markerRender(event) {
-        console.log(event);
-        this.autoUpdateBounds = true;
-        //this.autoUpdateBounds = false;
-        this.zoomLevel = 4;
     }
 
     private updatePosition(position: Position) {
@@ -141,9 +134,9 @@ export class Profile {
         this.isLoading = true;
         const model = this.model;
 
-        if(!this.shareLocation) {
-            model.latitude = NaN;
-            model.longitude = NaN;
+        if(!model.shareLocation) {
+            model.latitude = null;
+            model.longitude = null;
         }
 
         await this.store.dispatch(updateUser, model, (model) => this.userService.updateUser(model));
@@ -158,4 +151,5 @@ export interface ProfileModel {
     tags: string[];
     latitude: number;
     longitude: number;
+    shareLocation: boolean;
 }

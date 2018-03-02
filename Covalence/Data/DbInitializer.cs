@@ -46,7 +46,7 @@ namespace Covalence.Data
             await userManager.CreateAsync(testUser, "123Abc!");
 
             await tagService.AddTag(biologyTag, testUser);
-            await locationService.AddLocationAsync(testUser, 42.706443, -71.462581);
+            await locationService.AddUpdateLocationAsync(testUser, 42.706443, -71.462581);
 
             var mccreeUser = new ApplicationUser() {
                     Email = "mccree@overwatch.com",
@@ -75,7 +75,7 @@ namespace Covalence.Data
             await userManager.CreateAsync(genjiUser, "123Abc!");
 
             await tagService.AddTag(biologyTag, genjiUser);
-            await locationService.AddLocationAsync(genjiUser, 35.683122, 139.749033);
+            await locationService.AddUpdateLocationAsync(genjiUser, 35.683122, 139.749033);
 
             var tracerUser = new ApplicationUser() {
                     Email = "tracer@overwatch.com",
@@ -90,7 +90,7 @@ namespace Covalence.Data
             await userManager.CreateAsync(tracerUser, "123Abc!");
 
             await tagService.AddTag(biologyTag, tracerUser);
-            await locationService.AddLocationAsync(tracerUser, 51.518732, -0.128382);
+            await locationService.AddUpdateLocationAsync(tracerUser, 51.518732, -0.128382);
 
             var dvaUser = new ApplicationUser() {
                     Email = "dva@overwatch.com",
@@ -120,7 +120,7 @@ namespace Covalence.Data
             await userManager.CreateAsync(hanzoUser, "123Abc!");
 
             await tagService.AddTag(biologyTag, hanzoUser);
-            await locationService.AddLocationAsync(hanzoUser, 35.683122, 139.749033);
+            await locationService.AddUpdateLocationAsync(hanzoUser, 35.683122, 139.749033);
 
             var meiUser = new ApplicationUser() {
                     Email = "mei@overwatch.com",
@@ -135,7 +135,7 @@ namespace Covalence.Data
             await userManager.CreateAsync(meiUser, "123Abc!");
 
             await tagService.AddTag(biologyTag, meiUser);
-            await locationService.AddLocationAsync(meiUser, -76.295702, 21.789606);
+            await locationService.AddUpdateLocationAsync(meiUser, -76.295702, 21.789606);
 
             var anaUser = new ApplicationUser() {
                 Email = "ana@overwatch.com",

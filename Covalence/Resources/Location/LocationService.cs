@@ -8,7 +8,8 @@ using System;
 namespace Covalence
 {
     public interface ILocationService {
-        Task<Location> AddLocationAsync(ApplicationUser user, double latitude, double longitude);
+        Task<Location> AddUpdateLocationAsync(ApplicationUser user, double latitude, double longitude);
+        Task<ApplicationUser> RemoveLocationAsync(ApplicationUser user);
     }
 
     public class LocationService : ILocationService {
@@ -20,7 +21,8 @@ namespace Covalence
             _logger = loggerFactory.CreateLogger<LocationService>();
         }
 
-        public async Task<Location> AddLocationAsync(ApplicationUser user, double latitude, double longitude) {
+        public async Task<Location> AddUpdateLocationAsync(ApplicationUser user, double latitude, double longitude) 
+        {
             var location = await _context.Locations.FindAsync(latitude, longitude);
             if(location == null) 
             {
@@ -29,8 +31,7 @@ namespace Covalence
                 await _context.Locations.AddAsync(location);
             }
             else 
-            {
-                
+            {   
                 if(!location.Users.Contains(user))
                     location.Users.Add(user);
                 _context.Locations.Update(location);
@@ -39,6 +40,20 @@ namespace Covalence
             await _context.SaveChangesAsync();
 
             return location;
+        }
+
+        public async Task<ApplicationUser> RemoveLocationAsync(ApplicationUser user) 
+        {
+            var location = await _context.Locations.FindAsync(user.Location.Latitude, user.Location.Longitude);
+            if(location != null) 
+            {
+                location.Users.Remove(user);
+                user.Location = null;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return user;
         }
     }
 }

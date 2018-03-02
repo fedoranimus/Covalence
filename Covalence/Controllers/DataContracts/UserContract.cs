@@ -7,7 +7,7 @@ namespace Covalence.Contracts
     {
         public UserContract()
         {
-            Tags = new List<TagContract>();
+            Tags = new List<String>();
             Connections = new List<ConnectionContract>();
         }
 
@@ -18,7 +18,7 @@ namespace Covalence.Contracts
         public string Bio { get; set; }
         public bool IsMentor { get; set; }
         public bool EmailConfirmed { get; set; }
-        public ICollection<TagContract> Tags { get; set; }
+        public ICollection<String> Tags { get; set; }
         public bool NeedsOnboarding { get; set; }
         public ICollection<ConnectionContract> Connections { get; set; }
         public LocationContract Location { get; set; }

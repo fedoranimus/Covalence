@@ -24,7 +24,7 @@ namespace Covalence.Contracts
                 Bio = user.Bio,
                 EmailConfirmed = user.EmailConfirmed,
                 Tags = user.Tags
-                    .Select(ut => Converters.ConvertTagToContract(ut.Tag)).ToList(),
+                    .Select(t => t.Name).ToList(),
                 NeedsOnboarding = user.NeedsOnboarding,
                 Location = user.Location == Location.Unknown || user.Location == null ? new LocationContract() : ConvertLocationToContract(user.Location)
             };

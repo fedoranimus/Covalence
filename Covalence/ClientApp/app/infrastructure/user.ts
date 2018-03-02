@@ -6,14 +6,13 @@ export interface IUser {
     email: string;
     firstName: string;
     lastName: string;
-    tags: ITag[];
+    tags: string[];
     bio: string;
-    location: string;
+    location: Location;
     displayName: string;
     isMentor: boolean;
     needsOnboarding: boolean;
     emailConfirmed: boolean;
-    distanceToUser: number;
 }
 
 export interface IRemoteUser {
@@ -24,6 +23,7 @@ export interface IRemoteUser {
     bio: string;
     tags: ITag[];
     connectionStatus: ConnectionStatus;
+    distanceToUser: number;
 }
 
 export interface IUserViewModel {
