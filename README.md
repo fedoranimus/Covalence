@@ -3,13 +3,15 @@
 Primary Repo for Covalence
 
 [![Build Status](https://travis-ci.org/fedoranimus/Covalence.svg?branch=master)](https://travis-ci.org/fedoranimus/Covalence)
-
- ## Sample Host
- covalence.timdturner.com
  
  ## Getting Started
  
- TODO
+ 1. Install NodeJS & NPM
+ 1. Install .NET Core 2.0
+ 1. Change directory to ./Covalence 
+ 1. Run `npm install`
+ 1. Run `dotnet restore`
+ 1. Run `dotnet run`
 
  ## Design Documentation
 
