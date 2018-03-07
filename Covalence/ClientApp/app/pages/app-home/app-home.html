@@ -1,7 +1,8 @@
 <template>
+    <require from='./app-home.scss'></require>
     <div class="container">
         <div class="columns">
-            <div class="column is-two-thirds" style="flex-direction: column;">
+            <div class="column primary-column is-two-thirds">
                 <search-bar search-query.bind="state.searchQuery"></search-bar>
                 <user-list results.bind="state.results" search-query.bind="state.searchQuery"></user-list>
             </div>
