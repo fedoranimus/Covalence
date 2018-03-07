@@ -10,6 +10,7 @@ import { updateConnection } from "store/connectionActions";
 @autoinject
 export class UserListItem {
     @bindable user: IRemoteUser;
+    @bindable currentUser: IUser;
     
     constructor(private connectionService: ConnectionService, private store: Store<State>) {
 

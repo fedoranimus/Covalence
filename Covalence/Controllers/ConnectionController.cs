@@ -54,7 +54,7 @@ namespace Covalence.Controllers
         public async Task<IActionResult> RequestConnection([FromBody] UserIdWrapper requestedUserId)
         {
             var user = await _userManager.GetUserAsync(User);
-            if(user == null)
+            if(user == null || !user.EmailConfirmed)
             {
                 return BadRequest();
             }

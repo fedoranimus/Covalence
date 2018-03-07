@@ -22,9 +22,7 @@ export class Onboarding {
     }
 
     locationMarker = [];
-    zoomLevel = 15;
-
-    hasLocation: boolean = false;
+    zoomLevel = 8;
     canSave: boolean = false;
     isLoading: boolean = false;
     private controller: ValidationController;
@@ -86,11 +84,9 @@ export class Onboarding {
     resetLocation() {
         this.model.latitude = null;
         this.model.longitude = null;
-        this.hasLocation = false;
     }
 
     private updatePosition(position: Position) {
-        this.hasLocation = true;
         this.model.latitude = position.coords.latitude;
         this.model.longitude = position.coords.longitude;
 

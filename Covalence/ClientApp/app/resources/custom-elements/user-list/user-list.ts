@@ -1,7 +1,7 @@
 import { PagedList, SearchService } from 'services/searchService';
 import { computedFrom } from 'aurelia-binding';
 import { bindable, autoinject } from "aurelia-framework";
-import { IUser } from "infrastructure/user";
+import { IUser, IRemoteUser } from "infrastructure/user";
 import { Store } from 'aurelia-store';
 import { State } from 'store/state';
 import { updateConnection } from 'store/connectionActions';
@@ -9,8 +9,9 @@ import { navigateToPage, search, clearSearchParams } from 'store/searchActions';
 
 @autoinject
 export class UserList {
-    @bindable results: PagedList<IUser>;
+    @bindable results: PagedList<IRemoteUser>;
     @bindable searchQuery: string[];
+    @bindable currentUser: IUser;
 
     constructor(private searchService: SearchService, private store: Store<State>) {
 
