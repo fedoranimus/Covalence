@@ -9,7 +9,7 @@
     </div>
     <div else>
         <section class="section">
-            <user-list-item class="media" repeat.for="user of results.items" user.bind="user"></user-list-item>
+            <user-list-item class="media" repeat.for="user of results.items" user.bind="user" current-user.bind="currentUser"></user-list-item>
         </section>
         <section>
             <nav class="pagination is-rounded" role="navigation" aria-label="pagination">
