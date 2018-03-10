@@ -24,14 +24,16 @@ namespace Covalence.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ICache _cache;
         private readonly IConnectionService _connectionService;
+        private readonly IEmailSender _emailSender;
 
-        public ConnectionController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, ITagService tagService, ILogger<ConnectionController> logger, ICache cache, IConnectionService connectionService) {
+        public ConnectionController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, ITagService tagService, ILogger<ConnectionController> logger, ICache cache, IConnectionService connectionService, IEmailSender emailSender) {
             _userManager = userManager;
             _tagService = tagService;
             _logger = logger;
             _context = context;
             _cache = cache;
             _connectionService = connectionService;
+            _emailSender = emailSender;
         }
 
         [HttpGet]
@@ -69,6 +71,8 @@ namespace Covalence.Controllers
                     var connections = await _connectionService.GetConnectionsForUserAsync(user.Id);
                     var connectionListContract = Converters.ConvertConnectionListToContract(connections, user.Id);
 
+                    await _emailSender.SendConnectionRequestedAsync(user.Email);
+
                     return Ok(connectionListContract);
                 } else {
                     return BadRequest("Connection already exists");
@@ -96,6 +100,8 @@ namespace Covalence.Controllers
 
                 var connections = await _connectionService.GetConnectionsForUserAsync(user.Id);
                 var connectionListContract = Converters.ConvertConnectionListToContract(connections, user.Id);
+
+                await _emailSender.SendConnectionAcceptedAsync(user.Email);
 
                 return Ok(connectionListContract);
             }

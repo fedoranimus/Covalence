@@ -1,5 +1,6 @@
 public class AuthMessageSenderOptions
 {
-    public string SendGridUser { get; set; }
-    public string SendGridKey { get; set; }
+    public string MailGunUser { get; set; }
+    public string MailGunPassword { get; set; }
+    public string MailGunSmtpUrl { get; set; }
 }

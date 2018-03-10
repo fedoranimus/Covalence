@@ -1,6 +1,6 @@
+using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
-using SendGrid;
-using SendGrid.Helpers.Mail;
+using MimeKit;
 using System.Threading.Tasks;
 
 namespace Covalence {
@@ -21,22 +21,31 @@ namespace Covalence {
 
         public async Task SendEmailAsync(string email, string subject, string message)
         {
-            await Execute(Options.SendGridKey, subject, message, email);
+            await Execute(Options.MailGunSmtpUrl, Options.MailGunUser, Options.MailGunPassword, subject, message, email);
         }
 
-        public async Task Execute(string apiKey, string subject, string message, string email)
+        public async Task Execute(string smtpUrl, string smtpUsername, string smtpPassword, string subject, string message, string email)
         {
-            var client = new SendGridClient(apiKey);
-            var msg = new SendGridMessage()
-            {
-                From = new EmailAddress("timdturner@gmail.com", "Account Services"),
-                Subject = subject,
-                PlainTextContent = message,
-                HtmlContent = message
-            };
+            var mail = new MimeMessage();
+            mail.From.Add(new MailboxAddress("Covalence", "no-reply@becovalent.com"));
+            mail.To.Add(new MailboxAddress(email));
+            mail.Subject = subject;
 
-            msg.AddTo(new EmailAddress(email));
-            await client.SendEmailAsync(msg);
+            var builder = new BodyBuilder();
+            builder.TextBody = message;
+            builder.HtmlBody = message;
+
+            mail.Body = builder.ToMessageBody();
+
+            using(var client = new SmtpClient()) {
+                client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+
+                await client.ConnectAsync(smtpUrl, 587, false);
+                client.AuthenticationMechanisms.Remove("XOAUTH2");
+                await client.AuthenticateAsync(smtpUsername, smtpPassword);
+                await client.SendAsync(mail);
+                await client.DisconnectAsync(true);
+            }
         }
     }
 }
