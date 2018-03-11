@@ -71,7 +71,11 @@ namespace Covalence.Controllers
                     var connections = await _connectionService.GetConnectionsForUserAsync(user.Id);
                     var connectionListContract = Converters.ConvertConnectionListToContract(connections, user.Id);
 
-                    await _emailSender.SendConnectionRequestedAsync(user.Email);
+                    try {
+                        await _emailSender.SendConnectionRequestedAsync(user.Email);
+                    } catch (Exception e) {
+                        _logger.LogDebug(e.Message);
+                    }
 
                     return Ok(connectionListContract);
                 } else {
@@ -101,7 +105,12 @@ namespace Covalence.Controllers
                 var connections = await _connectionService.GetConnectionsForUserAsync(user.Id);
                 var connectionListContract = Converters.ConvertConnectionListToContract(connections, user.Id);
 
-                await _emailSender.SendConnectionAcceptedAsync(user.Email);
+                try {
+                    await _emailSender.SendConnectionAcceptedAsync(user.Email);
+                } catch (Exception e) {
+                    _logger.LogDebug(e.Message);
+                }
+                
 
                 return Ok(connectionListContract);
             }
