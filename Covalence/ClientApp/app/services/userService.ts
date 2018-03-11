@@ -1,7 +1,7 @@
 import {autoinject} from 'aurelia-framework';
 import {Config} from 'aurelia-api';
 import {ITag} from 'infrastructure/tag';
-import {IUser, IUserViewModel} from '../infrastructure/user';
+import {IUser, IUserViewModel, IRemoteUser} from '../infrastructure/user';
 import { AuthService } from 'aurelia-authentication';
 import { State } from 'store/state';
 import { Store } from 'aurelia-store';
@@ -16,22 +16,16 @@ export class UserService {
         });
     }
 
-    public getUser(userId: string): Promise<IUser> {
+    public getUser(userId: string): Promise<IRemoteUser> {
         return this.config.getEndpoint('api').findOne('user', userId);
     }
 
-    public updateUser(viewModel: IUserViewModel): Promise<IUser> {
+    public getCurrentUser(): Promise<IUser> {
+        return this.config.getEndpoint('api').findOne('user', this.currentUser.id);
+    }
+
+    public updateCurrentUser(viewModel: IUserViewModel): Promise<IUser> {
         return this.config.getEndpoint('api').updateOne('user', this.currentUser.id, null, viewModel);
-    }
-
-    public updateUserTags(tagList: string[]): Promise<IUser> {   
-        const user = this.config.getEndpoint('api').updateOne('user/tags', this.currentUser.id, null, tagList);
-        this.updateCurrentUserTags(user);
-        return user;
-    }
-
-    private async updateCurrentUserTags(user: Promise<IUser>) {
-
     }
 
     public forgotPassword(email: string) {

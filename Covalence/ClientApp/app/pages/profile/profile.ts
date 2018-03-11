@@ -1,155 +1,63 @@
-import { loadConnections } from 'store/connectionActions';
-import { autoinject, bindable, computedFrom, lazy } from 'aurelia-framework';
-import { AuthService } from 'aurelia-authentication';
-import { ValidationControllerFactory, ValidationController, Validator, validateTrigger, ValidationRules, ValidateResult } from 'aurelia-validation';
-import { IUser, Location } from 'infrastructure/user';
-import { UserService } from 'services/userService';
-import { State } from 'store/state';
+import { IRemoteUser } from 'infrastructure/user';
+import { NavigationInstruction, RouteConfig } from 'aurelia-router';
 import { Store } from 'aurelia-store';
-import { TagService } from 'services/tagService';
-import { Router } from 'aurelia-router';
-import { updateUser } from 'store/userActions';
-
+import { State } from 'store/state';
+import { UserService } from 'services/userService';
+import { getUser, clearUser } from 'store/userActions';
+import { autoinject } from 'aurelia-framework';
+import { updateConnection } from 'store/connectionActions';
+import { ConnectionStatus, ConnectionService } from 'services/connectionService';
 
 @autoinject
 export class Profile {
-    model: ProfileModel = {
-        firstName: "",
-        lastName: "",
-        bio: "",
-        tags: [],
-        latitude: 0,
-        longitude: 0,
-        shareLocation: false
-    }
+    remoteUserDetails: IRemoteUser;
+    isEmailConfirmed: boolean = false;
 
-    canSave: boolean = false;
-    isLoading: boolean = false;
-
-    locationMarker = [];
-    zoomLevel = 8;
-
-    hasLocation: boolean = false;
-
-    private controller: ValidationController;
-
-    constructor(private validator: Validator, 
-                private controllerFactory: ValidationControllerFactory, 
-                private tagService: TagService, 
-                private userService: UserService, 
-                private router: Router,
-                private store: Store<State>) {
+    constructor(private store: Store<State>, private userService: UserService, private connectionService: ConnectionService) {
         this.store.state.subscribe(state => {
-            if(state.user) {
-                this.model.firstName = state.user.firstName;
-                this.model.lastName = state.user.lastName;
-                this.model.bio = state.user.bio;
-                this.model.tags = state.user.tags;
-                if(!isNaN(state.user.location.latitude) && !isNaN(state.user.location.longitude)) {
-                    this.model.latitude = state.user.location.latitude;
-                    this.model.longitude = state.user.location.longitude;
-                    this.model.shareLocation = true;
-                }
-            }
+            this.remoteUserDetails = state.remoteUserDetails;
+            if(state.user)
+                this.isEmailConfirmed = state.user.emailConfirmed;
         });
-        this.controller = controllerFactory.createForCurrentScope(validator);
-        this.controller.validateTrigger = validateTrigger.changeOrBlur;
-        this.controller.subscribe(event => this.validate());
     }
 
-    activate() {
-        this.setupValidation();
+    activate(params: any) {
+        this.store.dispatch(getUser, params.id, (id) => this.userService.getUser(params.id));   
     }
 
-    private validate() {
-        this.validator.validateObject(this.model)
-            .then(results => this.canSave = results.every(result => result.valid));
-    }
-
-    private setupValidation() {
-        ValidationRules
-            .ensure('firstName').required()
-            .ensure('lastName').required()
-            .ensure('bio').required()
-            .ensure('tags').required().minItems(1)
-            .on(this.model);
-    }
-
-    async onAddTag(tagName: string) {
-        const index = this.model.tags.findIndex(x => x == tagName);
-        
-        if(index === -1) {
-            const tag = await this.tagService.getTag(tagName);
-            this.model.tags.push(tag.name);
-        }      
-
-        this.validate();
-    }
-
-    mapLoaded(map, event) {
-        if(isNaN(this.model.latitude) && isNaN(this.model.longitude))
-            this.getGeoLocation();
-        else
-            this.locationMarker = [{ latitude: this.model.latitude, longitude: this.model.longitude }];
-    }
-
-    clickMap(latLng) {
-        const lat = latLng.lat();
-        const long = latLng.lng();
-
-        this.locationMarker = [{ latitude: lat, longitude: long }];
-        this.model.latitude = lat;
-        this.model.longitude = long;
-    }
-
-    getGeoLocation() {
-        if(navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => this.updatePosition(position));
+    async requestConnection(userId: string) {
+        try {
+            this.store.dispatch(updateConnection, userId, ConnectionStatus.requested, (userId) => this.connectionService.requestConnection(userId));
+        } catch(e) {
+            console.error(e);
         }
-        this.zoomLevel = 8;
     }
 
-    resetLocation() {
-        this.model.latitude = null;
-        this.model.longitude = null;
-        this.hasLocation = false;
-    }
-
-    private updatePosition(position: Position) {
-        this.hasLocation = true;
-        this.model.latitude = position.coords.latitude;
-        this.model.longitude = position.coords.longitude;
-
-        this.locationMarker = [{ latitude: position.coords.latitude, longitude: position.coords.longitude }];
-    }
-
-    onRemoveTag(tagName: string) {
-        const index = this.model.tags.findIndex(x => x == tagName);
-        this.model.tags.splice(index, 1);
-
-        this.validate();
-    }
-
-    public async save() {
-        this.isLoading = true;
-        const model = this.model;
-
-        if(!model.shareLocation) {
-            model.latitude = null;
-            model.longitude = null;
+    async confirmConnection(userId: string) {
+        try {
+            this.store.dispatch(updateConnection, userId, ConnectionStatus.connected, (userId) => this.connectionService.acceptConnection(userId));
+        } catch(e) {
+            console.error(e);
         }
-
-        await this.store.dispatch(updateUser, model, (model) => this.userService.updateUser(model));
-        this.isLoading = false;
     }
-}
 
-export interface ProfileModel {
-    firstName: string;
-    lastName: string;
-    bio: string;
-    tags: string[];
-    latitude: number;
-    longitude: number;
-    shareLocation: boolean;
+    async rejectConnection(userId: string) {
+        try {
+            this.store.dispatch(updateConnection, userId, ConnectionStatus.available, (userId) => this.connectionService.rejectConnection(userId));
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
+    async cancelConnectionRequest(userId: string) {
+        try {
+            this.store.dispatch(updateConnection, userId, ConnectionStatus.available, (userId) => this.connectionService.cancelConnection(userId));
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
+    unbind() {
+        this.store.dispatch(clearUser);
+    }
 }

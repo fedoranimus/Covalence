@@ -3,7 +3,7 @@
         <div class="content">
             <div class="level">
                 <div class="level-left">
-                    <p><strong>${user.firstName} ${user.lastName}</strong>
+                    <a route-href="route: profile; params.bind: { id: user.id }"><p><strong>${user.firstName} ${user.lastName}</strong></a>
                     <i if.bind="hasDistance">${user.distanceToUser | distance} kilometers away</i></p>
                 </div>
             </div> 

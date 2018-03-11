@@ -22,13 +22,14 @@ namespace Covalence.Controllers
         private readonly ITagService _tagService;
         private readonly ApplicationDbContext _context;
         private readonly ILocationService _locationService;
-
-        public UserController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, ITagService tagService, ILogger<UserController> logger, ILocationService locationService) {
+        private readonly IConnectionService _connectionService;
+        public UserController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, ITagService tagService, ILogger<UserController> logger, ILocationService locationService, IConnectionService connectionService) {
             _userManager = userManager;
             _tagService = tagService;
             _logger = logger;
             _context = context;
             _locationService = locationService;
+            _connectionService = connectionService;
         }
 
         [HttpGet]
@@ -55,7 +56,21 @@ namespace Covalence.Controllers
             return Ok(userContract); 
         }
 
-        //TODO: Get UserById
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> Get(string userId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var remoteUser = await _context.Users.FindAsync(userId);
+            var connections = await _connectionService.GetConnectionsForUserAsync(user.Id);
+
+            if(remoteUser == null || user == null) {
+                _logger.LogError("User or RemoteUser not found");
+                return BadRequest();
+            }
+
+            var remoteUserContract = Converters.ConvertRemoteUserToContract(user, remoteUser, connections);
+            return Ok(remoteUserContract);
+        }
 
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateUser(string userId, [FromBody] UserViewModel model) // TODO: Simplify this logic

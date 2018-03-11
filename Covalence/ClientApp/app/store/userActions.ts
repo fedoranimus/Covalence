@@ -1,13 +1,26 @@
 import { State } from 'store/state';
-import { IUser, IUserViewModel } from 'infrastructure/user';
+import { IUser, IUserViewModel, IRemoteUser } from 'infrastructure/user';
 
-export async function updateUser(state: State, viewModel: IUserViewModel, updateUserApi: (viewModel: IUserViewModel) => IUser) {
+export async function updateCurrentUser(state: State, viewModel: IUserViewModel, updateUserApi: (viewModel: IUserViewModel) => IUser) {
     try {
         const user = await updateUserApi(viewModel);
         return { ...state, ...{ user }};
     } catch(e) {
         return state;
     }
+}
+
+export async function getUser(state: State, userId: string, getUserApi: (userId: string) => IRemoteUser) {
+    try {
+        const remoteUserDetails = await getUserApi(userId);
+        return { ...state, ...{ remoteUserDetails }};
+    } catch(e) {
+        return state;
+    }
+}
+
+export function clearUser(state: State) {
+    return { ...state, ...{ remoteUserDetails: null }};
 }
 
 export async function getCurrentUser(state: State, getMeApi: () => IUser) {
@@ -19,7 +32,7 @@ export async function getCurrentUser(state: State, getMeApi: () => IUser) {
     }
 }
 
-export function clearUser(state: State) {
+export function clearCurrentUser(state: State) {
     return { ...state, ...{ user: null }};
 }
 

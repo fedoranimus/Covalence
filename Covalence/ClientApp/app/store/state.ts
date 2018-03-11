@@ -2,11 +2,12 @@ import { IUser, IRemoteUser } from 'infrastructure/user';
 import { IConnection } from 'services/connectionService';
 import { PagedList } from 'services/searchService';
 
-export const initialState = {
+export const initialState: State = {
     searchQuery: [],
     user: null,
     connections: [],
-    results: null
+    results: null,
+    remoteUserDetails: null
 };
 
 export interface State {
@@ -14,4 +15,5 @@ export interface State {
     user: IUser;
     connections: IConnection[];
     results: PagedList<IRemoteUser>;
+    remoteUserDetails: IRemoteUser;
 }
