@@ -65,11 +65,44 @@ namespace Covalence.Controllers
 
                 return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
             }
+            else if(request.IsRefreshTokenGrantType())
+            {
+                var info = await HttpContext.AuthenticateAsync(OpenIdConnectServerDefaults.AuthenticationScheme);
 
-            return BadRequest("The specified grant type is not supported.");
+                var user = await _userManager.GetUserAsync(info.Principal);
+                if(user == null)
+                {
+                    return BadRequest(new OpenIdConnectResponse
+                    {
+                        Error = OpenIdConnectConstants.Errors.InvalidGrant,
+                        ErrorDescription = "The refresh token is no longer valid."
+                    });
+                }
+
+                if(!await _signInManager.CanSignInAsync(user))
+                {
+                    return BadRequest(new OpenIdConnectResponse 
+                    {
+                        Error = OpenIdConnectConstants.Errors.InvalidGrant,
+                        ErrorDescription = "The user is no longer allowed to sign in."
+                    });
+                }
+
+                var ticket = await CreateTicketAsync(request, user, info.Properties);
+
+                return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
+            }
+
+            return BadRequest(new OpenIdConnectResponse
+            {
+                Error = OpenIdConnectConstants.Errors.UnsupportedGrantType,
+                ErrorDescription = "The specified grant type is not supported."
+            });
         }
 
-        private async Task<AuthenticationTicket> CreateTicketAsync(OpenIdConnectRequest request, ApplicationUser user)
+        private async Task<AuthenticationTicket> CreateTicketAsync(
+            OpenIdConnectRequest request, ApplicationUser user,
+            AuthenticationProperties properties = null)
         {
             // Create a new ClaimsPrincipal containing the claims that
             // will be used to create an id_token, a token or a code.
@@ -77,17 +110,20 @@ namespace Covalence.Controllers
 
             // Create a new authentication ticket holding the user identity.
             var ticket = new AuthenticationTicket(principal,
-                new AuthenticationProperties(),
+                properties,
                 OpenIdConnectServerDefaults.AuthenticationScheme);
 
-            // Set the list of scopes granted to the client application.
-            ticket.SetScopes(new[]
+            if(!request.IsRefreshTokenGrantType())
             {
-                OpenIdConnectConstants.Scopes.OpenId,
-                OpenIdConnectConstants.Scopes.Email,
-                OpenIdConnectConstants.Scopes.Profile,
-                OpenIddictConstants.Scopes.Roles
-            }.Intersect(request.GetScopes()));
+                ticket.SetScopes(new[]
+                {
+                    OpenIdConnectConstants.Scopes.OpenId,
+                    OpenIdConnectConstants.Scopes.Email,
+                    OpenIdConnectConstants.Scopes.Profile,
+                    OpenIdConnectConstants.Scopes.OfflineAccess,
+                    OpenIddictConstants.Scopes.Roles
+                }.Intersect(request.GetScopes()));
+            }
 
             ticket.SetResources("http://localhost:5000"); //TODO
 
