@@ -171,6 +171,31 @@ namespace Covalence.Controllers
             }
         }
 
+        // [HttpPost("disconnect")]
+        // public async Task<IActionResult> DisconnectConnection([FromBody] UserIdWrapper requestedUserId) 
+        // {
+        //     var user = await _userManager.GetUserAsync(User);
+        //     if(user == null)
+        //     {
+        //         return BadRequest();
+        //     }    
+
+        //     try 
+        //     {
+        //         await _connectionService.RejectConnectionAsync(user.Id, requestedUserId.Id);
+
+        //         var connections = await _connectionService.GetConnectionsForUserAsync(user.Id);
+        //         var connectionListContract = Converters.ConvertConnectionListToContract(connections, user.Id);
+
+        //         return Ok(connectionListContract);
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         _logger.LogError(e.Message);
+        //         return BadRequest("Connection Not Found");
+        //     }
+        // }
+
         [HttpPost("block")]
         public async Task<IActionResult> BlockConnection([FromBody] UserIdWrapper requestingUserId)
         {

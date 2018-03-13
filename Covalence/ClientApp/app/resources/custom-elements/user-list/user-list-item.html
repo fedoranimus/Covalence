@@ -27,6 +27,7 @@
                     <span show.bind="user.connectionStatus == 0" class="level-item">Awaiting confirmation from ${user.firstName}</span>
                     <a show.bind="user.connectionStatus == 0" class="button is-warning level-item" click.delegate="cancelConnectionRequest(user.id)">Cancel Request</a>
                     <span show.bind="user.connectionStatus == 2" class="level-item">Connected</span>
+                    <a show.bind="user.connectionStatus == 2" class="button is-danger level-item" click.delegate="rejectConnection(user.id)">Disconnect</a>
                 </div>
                 <div else>
                     <i>Please confirm your email to connect with others.</i>

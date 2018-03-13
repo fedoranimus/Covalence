@@ -23,9 +23,9 @@ export class ConnectionService {
         return this.config.getEndpoint('api').post("connection/reject", { id: requestingUserId });
     }
 
-    public blockConnection(requestingUserId: string): Promise<IConnection[]> {
-        return this.config.getEndpoint('api').post("connection/block", { id: requestingUserId });
-    }
+    // public blockConnection(requestingUserId: string): Promise<IConnection[]> {
+    //     return this.config.getEndpoint('api').post("connection/block", { id: requestingUserId });
+    // }
 
     public cancelConnection(requestedUserId: string): Promise<IConnection[]> {
         return this.config.getEndpoint('api').post("connection/cancel", { id: requestedUserId });
