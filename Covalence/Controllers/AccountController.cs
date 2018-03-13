@@ -42,9 +42,13 @@ namespace Covalence.Controllers
                 {
                     _logger.LogInformation("Registered {0}", model.Email);
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                    try {
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                        await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                    } catch (Exception e) {
+                        _logger.LogError(e.Message);
+                    }
 
                     return Ok();
                 }
