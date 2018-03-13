@@ -4,7 +4,6 @@ import { bindable, autoinject } from "aurelia-framework";
 import { IUser, IRemoteUser } from "infrastructure/user";
 import { Store } from 'aurelia-store';
 import { State } from 'store/state';
-import { updateConnection } from 'store/connectionActions';
 import { navigateToPage, search, clearSearchParams } from 'store/searchActions';
 
 @autoinject
@@ -66,7 +65,6 @@ export class UserList {
         const previousPage = --this.results.pageNumber;
         const searchQuery = this.searchQuery;
         this.store.dispatch(search, searchQuery, previousPage, (searchQuery, previousPage) => this.searchService.getResults(searchQuery, previousPage));
-        
     }
 
     navigateToPage(pageNumber: number) {

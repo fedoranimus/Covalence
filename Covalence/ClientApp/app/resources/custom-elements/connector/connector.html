@@ -1,0 +1,13 @@
+<template>
+    <div if.bind="emailConfirmed">
+        <a show.bind="remoteUser.connectionStatus == 4" class="button is-primary tooltip is-tooltip-multiline level-item" data-tooltip="Connecting will allow you and ${remoteUser.firstName} to see each other's email address" click.delegate="request(remoteUser.id)">Request Connection</a>
+        <a show.bind="remoteUser.connectionStatus == 1" class="button is-success level-item" click.delegate="confirm(remoteUser.id)">Confirm Connection</a>
+        <a show.bind="remoteUser.connectionStatus == 1" class="button is-danger level-item" click.delegate="reject(remoteUser.id)">Reject Connection</a>
+        <span show.bind="remoteUser.connectionStatus == 0" class="level-item">Awaiting confirmation from ${remoteUser.firstName}</span>
+        <a show.bind="remoteUser.connectionStatus == 0" class="button is-warning level-item" click.delegate="cancelRequest(remoteUser.id)">Cancel Request</a>
+        <span show.bind="remoteUser.connectionStatus == 2" class="level-item">Connected</span>
+    </div>
+    <div else>
+        <i>Please confirm your email to connect with others.</i>
+    </div>
+</template>

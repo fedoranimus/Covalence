@@ -4,7 +4,7 @@ import { State } from 'store/state';
 import { Store } from 'aurelia-store';
 import { ConnectionService, ConnectionStatus, IConnection } from 'services/connectionService';
 import { StringUtils } from 'utils/stringUtils';
-import { updateConnection } from 'store/connectionActions';
+import { rejectConnection, confirmConnection, cancelConnection, disconnectConnection } from 'store/connectionActions';
 import { bindable } from 'aurelia-templating';
 
 @autoinject
@@ -25,14 +25,18 @@ export class ConnectionListItem {
     }
 
     async confirmConnection(userId: string) {
-        this.store.dispatch(updateConnection, userId, ConnectionStatus.connected, (userId) => this.connectionService.acceptConnection(userId));
+        this.store.dispatch(confirmConnection, userId);
     }
 
     async rejectConnection(userId: string) {
-        this.store.dispatch(updateConnection, userId, ConnectionStatus.available, (userId) => this.connectionService.rejectConnection(userId));
+        this.store.dispatch(rejectConnection, userId);
     }
 
     async cancelConnectionRequest(userId: string) {
-        this.store.dispatch(updateConnection, userId, ConnectionStatus.available, (userId) => this.connectionService.cancelConnection(userId));
+        this.store.dispatch(cancelConnection, userId);
+    }
+
+    async disconnectConnection(userId: string) {
+        this.store.dispatch(disconnectConnection, userId);
     }
 }

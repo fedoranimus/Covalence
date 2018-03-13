@@ -2,17 +2,6 @@
     <div class="container">
         <div>${remoteUserDetails.firstName} ${remoteUserDetails.lastName}</div>
         <div>${remoteUserDetails.bio}</div>
-
-        <div if.bind="isEmailConfirmed">
-            <a show.bind="remoteUserDetails.connectionStatus == 4" class="button is-primary tooltip is-tooltip-multiline level-item" data-tooltip="Connecting will allow you and ${remoteUserDetails.firstName} to see each other's email address" click.delegate="requestConnection(remoteUserDetails.id)">Request Connection</a>
-            <a show.bind="remoteUserDetails.connectionStatus == 1" class="button is-success level-item" click.delegate="confirmConnection(remoteUserDetails.id)">Confirm Connection</a>
-            <a show.bind="remoteUserDetails.connectionStatus == 1" class="button is-danger level-item" click.delegate="rejectConnection(remoteUserDetails.id)">Reject Connection</a>
-            <span show.bind="remoteUserDetails.connectionStatus == 0" class="level-item">Awaiting confirmation from ${remoteUserDetails.firstName}</span>
-            <a show.bind="remoteUserDetails.connectionStatus == 0" class="button is-warning level-item" click.delegate="cancelConnectionRequest(remoteUserDetails.id)">Cancel Request</a>
-            <span show.bind="remoteUserDetails.connectionStatus == 2" class="level-item">Connected</span>
-        </div>
-        <div else>
-            <i>Please confirm your email to connect with others.</i>
-        </div>
+        <connector remote-user.bind="remoteUserDetails"></connector>
     </div>
 </template>

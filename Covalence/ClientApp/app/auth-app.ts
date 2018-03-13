@@ -5,7 +5,7 @@ import { Router, RouterConfiguration, NavigationInstruction, Next, Redirect, Red
 import { AuthenticateStep, AuthService } from 'aurelia-authentication';
 import { Store } from 'aurelia-store';
 import { State } from 'store/state';
-import { loadConnections, updateConnection } from 'store/connectionActions';
+import { loadConnections, requestConnection, confirmConnection, cancelConnection, disconnectConnection, rejectConnection } from 'store/connectionActions';
 import { search, navigateToPage, addSearchParam, removeSearchParam, clearSearchParams } from 'store/searchActions';
 import { getCurrentUser, completeOnboarding, clearUser, updateCurrentUser, clearCurrentUser, getUser } from 'store/userActions';
 
@@ -28,19 +28,35 @@ export class AuthApp {
     }
 
     private registerActions() {
-        this.store.registerAction(loadConnections.name, loadConnections);
-        this.store.registerAction(updateConnection.name, updateConnection);
-        this.store.registerAction(search.name, search);
-        this.store.registerAction(navigateToPage.name, navigateToPage);
+        this.registerUserActions();
+        this.registerSearchActions();
+        this.registerConnectionActions();
+    }
+
+    private registerUserActions() {
         this.store.registerAction(getUser.name, getUser);
         this.store.registerAction(getCurrentUser.name, getCurrentUser);
         this.store.registerAction(completeOnboarding.name, completeOnboarding);
-        this.store.registerAction(addSearchParam.name, addSearchParam);
-        this.store.registerAction(removeSearchParam.name, removeSearchParam);
-        this.store.registerAction(clearSearchParams.name, clearSearchParams);
         this.store.registerAction(clearUser.name, clearUser);
         this.store.registerAction(clearCurrentUser.name, clearCurrentUser);
         this.store.registerAction(updateCurrentUser.name, updateCurrentUser);
+    }
+
+    private registerSearchActions() {
+        this.store.registerAction(search.name, search);
+        this.store.registerAction(navigateToPage.name, navigateToPage);
+        this.store.registerAction(addSearchParam.name, addSearchParam);
+        this.store.registerAction(removeSearchParam.name, removeSearchParam);
+        this.store.registerAction(clearSearchParams.name, clearSearchParams);
+    }
+
+    private registerConnectionActions() {
+        this.store.registerAction(loadConnections.name, loadConnections);
+        this.store.registerAction(confirmConnection.name, confirmConnection);
+        this.store.registerAction(cancelConnection.name, cancelConnection);
+        this.store.registerAction(disconnectConnection.name, disconnectConnection);
+        this.store.registerAction(rejectConnection.name, rejectConnection);
+        this.store.registerAction(requestConnection.name, requestConnection);
     }
 
     configureRouter(config: RouterConfiguration, router: Router) {

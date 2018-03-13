@@ -3,7 +3,7 @@ import { bindable } from 'aurelia-framework';
 import { ConnectionService, IConnection, ConnectionStatus } from 'services/connectionService';
 import { Store } from 'aurelia-store';
 import { State } from 'store/state';
-import { loadConnections, updateConnection } from 'store/connectionActions';
+import { loadConnections } from 'store/connectionActions';
 import { StringUtils } from 'utils/stringUtils';
 
 @autoinject

@@ -11,7 +11,7 @@
                     <button if.bind="connection.connectionStatus === 2" class="button is-primary is-small level-item tooltip" data-tooltip="Click to copy: ${connection.email}" click.delegate="copyEmail(connection.email)" ref="copyBtn">
                         Copy
                     </button>
-                    <button if.bind="connection.connectionStatus === 2" class="button is-danger is-small level-item" click.delegate="rejectConnection(connection.requestingUserId)">
+                    <button if.bind="connection.connectionStatus === 2" class="button is-danger is-small level-item" click.delegate="disconnectConnection(connection.requestingUserId)">
                         Disconnect
                     </button>
                     <button if.bind="connection.connectionStatus === 1" class="button is-success is-small level-item" click.delegate="confirmConnection(connection.requestingUserId)">
