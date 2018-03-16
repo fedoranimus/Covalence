@@ -14,8 +14,8 @@ export function configure(aurelia: Aurelia) {
     .plugin(PLATFORM.moduleName('aurelia-api'), config => {
       //config.setDefaultBaseUrl(environment.host);
       if(!IS_DEV_BUILD) { // TODO: Refactor
-        config.registerEndpoint('auth', 'https://covalence.timdturner.com/');
-        config.registerEndpoint('api', 'https://covalence.timdturner.com/api/');
+        config.registerEndpoint('auth', 'https://becovalent.com/');
+        config.registerEndpoint('api', 'https://becovalent.com/api/');
       } else {
         config.registerEndpoint('auth', 'http://localhost:5000/');
         config.registerEndpoint('api', 'http://localhost:5000/api/');
