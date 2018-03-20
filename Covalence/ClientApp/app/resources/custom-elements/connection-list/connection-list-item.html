@@ -5,7 +5,7 @@
                     <span class="panel-icon level-item">
                         <i class="fa fa-book"></i>
                     </span>
-                    <span class="level-item truncate-text">${connection.displayName}</span>
+                    <a class="level-item truncate-text" route-href="route: profile; params.bind: { id: connection.id }">${connection.displayName}</a>
                 </div>
                 <div class="level-right">
                     <button if.bind="connection.connectionStatus === 2" class="button is-primary is-small level-item tooltip" data-tooltip="Click to copy: ${connection.email}" click.delegate="copyEmail(connection.email)" ref="copyBtn">
