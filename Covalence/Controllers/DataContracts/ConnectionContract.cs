@@ -8,5 +8,6 @@ namespace Covalence.Contracts
         public string DisplayName { get; set; }
         public string Email { get; set; }
         public RemoteConnectionStatus ConnectionStatus { get; set; }
+        public string Id { get; set; }
     }
 }

@@ -123,13 +123,15 @@ namespace Covalence.Contracts
         public static ConnectionContract ConvertConnectionToContract(Connection connection, string userId) {
             var isRequestingUser = connection.RequestingUserId == userId;
             var emailAddress = isRequestingUser ? connection.RequestedUser.Email : connection.RequestingUser.Email;
+            var id = isRequestingUser ? connection.RequestedUserId : connection.RequestingUserId;
             
             return new ConnectionContract() {
                 RequestingUserId = connection.RequestingUserId,
                 RequestedUserId = connection.RequestedUserId,
                 DisplayName = ConvertConnectionDisplayName(connection, isRequestingUser),
                 Email = connection.State == ConnectionState.Connected ? emailAddress : null,
-                ConnectionStatus = ConvertRemoteConnectionStatus(userId, connection)
+                ConnectionStatus = ConvertRemoteConnectionStatus(userId, connection),
+                Id = id
             };
         }
 
