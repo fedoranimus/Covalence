@@ -177,7 +177,16 @@ namespace Covalence
 
         public virtual void ConfigureDatabase(IServiceCollection services, IHostingEnvironment env) {
 
-            if(env.IsDevelopment()) 
+            if(env.IsProduction()) 
+            {
+                var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+
+                services.AddDbContext<ApplicationDbContext>(options => {
+                    options.UseNpgsql(connectionString);
+                    options.UseOpenIddict();
+                });
+            }
+            else
             {
                 var db = new SqliteConnection("DataSource=:memory:");
                 db.Open();
@@ -187,15 +196,7 @@ namespace Covalence
                     options.UseOpenIddict();
                 });
             } 
-            else
-            {
-                var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
 
-                services.AddDbContext<ApplicationDbContext>(options => {
-                    options.UseNpgsql(connectionString);
-                    options.UseOpenIddict();
-                });
-            }
         }
     }
 }

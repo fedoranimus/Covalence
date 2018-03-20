@@ -26,7 +26,7 @@ namespace Covalence
                     var connectionService = services.GetRequiredService<IConnectionService>();
                     var env = services.GetRequiredService<IHostingEnvironment>();
                     var locationService = services.GetRequiredService<ILocationService>();
-                    await DbInitializer.InitializeAsync(context, userManager, tagService, connectionService, locationService);
+                    await DbInitializer.InitializeAsync(context, userManager, tagService, connectionService, locationService, env);
                 }
                 catch(Exception ex) 
                 {

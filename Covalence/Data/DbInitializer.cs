@@ -13,9 +13,11 @@ namespace Covalence.Data
 {
     public static class DbInitializer
     {
-        public static async Task InitializeAsync(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ITagService tagService, IConnectionService connectionService, ILocationService locationService)
+        public static async Task InitializeAsync(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ITagService tagService, IConnectionService connectionService, ILocationService locationService, IHostingEnvironment env)
         {
-            //if(env.IsProduction())
+            if(env.IsProduction())
+                return;
+
             context.Database.Migrate();
 
             if(context.Users.Any() || context.Tags.Any())
