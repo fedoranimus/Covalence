@@ -20,7 +20,7 @@
     "aurelia-loader-webpack": "^2.1.0",
     "aurelia-pal": "^1.5.0",
     "aurelia-router": "^1.5.0",
-    "aurelia-store": "^0.18.0",
+    "aurelia-store": "^0.20.0",
     "aurelia-validation": "^1.1.2",
     "bulma": "^0.6.2",
     "bulma-tooltip": "^1.0.3",
