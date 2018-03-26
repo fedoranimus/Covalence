@@ -2,7 +2,7 @@
     <require from="./search-bar.scss"></require>
     <div class="field has-addons is-inline-flex is-fullwidth">
         <div class="control is-expanded">
-            <tag-editor placeholder.bind="Search for mentors using tags..." existing-tags.bind="searchQuery" add.delegate="updateSearchQuery($event.detail, true)" remove.delegate="updateSearchQuery($event.detail, false)"></tag-editor>
+            <tag-editor placeholder="Search for mentors using tags..." existing-tags.bind="searchQuery" add.delegate="updateSearchQuery($event.detail, true)" remove.delegate="updateSearchQuery($event.detail, false)"></tag-editor>
         </div>
         <div class="control">
             <button class="button is-info" click.delegate="search()">
