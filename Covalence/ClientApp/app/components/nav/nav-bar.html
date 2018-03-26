@@ -44,6 +44,6 @@
       </ul>-->
   </nav>
   <banner if.bind="isAuthenticated" show.bind="!emailConfirmed">
-    Please verify your email, by checking "${state.user.email}", to become a full member of Covalence. <a click.delegate="sendEmail()">Resend Email</a>
+    Please verify your email, by checking "${state.user.email}", to become a full member of Covalence. <a class="banner-button" click.delegate="sendEmail()">Resend Email</a>
   </banner>
 </template>

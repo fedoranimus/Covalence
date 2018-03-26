@@ -133,7 +133,7 @@ namespace Covalence.Controllers
         }
 
         
-        [HttpGet]
+        [HttpPost]
         [Route("resendVerification")]
         public async Task<IActionResult> ResendVerificationEmail() {
             var user = await _userManager.GetUserAsync(User);
