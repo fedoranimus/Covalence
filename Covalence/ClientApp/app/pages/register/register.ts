@@ -33,7 +33,7 @@ export class Register {
     private setupValidation() {
         ValidationRules
             .ensure('email').required().email()
-            .ensure('password').required().minLength(6).satisfiesRule('specialCharacter').satisfiesRule('number')
+            .ensure('password').required().minLength(6).satisfiesRule('specialCharacter').satisfiesRule('number').satisfiesRule('upperCase')
             .ensure('verifyPassword').required().satisfiesRule('matchesProperty', 'password')
             .on(this.model);
     }
@@ -83,6 +83,16 @@ ValidationRules.customRule(
         || RegExp('[0-9]+').test(value),
     '${$displayName} must include at least 1 number'
   );
+
+  ValidationRules.customRule(
+      'upperCase',
+      (value, obj) =>
+        value === null
+        || value === undefined
+        || value === ''
+        || RegExp('[A-Z]+').test(value),
+    '${$displayName} must include at least 1 upper case character'
+  )
 
 interface RegistrationModel {
     email: string;
