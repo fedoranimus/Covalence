@@ -33,7 +33,7 @@ export class Register {
     private setupValidation() {
         ValidationRules
             .ensure('email').required().email()
-            .ensure('password').required().minLength(6)
+            .ensure('password').required().minLength(6).satisfiesRule('specialCharacter').satisfiesRule('number')
             .ensure('verifyPassword').required().satisfiesRule('matchesProperty', 'password')
             .on(this.model);
     }
@@ -62,6 +62,26 @@ ValidationRules.customRule(
       || value === obj[otherPropertyName],
     '${$displayName} must match ${$getDisplayName($config.otherPropertyName)}',
     otherPropertyName => ({ otherPropertyName })
+  );
+
+  ValidationRules.customRule(
+    'specialCharacter',
+    (value, obj) => 
+        value === null 
+        || value === undefined
+        || value === ''
+        || RegExp('[^a-zA-Z0-9]').test(value),
+    '${$displayName} must include at least 1 non-alphanumeric character'
+  );
+
+  ValidationRules.customRule(
+    'number',
+    (value, obj) => 
+        value === null
+        || value === undefined
+        || value === ''
+        || RegExp('[0-9]+').test(value),
+    '${$displayName} must include at least 1 number'
   );
 
 interface RegistrationModel {
