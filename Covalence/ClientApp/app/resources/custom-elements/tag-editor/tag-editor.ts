@@ -45,7 +45,7 @@ export class TagEditorCustomElement {
 
     async tagQueryChanged(query: string) {
         if(!this.fromSelection) {
-            if(this.debug) console.log(`Query: ${query}`);
+            // if(this.debug) console.log(`Query: ${query}`);
             if(query.length > 0) {
                 await this.onChangeQuery(query);
             } else {
