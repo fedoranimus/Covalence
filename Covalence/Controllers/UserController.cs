@@ -9,6 +9,7 @@ using Covalence.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using AspNet.Security.OAuth.Validation;
+using System;
 
 namespace Covalence.Controllers
 {
@@ -23,7 +24,12 @@ namespace Covalence.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ILocationService _locationService;
         private readonly IConnectionService _connectionService;
-        public UserController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, ITagService tagService, ILogger<UserController> logger, ILocationService locationService, IConnectionService connectionService) {
+        public UserController(UserManager<ApplicationUser> userManager, 
+            ApplicationDbContext context, 
+            ITagService tagService, 
+            ILogger<UserController> logger, 
+            ILocationService locationService, 
+            IConnectionService connectionService) {
             _userManager = userManager;
             _tagService = tagService;
             _logger = logger;

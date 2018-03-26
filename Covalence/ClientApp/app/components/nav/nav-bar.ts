@@ -63,6 +63,10 @@ export class NavBar {
         this.app.setRoot(PLATFORM.moduleName('app/app'));
     }
 
+    async sendEmail() {
+        await this.userService.resendVerification();
+    }
+
     deactivate() {
         
         //this.subscription.dispose();

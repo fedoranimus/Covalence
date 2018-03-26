@@ -36,4 +36,8 @@ export class UserService {
         viewModel.needsOnboarding = false;
         return await this.config.getEndpoint('api').updateOne('user', this.currentUser.id, null, viewModel);
     }
+
+    public async resendVerification(): Promise<void> {
+        return this.config.getEndpoint('api').post('account/resendVerification');
+    }
 }

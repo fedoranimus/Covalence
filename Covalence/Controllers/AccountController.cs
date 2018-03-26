@@ -10,6 +10,7 @@ using Covalence.ViewModels;
 // https://github.com/aspnet/Docs/blob/master/aspnetcore/migration/1x-to-2x/samples/AspNetCoreDotNetFx2.0App/AspNetCoreDotNetFx2.0App/Controllers/AccountController.cs
 namespace Covalence.Controllers
 {
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/[controller]")]
     public class AccountController : Controller
     {
@@ -129,7 +130,29 @@ namespace Covalence.Controllers
 
             AddErrors(result);
             return BadRequest("Something went wrong");
-            
+        }
+
+        
+        [HttpGet]
+        [Route("resendVerification")]
+        public async Task<IActionResult> ResendVerificationEmail() {
+            var user = await _userManager.GetUserAsync(User);
+
+            if(user == null)
+            {
+                _logger.LogError("User not found");
+                return BadRequest();
+            }
+
+            try {
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                await _emailSender.SendEmailConfirmationAsync(user.Email, callbackUrl);
+            } catch (Exception e) {
+                _logger.LogError(e.Message);
+            }
+
+            return BadRequest();
         }
 
         #region Helpers
