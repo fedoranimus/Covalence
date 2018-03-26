@@ -15,7 +15,6 @@ export class TagEditorCustomElement {
     @bindable tagQuery = '';
     @bindable placeholder = "Start typing to add a tag...";
     suggestedTags: ITag[] = [];
-    errorState: string|null = null;
     private fromSelection = false;
 
     constructor(private element: Element, private tagService: TagService) {
@@ -56,14 +55,9 @@ export class TagEditorCustomElement {
     }
 
     async onChangeQuery(query: string) {
-        if(query && !query.includes(" ")) {
-            this.errorState = null;
-            const potentialTags = await this.tagService.queryTag(query);
-            if(potentialTags)
-                this.suggestedTags = potentialTags.filter(t => this.tags.findIndex(x => x.name == t.name) === -1);
-        } else {
-            this.errorState = "Invalid Query; Spaces are not allowed";
-        }
+        const potentialTags = await this.tagService.queryTag(query);
+        if(potentialTags)
+            this.suggestedTags = potentialTags.filter(t => this.tags.findIndex(x => x.name == t.name) === -1);
     }
 
     handleEnter(e: KeyboardEvent) {
