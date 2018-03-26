@@ -95,6 +95,7 @@ namespace Covalence.Controllers
                 user.FirstName = model.FirstName == null ? user.FirstName : model.FirstName;
                 user.LastName = model.LastName == null ? user.LastName : model.LastName;
                 user.Email = model.Email == null ? user.Email : model.Email;
+                user.Bio = model.Bio == null ? user.Bio : model.Bio;
                 user.UserName = user.Email;
                 
                 if(model.ShareLocation != null) {
