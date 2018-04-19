@@ -1,8 +1,9 @@
 # Covalence
 
-Primary Repo for Covalence
-
 [![Build Status](https://travis-ci.org/fedoranimus/Covalence.svg?branch=master)](https://travis-ci.org/fedoranimus/Covalence)
+
+Please visit the beta at [becovalent.com](https://www.becovalent.com)
+
  
  ## Getting Started
  
@@ -23,3 +24,7 @@ Primary Repo for Covalence
  
  1. Marketplace
  1. Real-time Chat
+
+## Acknowledgements
+
+Paid for with grants from the [National Science Foundation](https://www.nsf.gov/).
