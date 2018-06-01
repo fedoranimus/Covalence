@@ -1,5 +1,5 @@
 language: csharp
-sudo: false
+sudo: true
 mono: none
 dotnet: 2.1.300
 skip_cleanup: true
