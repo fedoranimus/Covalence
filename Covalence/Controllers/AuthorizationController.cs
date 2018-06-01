@@ -4,16 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using AspNet.Security.OpenIdConnect.Extensions;
-//using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Authentication;
 using AspNet.Security.OpenIdConnect.Server;
 using AspNet.Security.OpenIdConnect.Primitives;
-using OpenIddict.Core;
-using OpenIddict.Models;
 using System.Collections.Generic;
 using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Builder;
 using System.Diagnostics;
+using OpenIddict.Abstractions;
 
 namespace Covalence.Controllers
 {

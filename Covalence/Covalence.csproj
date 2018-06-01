@@ -1,6 +1,6 @@
 <Project ToolsVersion="15.0" Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <IsPackable>false</IsPackable>
     <UserSecretsId>e3f9fee7-42c1-4630-9220-d3dce8fd7840</UserSecretsId>
@@ -8,17 +8,13 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MailKit" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.1.0" />
     <PackageReference Include="OpenIddict.Mvc" Version="2.0.0-*" />
     <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="2.0.0-*" />
     <PackageReference Include="OpenIddict" Version="2.0.0-*" />
-    <PackageReference Include="AspNet.Security.OAuth.Validation" Version="2.0.0-rc1-final*" /> <!-- Update Me when possible -->
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
-    <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
+    <PackageReference Include="AspNet.Security.OAuth.Validation" Version="2.0.0-*" /> <!-- Update Me when possible -->
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
     <!-- Files not to show in IDE -->

@@ -6,7 +6,7 @@ let baseConfig = {
     profileUrl: 'api/user',
     useRefreshToken: true,
     loginOnSignup: true,
-    logoutOnInvalidtoken: true,
+    logoutOnInvalidToken: true,
     defaultHeadersForTokenRequests: { 'Content-Type': "application/x-www-form-urlencoded" }
 }
 

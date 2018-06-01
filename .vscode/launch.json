@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceRoot}/Covalence/bin/Debug/netcoreapp2.0/Covalence.dll",
+            "program": "${workspaceRoot}/Covalence/bin/Debug/netcoreapp2.1/Covalence.dll",
             "args": [],
             "cwd": "${workspaceRoot}/Covalence",
             "stopAtEntry": false,
@@ -42,7 +42,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceRoot}/Covalence/bin/Debug/netcoreapp2.0/Covalence.dll",
+            "program": "${workspaceRoot}/Covalence/bin/Debug/netcoreapp2.1/Covalence.dll",
             "args": [],
             "cwd": "${workspaceRoot}/Covalence",
             "stopAtEntry": false,

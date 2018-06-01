@@ -16,7 +16,6 @@ using System.Reflection;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using OpenIddict.Core;
-using OpenIddict.Models;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -26,6 +25,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.FileProviders;
+using OpenIddict.Abstractions;
 
 namespace Covalence
 {
@@ -85,37 +85,48 @@ namespace Covalence
             });
 
             // Register the OpenIddict services, including the default Entity Framework stores.
-            services.AddOpenIddict(options => 
-            {
-                // Register the Entity Framework stores.
-                options.AddEntityFrameworkCoreStores<ApplicationDbContext>();
-                // Register the ASP.NET Core MVC binder used by OpenIddict.
-                // Note: if you don't call this method, you won't be able to
-                // bind OpenIdConnectRequest or OpenIdConnectResponse parameters.
-                options.AddMvcBinders();
+            services.AddOpenIddict()
+                .AddCore(options => 
+                {
+                    options.UseEntityFrameworkCore()
+                            .UseDbContext<ApplicationDbContext>();
+                })
+                .AddServer(options => {
+                    // Register the ASP.NET Core MVC binder used by OpenIddict.
+                    // Note: if you don't call this method, you won't be able to
+                    // bind OpenIdConnectRequest or OpenIdConnectResponse parameters.
+                    options.UseMvc();
 
-                // Enable the token endpoint (required to use the password flow).
-                options.EnableTokenEndpoint("/connect/token");
+                    // Enable the token endpoint (required to use the password flow).
+                    options.EnableTokenEndpoint("/connect/token");
 
-                // Allow client applications to use the grant_type=password flow.
-                options.AllowPasswordFlow();
-                options.AllowRefreshTokenFlow();
+                    // Allow client applications to use the grant_type=password flow.
+                    options.AllowPasswordFlow()
+                            .AllowRefreshTokenFlow();
 
-                // Return a JWT rather than a traditional token
-                //options.UseJsonWebTokens();
+                    // Return a JWT rather than a traditional token
+                    //options.UseJsonWebTokens();
 
-                // During development, you can disable the HTTPS requirement.
-                //if(!_env.IsProduction())
-                options.DisableHttpsRequirement();
+                    options.RegisterScopes(OpenIdConnectConstants.Scopes.Email,
+                                            OpenIdConnectConstants.Scopes.Profile,
+                                            OpenIddictConstants.Scopes.Roles);
 
-                // Register a new ephemeral key, that is discarded when the application
-                // shuts down. Tokens signed using this key are automatically invalidated.
-                // This method should only be used during development.
-                //options.AddEphemeralSigningKey();
-            });
+                    //options.RequireClientIdentification();
+                    //options.EnableRequestCaching();
+                    //options.EnableScopeValidation();
 
-            services.AddAuthentication()
-                    .AddOAuthValidation();
+                    // During development, you can disable the HTTPS requirement.
+                    //if(!_env.IsProduction())
+                    options.DisableHttpsRequirement();
+
+                    // Register a new ephemeral key, that is discarded when the application
+                    // shuts down. Tokens signed using this key are automatically invalidated.
+                    // This method should only be used during development.
+                    //options.AddEphemeralSigningKey();
+                })
+                .AddValidation();
+
+            services.AddAuthentication();
 
             services.AddScoped<ICache, Cache>();
 
@@ -161,18 +172,7 @@ namespace Covalence
 
             app.UseStaticFiles();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-
-                routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
-            });
-
-            
+            app.UseMvcWithDefaultRoute();
         }
 
         public virtual void ConfigureDatabase(IServiceCollection services, IHostingEnvironment env) {
