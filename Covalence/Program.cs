@@ -14,7 +14,7 @@ namespace Covalence
     {
         public static async Task Main(string[] args)
         {
-            var host = BuildWebHost(args);
+            var host = CreateWebHostBuilder(args).Build();
             
             using (var scope = host.Services.CreateScope())
             {
@@ -38,9 +38,8 @@ namespace Covalence
             await host.RunAsync();
         }
 
-        public static IWebHost BuildWebHost(string[] args) => 
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) => 
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+                .UseStartup<Startup>();
     }
 }
