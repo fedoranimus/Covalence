@@ -61,7 +61,7 @@ namespace Covalence.Tests
         [Theory]
         [InlineData("olo")]
         [InlineData("neu")]
-        [InlineData("neu")]
+        [InlineData("Neu")]
         public async Task QueryTag(string query)
         {
             var response = await Client.GetAsync($"/api/tag/query/{query}");
