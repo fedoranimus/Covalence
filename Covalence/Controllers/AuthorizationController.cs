@@ -5,12 +5,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using AspNet.Security.OpenIdConnect.Extensions;
 using Microsoft.AspNetCore.Authentication;
-using AspNet.Security.OpenIdConnect.Server;
 using AspNet.Security.OpenIdConnect.Primitives;
 using System.Collections.Generic;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using OpenIddict.Abstractions;
+using OpenIddict.Server;
 
 namespace Covalence.Controllers
 {
@@ -64,7 +64,7 @@ namespace Covalence.Controllers
             }
             else if(request.IsRefreshTokenGrantType())
             {
-                var info = await HttpContext.AuthenticateAsync(OpenIdConnectServerDefaults.AuthenticationScheme);
+                var info = await HttpContext.AuthenticateAsync(OpenIddictServerDefaults.AuthenticationScheme);
 
                 var user = await _userManager.GetUserAsync(info.Principal);
                 if(user == null)
@@ -108,7 +108,7 @@ namespace Covalence.Controllers
             // Create a new authentication ticket holding the user identity.
             var ticket = new AuthenticationTicket(principal,
                 properties,
-                OpenIdConnectServerDefaults.AuthenticationScheme);
+                OpenIddictServerDefaults.AuthenticationScheme);
 
             if(!request.IsRefreshTokenGrantType())
             {

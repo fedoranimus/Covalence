@@ -10,11 +10,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using AspNet.Security.OAuth.Validation;
 using System;
+using OpenIddict.Validation;
 
 namespace Covalence.Controllers
 {
-    //[Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = OpenIddictValidationDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     public class UserController : Controller
     {

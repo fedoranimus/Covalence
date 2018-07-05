@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AspNet.Security.OAuth.Validation;
 using Microsoft.AspNetCore.Authorization;
+using OpenIddict.Validation;
 
 namespace Covalence.Controllers
 {
-    //[Authorize(AuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = OpenIddictValidationDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     public class TagController : Controller
     {

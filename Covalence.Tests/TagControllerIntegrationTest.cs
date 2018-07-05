@@ -7,6 +7,7 @@ using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using Covalence.Contracts;
+using System.Net.Http.Headers;
 
 namespace Covalence.Tests
 {
@@ -17,6 +18,7 @@ namespace Covalence.Tests
         public TagsControllerIntegrationTests(TestFixture<TestStartup> fixture)
         { 
             Client = fixture.Client;
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", fixture.Token);
         }
 
         // [Fact]

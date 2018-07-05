@@ -15,12 +15,11 @@ namespace Covalence.Tests
     public class UserControllerIntegrationTests : IClassFixture<TestFixture<TestStartup>>
     {
         private readonly HttpClient Client;
-        private readonly String Token;
         public UserControllerIntegrationTests(TestFixture<TestStartup> fixture)
         {
             Client = fixture.Client;
-            Token = fixture.Token;
-            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            //Token = fixture.FetchToken().Result;
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", fixture.Token);
         }
 
         [Fact]

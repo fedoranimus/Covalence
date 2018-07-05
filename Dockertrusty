@@ -1,0 +1,22 @@
+FROM ubuntu:trusty
+
+# Install ubuntu deps
+RUN apt-get update &&\
+    apt-get install -y wget &&\
+    wget -q https://packages.microsoft.com/config/ubuntu/14.04/packages-microsoft-prod.deb &&\
+    wget -qO- https://deb.nodesource.com/setup_8.x | bash
+
+# Install Dotnet Core 2.1 & node 8
+RUN dpkg -i packages-microsoft-prod.deb &&\
+    apt-get -y install apt-transport-https &&\
+    apt-get update &&\
+    apt-get -y install dotnet-sdk-2.1 &&\
+    apt-get install -y nodejs
+
+# Copy Entire Covalence Directory
+COPY . ./src
+
+# Restore packages and run tests
+RUN cd ./src/Covalence.Tests/ &&\
+    dotnet restore &&\
+    dotnet test

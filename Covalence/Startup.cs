@@ -63,8 +63,8 @@ namespace Covalence
             services.AddMemoryCache();
             services.AddMvc();
 
-            var physicalProvider = _env.ContentRootFileProvider;
-            services.AddSingleton<IFileProvider>(physicalProvider);
+            // var physicalProvider = _env.ContentRootFileProvider;
+            // services.AddSingleton<IFileProvider>(physicalProvider);
                 
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
@@ -103,6 +103,8 @@ namespace Covalence
                     // Allow client applications to use the grant_type=password flow.
                     options.AllowPasswordFlow()
                             .AllowRefreshTokenFlow();
+
+                    options.AcceptAnonymousClients(); //TODO - Is this wanted?
 
                     // Return a JWT rather than a traditional token
                     //options.UseJsonWebTokens();
