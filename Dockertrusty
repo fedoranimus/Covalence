@@ -17,6 +17,7 @@ RUN dpkg -i packages-microsoft-prod.deb &&\
 COPY . ./src
 
 # Restore packages and run tests
-RUN cd ./src/Covalence.Tests/ &&\
+RUN dotnet --version &&\
+    cd ./src/Covalence.Tests/ &&\
     dotnet restore &&\
-    dotnet test
+    dotnet test -v d
