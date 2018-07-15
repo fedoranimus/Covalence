@@ -11,14 +11,15 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Xunit;
 
 namespace Covalence.Tests {
-    public class TestFixture<TStartup> : IDisposable where TStartup : class  
+    public class TestFixture<TStartup> : IAsyncLifetime where TStartup : class  
     {
-        private readonly TestServer _server;
-        private readonly ApplicationDbContext _context;
+        private TestServer _server;
+        private ApplicationDbContext _context;
 
-        public TestFixture()
+        public async Task InitializeAsync()
         {
             var builder = new WebHostBuilder()
                 .UseEnvironment("Staging")
@@ -29,11 +30,11 @@ namespace Covalence.Tests {
             Client = _server.CreateClient();
             Client.BaseAddress = new Uri("http://localhost:5000");
 
-            Token = FetchToken().Result;
+            Token = await FetchToken();
         }
 
-        public HttpClient Client { get; }
-        public String Token { get; }
+        public HttpClient Client { get; private set; }
+        public String Token { get; private set; }
 
         public async Task<string> FetchToken() {
             var registerRequestData = new { Email = "fixture@test.com", Password = "123Abc!", FirstName = "Fixture", LastName = "User", Location = "03062" };
@@ -63,11 +64,12 @@ namespace Covalence.Tests {
             return loginContent.access_token;
         }
 
-        public void Dispose()
+        public Task DisposeAsync()
         {
             _context.Database.EnsureDeleted();
             Client.Dispose();
             _server.Dispose();  
+            return Task.CompletedTask;
         }
     }
 }
