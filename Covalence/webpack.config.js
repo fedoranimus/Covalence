@@ -7,6 +7,7 @@ module.exports = (env) => {
     const isDevBuild = !(env && env.prod);
     return [{
         stats: { modules: false },
+        mode: isDevBuild ? 'development' : 'production',
         entry: { 'app': 'aurelia-bootstrapper' },
         resolve: {
             extensions: ['.ts', '.js'],
@@ -55,7 +56,7 @@ module.exports = (env) => {
                 moduleFilenameTemplate: path.relative(bundleOutputDir, '[resourcePath]')  // Point sourcemap entries to the original file locations on disk
             })
         ] : [
-            new webpack.optimize.UglifyJsPlugin()
+
         ])
     }];
 }

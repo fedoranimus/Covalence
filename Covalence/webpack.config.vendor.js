@@ -8,6 +8,7 @@ module.exports = ({ prod } = {}) => {
     
     return [{
         stats: { modules: false },
+        mode: isDevBuild ? 'development' : 'production',
         resolve: {
             extensions: ['.js']
         },
@@ -56,8 +57,6 @@ module.exports = ({ prod } = {}) => {
                 path: path.join(__dirname, 'wwwroot', 'dist', '[name]-manifest.json'),
                 name: '[name]_[hash]'
             })
-        ].concat(isDevBuild ? [] : [
-            new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } })
-        ])
+        ]
     }]
 };
