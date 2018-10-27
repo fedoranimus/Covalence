@@ -38,7 +38,7 @@ module.exports = ({ prod } = {}) => {
                 'aurelia-store',
                 'aurelia-google-maps',
                 'bulma/css/bulma.css',
-                'bulma-tooltip/dist/bulma-tooltip.min.css',
+                'bulma-tooltip/dist/css/bulma-tooltip.min.css',
                 'font-awesome/css/font-awesome.css',
                 'markdown-it',
                 'markdown-it-katex',
